@@ -167,14 +167,8 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="0">
-                            <TextBlock Text="Data Início" Style="{StaticResource FilterLabelStyle}"/>
+                            <TextBlock Text="Data" Style="{StaticResource FilterLabelStyle}"/>
                             <DatePicker SelectedDate="{Binding DataInicio, Mode=TwoWay}"
-                                    Style="{StaticResource ModernDatePickerStyle}"/>
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="2">
-                            <TextBlock Text="Data Fim" Style="{StaticResource FilterLabelStyle}"/>
-                            <DatePicker SelectedDate="{Binding DataFim, Mode=TwoWay}"
                                     Style="{StaticResource ModernDatePickerStyle}"/>
                         </StackPanel>
 
