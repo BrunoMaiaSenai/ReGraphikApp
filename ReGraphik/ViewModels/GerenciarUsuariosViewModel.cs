@@ -143,11 +143,11 @@ namespace ReGraphik.ViewModels
         /// </summary>
         public int LimiteTokensRestantes
         {
-            get => Properties.Settings.Default.LimiteTokensRestantes;
+            get => Properties.Config.Default.LimiteTokensRestantes;
             set
             {
-                Properties.Settings.Default.LimiteTokensRestantes = value;
-                Properties.Settings.Default.Save(); /// Salva no arquivo físico permanentemente
+                Properties.Config.Default.LimiteTokensRestantes = value;
+                Properties.Config.Default.Save(); /// Salva no arquivo físico permanentemente
                 OnPropertyChanged(nameof(LimiteTokensRestantes));
             }
         }
