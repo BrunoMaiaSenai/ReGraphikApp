@@ -5,7 +5,6 @@
 | Campo | Descrição |
 |---|---|
 | **Nome do Projeto** | ReGraphik — Plataforma de Gestão de Estoque Reverso |
-| **Repositório** | https://github.com/kaioss99/ReGraphikApp |
 | **Instituição** | SENAI — Trabalho de Conclusão de Curso (TCC) |
 | **Versão** | 1.0 (versão de TCC) |
 | **Domínio da Aplicação** | Gestão de resíduos reaproveitáveis (papel, cartão, vinil) no setor gráfico, com sugestões de economia circular e localização de pontos de coleta |
