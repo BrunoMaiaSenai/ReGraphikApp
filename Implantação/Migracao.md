@@ -6,17 +6,6 @@
 
 ---
 
-## Material de uso exclusivo
-
-Este documento é de uso exclusivo da equipe do projeto ReGraphik e do SENAI
-Afonso Greco – Nova Lima, elaborado como artefato obrigatório da Unidade
-Curricular *Implantação de Sistemas*, sob orientação do instrutor **Frederico
-Martins Aguiar**. Sua reprodução ou redistribuição fora do contexto acadêmico
-não é autorizada. O conteúdo deve ser mantido versionado no repositório
-GitHub do projeto, refletindo sempre o estado mais recente da estratégia de
-migração e backup adotada pela equipe.
-
----
 
 ## 1. Dados do Sistema
 
@@ -98,7 +87,7 @@ Relacionamentos principais:
 | Log de Consulta | Implementação futura |
 
 ### 3.4 Volume de dados atual
-Projeto em fase acadêmica/piloto: volume ainda reduzido (dados de teste da equipe e da empresa AML). Não há histórico de produção em larga escala até o momento.
+Projeto em fase piloto: volume ainda reduzido (dados de teste da equipe e da empresa AML). Não há histórico de produção em larga escala até o momento.
 
 ---
 
@@ -190,7 +179,7 @@ no cliente.
    - Identificar volume de dados (linhas por tabela) e qualidade dos dados (nulos, duplicados,
      inconsistências, campos livres sem padronização).
 
-2. **Mapeamento De-Para (Data Mapping)**
+2. **Mapeamento De-Para**
    - Construir uma planilha/tabela de mapeamento campo a campo entre o schema do cliente e as
      cinco entidades do ReGraphik (`Usuario`, `TipoMaterial`, `Residuo`, `Sugestao`,
      `SugestaoResiduo`).
