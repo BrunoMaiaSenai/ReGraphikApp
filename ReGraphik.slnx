@@ -1,4 +1,12 @@
 <Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x86" />
+  </Configurations>
   <Project Path="ApiRestReGraphik/ApiRestReGraphik.csproj" Id="74813167-fdfe-4ad1-8085-52c838fde0d1" />
   <Project Path="ReGraphik/ReGraphik.csproj" />
+  <Project Path="ReGraphikSetup/ReGraphikSetup.wixproj" Id="e01c995a-90f4-4e25-8a3a-b5767f6dbf6f">
+    <Platform Project="x86" />
+    <Build />
+  </Project>
 </Solution>

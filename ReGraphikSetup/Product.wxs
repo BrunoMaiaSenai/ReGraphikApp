@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="ReGraphik" Language="1046" Version="1.0.0.0" Manufacturer="Equipe ReGraphik" UpgradeCode="c918494a-da28-4f94-a9b5-246200dbf17e">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="Uma versão mais recente do [ProductName] já está instalada." />
+		<MediaTemplate EmbedCab="yes" />
+
+		<Feature Id="ProductFeature" Title="ReGraphik" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="ReGraphik">
+					<Directory Id="APPFOLDER" Name="App" />
+					<Directory Id="APIFOLDER" Name="API" />
+				</Directory>
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents">
+			<!-- Componente da Aplicação WPF -->
+			<Component Id="WpfExecutable" Directory="APPFOLDER" Guid="b2c3d4e5-f6a7-8901-bcde-2345678901bc">
+				<File Id="ReGraphikEXE" Source="..\ReGraphik\bin\Release\net8.0-windows\win-x64\publish\ReGraphik.exe" KeyPath="yes" />
+			</Component>
+
+			<!-- Componente da API REST -->
+			<Component Id="ApiExecutable" Directory="APIFOLDER" Guid="c3d4e5f6-a7b8-9012-cdef-3456789012cd">
+				<File Id="ApiRestReGraphikEXE" Source="..\ApiRestReGraphik\bin\Release\net8.0-windows\win-x64\publish\ApiRestReGraphik.exe" KeyPath="yes" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>
+
+
