@@ -6,10 +6,16 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UseWPF>true</UseWPF>
+		<NoWarn>$(NoWarn);NU1605</NoWarn>
+
+		<!-- VERSÃO DO PROJETO -->
+		<Version>1.0.0</Version>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>1.0.0.0</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Views\Controls\SugestaoResiduoControl.xaml.cs" />
+		<Compile Remove="Views\Controls\SugestaoResiduoControl.xaml.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -18,7 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Page Remove="Views\Controls\SugestaoResiduoControl.xaml" />
+		<Page Remove="Views\Controls\SugestaoResiduoControl.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -33,27 +39,30 @@
 		<PackageReference Include="QuestPDF" Version="2026.5.0" />
 	</ItemGroup>
 
-
 	<ItemGroup>
 		<Resource Include="Imgs\IconePerfil.png" />
 		<Resource Include="Imgs\logoRegraphik.png" />
 	</ItemGroup>
 
-
 	<ItemGroup>
-	  <Compile Update="Properties\Config.Designer.cs">
-	    <DesignTimeSharedInput>True</DesignTimeSharedInput>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>Config.settings</DependentUpon>
-	  </Compile>
+		<Compile Update="Properties\Config.Designer.cs">
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Config.settings</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
+		<PackageReference Include="System.IO.FileSystem.Primitives" Version="4.3.0" />
+		<PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
+	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="Properties\Config.settings">
-	    <Generator>SettingsSingleFileGenerator</Generator>
-	    <LastGenOutput>Config.Designer.cs</LastGenOutput>
-	  </None>
+		<None Update="Properties\Config.settings">
+			<Generator>SettingsSingleFileGenerator</Generator>
+			<LastGenOutput>Config.Designer.cs</LastGenOutput>
+		</None>
 	</ItemGroup>
 
 </Project>
