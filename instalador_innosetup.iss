@@ -22,6 +22,27 @@ SetupIconFile=logoRegraphik.ico
 ; --- DEFINE O ÍCONE NO "ADICIONAR OU REMOVER PROGRAMAS"
 UninstallDisplayIcon={app}\App\logoRegraphik.ico
 
+[Code]
+// Função para desinstalar versão anterior automaticamente antes de instalar a nova
+function InitializeSetup(): Boolean;
+var
+  UninstPath: String;
+  ResultCode: Integer;
+begin
+  Result := True;
+  
+  // Procura pelo desinstalador antigo nas chaves de registro do Windows
+  if RegQueryStringValue(HKLM, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{C918494A-DA28-4F94-A9B5-246200DBF17E}_is1', 'UninstallString', UninstPath) or
+     RegQueryStringValue(HKCU, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{C918494A-DA28-4F94-A9B5-246200DBF17E}_is1', 'UninstallString', UninstPath) then
+  begin
+    // Limpa as aspas se existirem
+    UninstPath := RemoveQuotes(UninstPath);
+    
+    // Executa a desinstalação antiga em modo silencioso sem fechar o instalador novo
+    Exec(UninstPath, '/SILENT /NORESTART /SUPPRESSMSGBOXES', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  end;
+end;
+
 [Files]
 ; Publicação do App WPF (Arquivos compilados)
 Source: "ReGraphik\bin\Release\net8.0-windows\win-x64\publish\*"; DestDir: "{app}\App"; Flags: ignoreversion recursesubdirs
