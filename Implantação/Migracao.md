@@ -72,7 +72,7 @@ Relacionamentos principais:
 | MODEL | Usuario, Residuo, Sugestao, SugestaoResiduo, PontosColeta | Entidades de domínio (POCOs) |
 | SERVICE LAYER | GooglePlacesService, ApiService | Integração HTTP com API REST e Google Maps |
 | BACKEND | API REST (ASP.NET Core, 5 controllers CRUD) | Regras de negócio e persistência no Firebase |
-| PERSISTÊNCIA | Firebase Realtime Database | Armazenamento NoSQL em nuvem |
+| PERSISTÊNCIA | Firebase Realtime Database | Armazenamento NoSQL nuvem |
 
 ### 3.3 Status atual dos módulos
 | Módulo | Status |
