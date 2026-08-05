@@ -26,16 +26,17 @@ O sistema é composto por um cliente desktop (WPF) e uma API REST. Os requisitos
 | Memória RAM | 4 GB | 8 GB |
 | Armazenamento | 2 GB livres | 5 GB livres (SSD) |
 | Internet | 5 Mbps | 20 Mbps |
-| Vídeo | Placa integrada compatível com DirectX | — |
+| Vídeo | 	Intel UHD Graphics 620 (integrada, DirectX 11) | Intel Iris Xe Graphics / AMD Radeon Vega 8 (integrada) |
 
 ### Servidor da API (ApiRestReGraphik)
 
 | Recurso | Mínimo | Recomendado |
 |---|---|---|
 | Processador | Dual Core | Quad Core |
-| Memória RAM | 2 GB | 4 GB |
-| Armazenamento | 5 GB livres | 20 GB livres (SSD) |
-| Internet | 10 Mbps | 100 Mbps |
+| Memória RAM | 4 GB | 8 GB |
+| Armazenamento | 2 GB livres | 5 GB livres (SSD) |
+| Internet | 5 Mbps | 20 Mbps |
+| Vídeo | 	Intel UHD Graphics 620 (integrada, DirectX 11) | Intel Iris Xe Graphics / AMD Radeon Vega 8 (integrada) |
 
 > Observação: a API está publicada em produção no plano gratuito do runasp.net (`webregraphik.runasp.net`), o que implica um período de "aquecimento" (cold start) após inatividade — item relevante para o plano de contingência.
 
