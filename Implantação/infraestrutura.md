@@ -5,8 +5,8 @@
 | Campo | Descrição |
 |---|---|
 | **Nome do Projeto** | ReGraphik — Plataforma de Gestão de Estoque Reverso |
-| **Instituição** | SENAI — Trabalho de Conclusão de Curso (TCC) |
-| **Versão** | 1.0 (versão de TCC) |
+| **Instituição** | SENAI  |
+| **Versão** | 1.0.0 |
 | **Repositorio** | https://github.com/BrunoMaiaSenai/ReGraphikApp/tree/master|
 | **Domínio da Aplicação** | Gestão de resíduos reaproveitáveis (papel, cartão, vinil) no setor gráfico, com sugestões de economia circular e localização de pontos de coleta |
 | **Componentes do Sistema** | Cliente Desktop (WPF), API REST (ASP.NET Core), Banco de Dados em nuvem (Firebase Realtime Database) |
@@ -22,7 +22,7 @@ O sistema é composto por um cliente desktop (WPF) e uma API REST. Os requisitos
 
 | Recurso | Mínimo | Recomendado |
 |---|---|---|
-| Processador | Dual Core | Quad Core |
+| Processador |	Intel Core i3-8100 / AMD Ryzen 3 2200G (ou equivalente) | Intel Core i5-10400 / AMD Ryzen 5 5500 (ou equivalente) |
 | Memória RAM | 4 GB | 8 GB |
 | Armazenamento | 2 GB livres | 5 GB livres (SSD) |
 | Internet | 5 Mbps | 20 Mbps |
@@ -32,7 +32,7 @@ O sistema é composto por um cliente desktop (WPF) e uma API REST. Os requisitos
 
 | Recurso | Mínimo | Recomendado |
 |---|---|---|
-| Processador | Dual Core | Quad Core |
+| Processador |	Intel Core i3-8100 / AMD Ryzen 3 2200G (ou equivalente) | Intel Core i5-10400 / AMD Ryzen 5 5500 (ou equivalente) |
 | Memória RAM | 4 GB | 8 GB |
 | Armazenamento | 2 GB livres | 5 GB livres (SSD) |
 | Internet | 5 Mbps | 20 Mbps |
@@ -45,7 +45,7 @@ O sistema é composto por um cliente desktop (WPF) e uma API REST. Os requisitos
 ## Requisitos de Software
 
 ### Cliente Desktop
-- Sistema Operacional: **Windows 10 ou Windows 11** (obrigatório — WPF não roda em Linux/macOS)
+- Sistema Operacional: **Windows 10 ou Windows 11** 
 - **.NET 8 Desktop Runtime** (ou SDK completo em ambiente de desenvolvimento)
 - **Microsoft Edge WebView2 Runtime** (necessário para o mapa interativo com Leaflet.js)
 - Permissões de usuário padrão (não requer administrador para execução, apenas para instalação)
