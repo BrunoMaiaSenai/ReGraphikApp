@@ -13,8 +13,7 @@
         MinWidth="900"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
-        ResizeMode="CanResize"
-        Icon="/Imgs/logoRegraphik.png">
+        ResizeMode="CanResize">
 
     <Window.Resources>
         <ResourceDictionary>
