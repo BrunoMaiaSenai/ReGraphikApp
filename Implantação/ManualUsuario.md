@@ -1,6 +1,6 @@
-**REGRAPHIK**
+## REGRAPHIK
 
-**MANUAL DO USUARIO**
+### MANUAL DO USUARIO
 
 ## 1 Apresentação
 
