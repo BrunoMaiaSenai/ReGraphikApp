@@ -63,6 +63,8 @@ O Inno Setup foi selecionado para gerar o instalador executável padrão pela su
 
 ```Delphi
 [Setup]
+; ID Único (Uma chave externa para escapar o GUID)
+AppId={{C918494A-DA28-4F94-A9B5-246200DBF17E}
 AppName=ReGraphik
 AppVersion=1.0.0
 DefaultDirName={autopf}\ReGraphik
@@ -72,16 +74,31 @@ OutputBaseFilename=ReGraphik_Setup
 Compression=lzma2
 SolidCompression=yes
 
+; --- PERMISSÕES E ARQUITETURA ---
+PrivilegesRequired=admin
+ArchitecturesInstallIn64BitMode=x64
+
+; --- CONFIGURAÇÕES DE ÍCONES (INSTALADOR E PAINEL DE CONTROLE) ---
+UsePreviousAppDir=yes
+DirExistsWarning=yes
+SetupIconFile=logoRegraphik.ico
+
+; --- DEFINE O ÍCONE NO "ADICIONAR OU REMOVER PROGRAMAS"
+UninstallDisplayIcon={app}\App\logoRegraphik.ico
+
 [Files]
-; Mapeamento da Aplicação WPF
+; Publicação do App WPF (Arquivos compilados)
 Source: "ReGraphik\bin\Release\net8.0-windows\win-x64\publish\*"; DestDir: "{app}\App"; Flags: ignoreversion recursesubdirs
 
-; Mapeamento da API REST
+; Publicação da API REST (Arquivos compilados)
 Source: "ApiRestReGraphik\bin\Release\net8.0\win-x64\publish\*"; DestDir: "{app}\API"; Flags: ignoreversion recursesubdirs
 
+; Copia o arquivo de ícone para dentro da pasta do App
+Source: "logoRegraphik.ico"; DestDir: "{app}\App"; Flags: ignoreversion
+
 [Icons]
-Name: "{group}\ReGraphik"; Filename: "{app}\App\ReGraphik.exe"
-Name: "{autodesktop}\ReGraphik"; Filename: "{app}\App\ReGraphik.exe"; Tasks: desktopicon
+Name: "{group}\ReGraphik"; Filename: "{app}\App\ReGraphik.exe"; WorkingDir: "{app}\App"; IconFilename: "{app}\App\logoRegraphik.ico"
+Name: "{autodesktop}\ReGraphik"; Filename: "{app}\App\ReGraphik.exe"; WorkingDir: "{app}\App"; IconFilename: "{app}\App\logoRegraphik.ico"; Tasks: desktopicon
 
 [Tasks]
 Name: "desktopicon"; Description: "Criar atalho na Área de Trabalho"; GroupDescription: "Atalhos adicionais:"
@@ -110,7 +127,7 @@ Name: "desktopicon"; Description: "Criar atalho na Área de Trabalho"; GroupDesc
 
 - **4. Adicione o script de compilação.**
   
-<img width="1413" height="637" alt="image" src="https://github.com/user-attachments/assets/2a8b8e92-6172-4545-a82a-3c0c535fbe43" />
+<img width="1412" height="812" alt="image" src="https://github.com/user-attachments/assets/ec1fc20e-2aa7-4f80-b592-d5c6c9777b0e" />
 
 ---
 
@@ -139,37 +156,81 @@ O WiX Toolset (v3.11) foi utilizado para gerar o pacote corporativo de instalaç
 	<Product Id="*" Name="ReGraphik" Language="1046" Version="1.0.0.0" Manufacturer="Equipe ReGraphik" UpgradeCode="c918494a-da28-4f94-a9b5-246200dbf17e" Codepage="1252">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" SummaryCodepage="1252" />
 
-		<MajorUpgrade DowngradeErrorMessage="Uma versao mais recente do [ProductName] ja esta instalada." />
+		<!-- Impede reinstalação/downgrade de versões mais antigas -->
+		<MajorUpgrade DowngradeErrorMessage="Uma versão mais recente do [ProductName] já está instalada." />
 		<MediaTemplate EmbedCab="yes" />
+
+		<!-- ÍCONE DO PAINEL DE CONTROLE ("Adicionar ou Remover Programas") -->
+		<Icon Id="AppIcon.ico" SourceFile="logoRegraphik.ico" />
+		<Property Id="ARPPRODUCTICON" Value="AppIcon.ico" />
 
 		<Feature Id="ProductFeature" Title="ReGraphik" Level="1">
 			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentRef Id="ApplicationShortcut" />
+			<ComponentRef Id="DesktopShortcut" />
 		</Feature>
 	</Product>
 
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
+			<!-- Pasta Arquivos de Programas -->
 			<Directory Id="ProgramFilesFolder">
 				<Directory Id="INSTALLFOLDER" Name="ReGraphik">
 					<Directory Id="APPFOLDER" Name="App" />
 					<Directory Id="APIFOLDER" Name="API" />
 				</Directory>
 			</Directory>
+
+			<!-- Pasta do Menu Iniciar -->
+			<Directory Id="ProgramMenuFolder">
+				<Directory Id="ApplicationProgramsFolder" Name="ReGraphik" />
+			</Directory>
+
+			<!-- Área de Trabalho -->
+			<Directory Id="DesktopFolder" Name="Desktop" />
 		</Directory>
 	</Fragment>
 
 	<Fragment>
 		<ComponentGroup Id="ProductComponents">
-			<!-- Executavel da Aplicacao WPF -->
+			<!-- Executável da Aplicação WPF -->
 			<Component Id="WpfExecutable" Directory="APPFOLDER" Guid="b2c3d4e5-f6a7-8901-bcde-2345678901bc">
 				<File Id="ReGraphikEXE" Source="..\ReGraphik\bin\Release\net8.0-windows\win-x64\publish\ReGraphik.exe" KeyPath="yes" />
 			</Component>
 
-			<!-- Executavel da API REST -->
+			<!-- Executável da API REST -->
 			<Component Id="ApiExecutable" Directory="APIFOLDER" Guid="c3d4e5f6-a7b8-9012-cdef-3456789012cd">
 				<File Id="ApiRestReGraphikEXE" Source="..\ApiRestReGraphik\bin\Release\net8.0\win-x64\publish\ApiRestReGraphik.exe" KeyPath="yes" />
 			</Component>
 		</ComponentGroup>
+
+		<!-- ATALHO NO MENU INICIAR -->
+		<DirectoryRef Id="ApplicationProgramsFolder">
+			<Component Id="ApplicationShortcut" Guid="d4e5f6a7-b890-1234-cdef-5678901234de">
+				<!-- Usar [#ReGraphikEXE] garante que o Windows ache o arquivo e o ícone sem erros -->
+				<Shortcut Id="ApplicationStartMenuShortcut"
+						  Name="ReGraphik"
+						  Description="Sistema ReGraphik"
+						  Target="[#ReGraphikEXE]"
+						  WorkingDirectory="APPFOLDER"
+						  Icon="AppIcon.ico" />
+				<RemoveFolder Id="RemoveApplicationProgramsFolder" On="uninstall" />
+				<RegistryValue Root="HKCU" Key="Software\ReGraphik" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+
+		<!-- ATALHO NA ÁREA DE TRABALHO -->
+		<DirectoryRef Id="DesktopFolder">
+			<Component Id="DesktopShortcut" Guid="e5f6a7b8-9012-3456-cdef-6789012345ef">
+				<Shortcut Id="ApplicationDesktopShortcut"
+						  Name="ReGraphik"
+						  Description="Sistema ReGraphik"
+						  Target="[#ReGraphikEXE]"
+						  WorkingDirectory="APPFOLDER"
+						  Icon="AppIcon.ico" />
+				<RegistryValue Root="HKCU" Key="Software\ReGraphik" Name="desktopShortcut" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
 	</Fragment>
 </Wix>
 ```
@@ -221,7 +282,7 @@ O WiX Toolset (v3.11) foi utilizado para gerar o pacote corporativo de instalaç
 <img width="1128" height="487" alt="Captura de tela 2026-08-04 160827" src="https://github.com/user-attachments/assets/c70b7b8e-5ea2-4da5-bb75-483d95c27a5b" />
 
 **Modelo novo atualizado:**
-<img width="1212" height="625" alt="image" src="https://github.com/user-attachments/assets/8180b2a4-479c-458e-9956-3a0b0327a529" />
+<img width="1208" height="952" alt="image" src="https://github.com/user-attachments/assets/a8f547d3-75b5-4e7c-81b1-584ce994d2b3" />
 
 ---
 
