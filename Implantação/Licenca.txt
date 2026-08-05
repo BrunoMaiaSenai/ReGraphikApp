@@ -1,9 +1,7 @@
 REGRAPHIK — TERMO DE LICENÇA ACADÊMICA
-Versão do software: 1.0.0 — candidata à validação acadêmica
+Versão do software: 1.0.0 
 Atualização: agosto de 2026
 
-AVISO
-Este termo foi redigido para a entrega acadêmica e não substitui revisão jurídica para utilização comercial.
 
 Documento correspondente ao arquivo Licenca.txt. Este termo foi redigido para a entrega acadêmica e não substitui revisão jurídica para utilização comercial.
 
