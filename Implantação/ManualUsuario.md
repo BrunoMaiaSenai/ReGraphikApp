@@ -183,6 +183,6 @@ Quando habilitados, os indicadores previstos incluem total de resíduos, peso to
 
 ## 1.12 Configurações e foto de perfil
 
-<img src="./media/image9.png" style="width:6.84583in;height:4.38403in" />
+<img src="./img/image9.png" style="width:6.84583in;height:4.38403in" />
 
 A solução registra a foto de perfil, alteração de senha.
