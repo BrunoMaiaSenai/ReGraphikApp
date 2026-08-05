@@ -13,7 +13,7 @@ SolidCompression=yes
 Source: "ReGraphik\bin\Release\net8.0-windows\win-x64\publish\*"; DestDir: "{app}\App"; Flags: ignoreversion recursesubdirs
 
 ; Publicação da API
-Source: "ApiRestReGraphik\bin\Release\net8.0-windows\win-x64\publish\*"; DestDir: "{app}\API"; Flags: ignoreversion recursesubdirs
+Source: "ApiRestReGraphik\bin\Release\net8.0\win-x64\publish\*"; DestDir: "{app}\API"; Flags: ignoreversion recursesubdirs
 
 [Icons]
 ; Criar atalho no Menu Iniciar e na Área de Trabalho
