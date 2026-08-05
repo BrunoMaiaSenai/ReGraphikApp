@@ -62,7 +62,7 @@ Figura 2 — Fluxo operacional planejado para os usuários do ReGraphik.
 
 ## 1.5 Login
 
-<img src="./media/image2.png" style="width:6.84583in;height:3.37014in" />
+<img src="./img/image2.png" style="width:6.84583in;height:3.37014in" />
 
 **1.** Abra o ReGraphik.
 
