@@ -13,8 +13,7 @@
     MinWidth="960"
     WindowStartupLocation="CenterScreen"
     WindowState="Maximized"
-    Background="#F3F4F6"
-    Icon="pack://application:,,,/logoRegraphik.ico">
+    Background="#F3F4F6">
 
     <Window.Resources>
         <ResourceDictionary>
