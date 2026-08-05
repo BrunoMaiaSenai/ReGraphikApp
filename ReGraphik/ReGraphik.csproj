@@ -12,6 +12,7 @@
 		<Version>1.0.0</Version>
 		<AssemblyVersion>1.0.0.0</AssemblyVersion>
 		<FileVersion>1.0.0.0</FileVersion>
+		<ApplicationIcon>logoRegraphik.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -20,11 +21,15 @@
 
 	<ItemGroup>
 		<None Remove="Imgs\IconePerfil.png" />
-		<None Remove="Imgs\logoRegraphik.png" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Page Remove="Views\Controls\SugestaoResiduoControl.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Imgs\logoRegraphik.ico" />
+	  <Content Include="logoRegraphik.ico" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -41,7 +46,6 @@
 
 	<ItemGroup>
 		<Resource Include="Imgs\IconePerfil.png" />
-		<Resource Include="Imgs\logoRegraphik.png" />
 	</ItemGroup>
 
 	<ItemGroup>
