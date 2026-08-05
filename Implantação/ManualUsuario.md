@@ -20,7 +20,7 @@ O ReGraphik é um sistema de gestão de estoque reverso criado para apoiar empre
 
 - Promover rastreabilidade e melhor aproveitamento dos materiais.
 
-<img src="./media/image1.png" style="width:6.37795in;height:2.55118in" />
+<img src="./img/image1.png" style="width:6.37795in;height:2.55118in" />
 
 Figura 2 — Fluxo operacional planejado para os usuários do ReGraphik.
 
@@ -76,7 +76,7 @@ Figura 2 — Fluxo operacional planejado para os usuários do ReGraphik.
 
 ## 1.6 Tela inicial e navegação
 
-<img src="./media/image3.png" style="width:6.84583in;height:3.46736in" />
+<img src="./img/image3.png" style="width:6.84583in;height:3.46736in" />
 
 A aplicação foi modelada com uma janela principal e páginas para Dashboard, Resíduos, Estoque Reverso, Mapa e Relatórios. O usuário deve utilizar o menu lateral ou principal para alternar entre os módulos disponíveis. A ordem e os nomes visuais precisam ser confirmados na versão final instalada.
 
@@ -93,7 +93,7 @@ A aplicação foi modelada com uma janela principal e páginas para Dashboard, R
 
 ## 1.7 Cadastro de resíduos
 
-<img src="./media/image4.png" style="width:6.84583in;height:5.52083in" />
+<img src="./img/image4.png" style="width:6.84583in;height:5.52083in" />
 
 **1.** Acesse o módulo Cadastro de Resíduos.
 
@@ -121,7 +121,7 @@ Para alterar o status, selecione o resíduo, escolha a ação permitida e confir
 
 ## 1.9 Sugestões de reaproveitamento
 
-<img src="./media/image5.png" style="width:6.84583in;height:5.23264in" />
+<img src="./img/image5.png" style="width:6.84583in;height:5.23264in" />
 
 **1.** Abra o resíduo desejado ou o módulo de Sugestões.
 
@@ -135,7 +135,7 @@ Para alterar o status, selecione o resíduo, escolha a ação permitida e confir
 
 ## 1.10 Mapa e pontos de coleta
 
-<img src="./media/image6.png" style="width:6.84583in;height:4.15208in" />
+<img src="./img/image6.png" style="width:6.84583in;height:4.15208in" />
 
 **1.** Acesse o menu Mapa.
 
@@ -165,9 +165,9 @@ Para alterar o status, selecione o resíduo, escolha a ação permitida e confir
 
 ## 1.11 Dashboard e relatórios
 
-<img src="./media/image7.png" style="width:6.84583in;height:3.41042in" />
+<img src="./img/image7.png" style="width:6.84583in;height:3.41042in" />
 
-<img src="./media/image8.png" style="width:6.84583in;height:3.88958in" />
+<img src="./img/image8.png" style="width:6.84583in;height:3.88958in" />
 
 Quando habilitados, os indicadores previstos incluem total de resíduos, peso total, quantidade reaproveitada e valor econômico. A geração do relatório deve consolidar os registros e permitir impressão ou exportação em PDF.
 
