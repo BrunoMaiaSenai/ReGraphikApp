@@ -64,7 +64,7 @@ Relacionamentos principais:
 - `CADASTRO_RESIDUOS` N:N `SUGESTOES`, resolvido por `SUGESTOES_RESIDUOS`
 - Demais entidades de apoio: `PontosColeta`, `Mensagens`/`Conversas` (chat interno)
 
-### 3.2 Arquitetura em camadas
+### 3.2 Arquitetura
 | Camada | Componentes | Responsabilidade |
 |---|---|---|
 | VIEW | MainWindow, DashboardPage, ResiduosPage, EstoqueReversoPage, MapaPage, RelatoriosPage | Apresentação (XAML), sem lógica de negócio |
