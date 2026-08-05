@@ -12,7 +12,7 @@ Registro das funcionalidades previstas, melhorias, limitações conhecidas e pen
 | --- | --- |
 | Versão | 1.0.0 |
 | Data prevista | Agosto de 2026 |
-| Canal | Entrega acadêmica / primeira versão oficial do projeto |
+| Canal | Primeira versão oficial do projeto |
 | Compatibilidade | Windows 10/11 64 bits; .NET 8+; WebView2; internet. |
 | Status | Candidata — depende da conclusão das validações listadas neste documento. |
 
