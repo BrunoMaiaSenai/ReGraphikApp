@@ -4,7 +4,10 @@
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" SummaryCodepage="1252" />
 
 		<!-- Impede reinstalação/downgrade de versões mais antigas -->
-		<MajorUpgrade DowngradeErrorMessage="Uma versão mais recente do [ProductName] já está instalada." />
+		<MajorUpgrade
+			Schedule="afterInstallInitialize"
+			AllowSameVersionUpgrades="yes"
+			DowngradeErrorMessage="Uma versão mais recente do [ProductName] já está instalada." />
 		<MediaTemplate EmbedCab="yes" />
 
 		<!-- ÍCONE DO PAINEL DE CONTROLE ("Adicionar ou Remover Programas") -->
