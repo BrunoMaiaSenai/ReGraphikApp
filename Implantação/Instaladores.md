@@ -87,23 +87,39 @@ SetupIconFile=logoRegraphik.ico
 UninstallDisplayIcon={app}\App\logoRegraphik.ico
 
 [Code]
-// Função para desinstalar versão anterior automaticamente antes de instalar a nova
+// Função executada logo ao iniciar o instalador
 function InitializeSetup(): Boolean;
 var
   UninstPath: String;
   ResultCode: Integer;
+  UserChoice: Integer;
 begin
   Result := True;
   
-  // Procura pelo desinstalador antigo nas chaves de registro do Windows
+  // Procura pelo desinstalador antigo no Registro do Windows
   if RegQueryStringValue(HKLM, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{C918494A-DA28-4F94-A9B5-246200DBF17E}_is1', 'UninstallString', UninstPath) or
      RegQueryStringValue(HKCU, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{C918494A-DA28-4F94-A9B5-246200DBF17E}_is1', 'UninstallString', UninstPath) then
   begin
-    // Limpa as aspas se existirem
-    UninstPath := RemoveQuotes(UninstPath);
+    // Exibe a mensagem avisando o usuário antes de prosseguir
+    UserChoice := MsgBox(
+      'Uma versão anterior do ReGraphik foi detectada no sistema.' + #13#10 + #13#10 +
+      'Deseja desinstalá-la automaticamente para prosseguir com a nova instalação?',
+      mbConfirmation, MB_YESNO
+    );
     
-    // Executa a desinstalação antiga em modo silencioso sem fechar o instalador novo
-    Exec(UninstPath, '/SILENT /NORESTART /SUPPRESSMSGBOXES', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+    if UserChoice = IDYES then
+    begin
+      // Limpa as aspas do caminho do desinstalador
+      UninstPath := RemoveQuotes(UninstPath);
+      
+      // Executa a remoção silenciosa
+      Exec(UninstPath, '/SILENT /NORESTART /SUPPRESSMSGBOXES', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+    end
+    else
+    begin
+      // Cancela o instalador caso o usuário escolha NÃO
+      Result := False;
+    end;
   end;
 end;
 
