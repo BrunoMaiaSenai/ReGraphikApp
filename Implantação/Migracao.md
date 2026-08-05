@@ -64,29 +64,7 @@ Relacionamentos principais:
 - `CADASTRO_RESIDUOS` N:N `SUGESTOES`, resolvido por `SUGESTOES_RESIDUOS`
 - Demais entidades de apoio: `PontosColeta`, `Mensagens`/`Conversas` (chat interno)
 
-### 3.2 Arquitetura
-| Camada | Componentes | Responsabilidade |
-|---|---|---|
-| VIEW | MainWindow, DashboardPage, ResiduosPage, EstoqueReversoPage, MapaPage, RelatoriosPage | Apresentação (XAML), sem lógica de negócio |
-| VIEWMODEL | BaseViewModel, ResiduoViewModel, LoginViewModel, MapViewModel | Lógica de apresentação, `INotifyPropertyChanged`, `RelayCommand` |
-| MODEL | Usuario, Residuo, Sugestao, SugestaoResiduo, PontosColeta | Entidades de domínio (POCOs) |
-| SERVICE LAYER | GooglePlacesService, ApiService | Integração HTTP com API REST e Google Maps |
-| BACKEND | API REST (ASP.NET Core, 5 controllers CRUD) | Regras de negócio e persistência no Firebase |
-| PERSISTÊNCIA | Firebase Realtime Database | Armazenamento NoSQL em nuvem |
-
-### 3.3 Status atual dos módulos
-| Módulo | Status |
-|---|---|
-| Mapa / Pontos de Coleta | Disponível |
-| Dashboard | Em construção |
-| Cadastro de Resíduo | Em construção |
-| Sugestões | Em construção |
-| Relatórios | Em construção |
-| Chat Interno | Implementação futura |
-| Central de Notificações | Implementação futura |
-| Log de Consulta | Implementação futura |
-
-### 3.4 Volume de dados atual
+### 3.2 Volume de dados atual
 Projeto em fase piloto: volume ainda reduzido (dados de teste da equipe e da empresa AML). Não há histórico de produção em larga escala até o momento.
 
 ---
