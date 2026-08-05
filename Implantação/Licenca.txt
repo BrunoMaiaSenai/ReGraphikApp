@@ -1,0 +1,46 @@
+REGRAPHIK — TERMO DE LICENÇA ACADÊMICA
+Versão do software: 1.0.0 
+Atualização: agosto de 2026
+
+
+Documento correspondente ao arquivo Licenca.txt. Este termo foi redigido para a entrega acadêmica e não substitui revisão jurídica para utilização comercial.
+
+CONCESSÃO DE USO
+
+
+A equipe ReGraphik concede ao destinatário desta versão uma licença limitada, não exclusiva, intransferível e revogável para instalar, executar e avaliar o software exclusivamente para fins acadêmicos, demonstrativos, de validação e de apresentação do projeto de TCC.
+
+RESTRIÇÕES
+
+
+- É vedada a comercialização, sublicença ou redistribuição pública sem autorização escrita da equipe responsável e observância das regras institucionais aplicáveis.
+
+- É vedada a remoção de identificações de autoria e avisos de licença.
+
+- É vedada a divulgação de chaves, credenciais, tokens, dados pessoais ou configurações sensíveis associadas ao software.
+
+- Alterações no código ou no instalador devem ser identificadas e documentadas.
+
+DADOS E RESPONSABILIDADES
+
+
+O usuário é responsável por inserir somente dados autorizados, proteger suas credenciais e utilizar o sistema de acordo com as políticas da organização. A versão acadêmica é fornecida para avaliação e pode conter limitações ou recursos em desenvolvimento. A equipe não garante disponibilidade contínua de serviços externos, como Firebase e Google Maps Places API.
+
+AUSÊNCIA DE GARANTIA
+
+
+O software é fornecido no estado em que se encontra, sem garantia de adequação a uso comercial, continuidade operacional ou ausência total de falhas. Qualquer implantação em ambiente real deve ser precedida de testes, aprovação técnica, definição de suporte, segurança, backup e responsabilidades contratuais.
+
+AUTORIA
+
+
+Projeto desenvolvido por Bruno Maia, Otávio Henrique, Lucas Aquino, Luna Beatriz e Kaio Alves, no Curso Técnico em Desenvolvimento de Sistemas do SENAI Afonso Greco — Nova Lima, sob orientação de Frederico Martins Aguiar.
+
+ACEITE
+
+
+Ao instalar ou utilizar a versão acadêmica, o destinatário declara ter lido e aceitado as condições deste termo.
+
+Representante/Usuário | Assinatura | Data
+ |  | 
+
