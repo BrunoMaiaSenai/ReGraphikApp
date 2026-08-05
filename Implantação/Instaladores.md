@@ -86,6 +86,27 @@ SetupIconFile=logoRegraphik.ico
 ; --- DEFINE O ÍCONE NO "ADICIONAR OU REMOVER PROGRAMAS"
 UninstallDisplayIcon={app}\App\logoRegraphik.ico
 
+[Code]
+// Função para desinstalar versão anterior automaticamente antes de instalar a nova
+function InitializeSetup(): Boolean;
+var
+  UninstPath: String;
+  ResultCode: Integer;
+begin
+  Result := True;
+  
+  // Procura pelo desinstalador antigo nas chaves de registro do Windows
+  if RegQueryStringValue(HKLM, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{C918494A-DA28-4F94-A9B5-246200DBF17E}_is1', 'UninstallString', UninstPath) or
+     RegQueryStringValue(HKCU, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{C918494A-DA28-4F94-A9B5-246200DBF17E}_is1', 'UninstallString', UninstPath) then
+  begin
+    // Limpa as aspas se existirem
+    UninstPath := RemoveQuotes(UninstPath);
+    
+    // Executa a desinstalação antiga em modo silencioso sem fechar o instalador novo
+    Exec(UninstPath, '/SILENT /NORESTART /SUPPRESSMSGBOXES', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  end;
+end;
+
 [Files]
 ; Publicação do App WPF (Arquivos compilados)
 Source: "ReGraphik\bin\Release\net8.0-windows\win-x64\publish\*"; DestDir: "{app}\App"; Flags: ignoreversion recursesubdirs
@@ -127,7 +148,7 @@ Name: "desktopicon"; Description: "Criar atalho na Área de Trabalho"; GroupDesc
 
 - **4. Adicione o script de compilação.**
   
-<img width="1412" height="812" alt="image" src="https://github.com/user-attachments/assets/ec1fc20e-2aa7-4f80-b592-d5c6c9777b0e" />
+<img width="1417" height="707" alt="image" src="https://github.com/user-attachments/assets/19b117b3-65d6-47b0-96d4-f553973f4e06" />
 
 ---
 
@@ -157,7 +178,10 @@ O WiX Toolset (v3.11) foi utilizado para gerar o pacote corporativo de instalaç
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" SummaryCodepage="1252" />
 
 		<!-- Impede reinstalação/downgrade de versões mais antigas -->
-		<MajorUpgrade DowngradeErrorMessage="Uma versão mais recente do [ProductName] já está instalada." />
+		<MajorUpgrade
+			Schedule="afterInstallInitialize"
+			AllowSameVersionUpgrades="yes"
+			DowngradeErrorMessage="Uma versão mais recente do [ProductName] já está instalada." />
 		<MediaTemplate EmbedCab="yes" />
 
 		<!-- ÍCONE DO PAINEL DE CONTROLE ("Adicionar ou Remover Programas") -->
@@ -282,7 +306,7 @@ O WiX Toolset (v3.11) foi utilizado para gerar o pacote corporativo de instalaç
 <img width="1128" height="487" alt="Captura de tela 2026-08-04 160827" src="https://github.com/user-attachments/assets/c70b7b8e-5ea2-4da5-bb75-483d95c27a5b" />
 
 **Modelo novo atualizado:**
-<img width="1208" height="952" alt="image" src="https://github.com/user-attachments/assets/a8f547d3-75b5-4e7c-81b1-584ce994d2b3" />
+<img width="1246" height="955" alt="image" src="https://github.com/user-attachments/assets/d3ab1107-b088-4523-8d43-a552f9fed84f" />
 
 ---
 
