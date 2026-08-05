@@ -12,6 +12,7 @@
 		<Version>1.0.0</Version>
 		<AssemblyVersion>1.0.0.0</AssemblyVersion>
 		<FileVersion>1.0.0.0</FileVersion>
+
 		<ApplicationIcon>logoRegraphik.ico</ApplicationIcon>
 	</PropertyGroup>
 
@@ -27,9 +28,9 @@
 		<Page Remove="Views\Controls\SugestaoResiduoControl.xaml" />
 	</ItemGroup>
 
+	<!-- MANTÉM O ÍCONE COMO RECURSO EMBUTIDO -->
 	<ItemGroup>
-	  <Content Include="Imgs\logoRegraphik.ico" />
-	  <Content Include="logoRegraphik.ico" />
+		<Resource Include="logoRegraphik.ico" />
 	</ItemGroup>
 
 	<ItemGroup>

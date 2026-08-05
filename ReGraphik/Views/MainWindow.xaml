@@ -14,7 +14,7 @@
     WindowStartupLocation="CenterScreen"
     WindowState="Maximized"
     Background="#F3F4F6"
-    Icon="/Imgs/logoRegraphik.ico">
+    Icon="pack://application:,,,/logoRegraphik.ico">
 
     <Window.Resources>
         <ResourceDictionary>

@@ -7,7 +7,7 @@
 		<MajorUpgrade DowngradeErrorMessage="Uma versao mais recente do [ProductName] ja esta instalada." />
 		<MediaTemplate EmbedCab="yes" />
 
-		<!-- DEFINE O ÍCONE DO PAINEL DE CONTROLE (ADICIONAR/REMOVER PROGRAMAS) -->
+		<!-- ICONE APENAS PARA O PAINEL DE CONTROLE AQUI -->
 		<Icon Id="AppIcon.ico" SourceFile="logoRegraphik.ico" />
 		<Property Id="ARPPRODUCTICON" Value="AppIcon.ico" />
 
