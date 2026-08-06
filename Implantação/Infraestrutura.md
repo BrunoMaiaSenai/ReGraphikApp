@@ -1,4 +1,4 @@
-# Infraestrutura.md
+# Infraestrutura do Sistema — ReGraphik
 
 ## Informações do Projeto
 
