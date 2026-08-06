@@ -335,3 +335,34 @@ O WiX Toolset (v3.11) foi utilizado para gerar o pacote corporativo de instalaç
 | **Público-Alvo** | Usuários Finais (B2C) | Ambientes Corporativos / TI (GPO / Active Directory) |
 | **Taxa de Compressão** | Alta (LZMA2) | Média (Padrão CAB/MSI) |
 | **Local do Artefato** | `\Installer_InnoSetup\ReGraphik_Setup.exe` | `\ReGraphikSetup\bin\Debug\ReGraphikSetup.msi` |
+
+---
+
+## 6. Adocão do Inno Setup no Sistema ReGraphik
+A equipe ReGraphik selecionou o **Inno Setup** como o motor oficial de implantação e empacotamento da solução. Essa decisão foi pautada na busca por um instalador autônomo, resiliente, de alta performance e com baixa complexidade de manutenção contínua, garantindo que o ciclo de vida de atualização no ambiente do cliente final ocorra de forma transparente e sem fricção. 
+A escolha do Inno Setup para o ecossistema ReGraphik equilibra robustez técnica e facilidade operacional. A ferramenta nos proporciona controle absoluto sobre a sequência de instalação e desinstalação via script, reduz potenciais chamados de suporte técnico relacionados a ambientes corrompidos e garante uma experiência profissional, segura e rápida para o usuário final.
+
+### 6.1. Arquitetura de Scripts Resiliente e Baixa Complexidade de Manutenção
+Sintaxe Declarativa e Limpa: Enquanto alternativas como o WiX Toolset demandam esquemas XML extensos e suscetíveis a erros de validação estrutural, o Inno Setup utiliza sintaxe de configuração baseada em seções estilo INI/Pascal.
+
+Redução de Debito Técnico: A simplicidade do código reduz drasticamente o tempo de integração de novas versões, facilitando a onboarding de novos desenvolvedores na equipe de empacotamento.
+
+### 6.2. Orquestração Avançada com Pascal Script ([Code])
+- **Gestão de Ciclo de Vida do Aplicativo:** Através de ganchos (event hooks) nativos como o InitializeSetup(), o instalador consulta dinamicamente o Registro do Windows para detectar qualquer versão preexistente do ReGraphik.
+
+- **Experiência de Atualização Transparente (Zero-Touch):** O instalador notifica o usuário, solicita a confirmação e aciona a desinstalação prévia de forma totalmente silenciosa antes da aplicação do novo binário, eliminando arquivos órfãos ou misturas de DLLs legadas.
+
+### 6.3. Autonomia de Execução e Alta Compressão Binária
+- **Empacotamento Autônomo (Single .EXE):** Diferente dos pacotes .msi, que são estritamente dependentes do serviço do Windows Installer (sujeito a bloqueios de política de grupo ou corrupção de banco de dados do sistema), o Inno Setup gera um binário autossuficiente (ReGraphik_Setup.exe).
+
+- **Algoritmo LZMA2 Solid:** Oferece taxas de compressão superiores, reduzindo o volume do pacote de distribuição. Isso agiliza o download para os clientes e reduz os custos de tráfego de rede/servidor da empresa.
+
+### 6.4. Integração Profunda com o Ecossistema Windows
+- **Prevenção de Erros em Runtime:** Configuração direta de diretórios de execução (WorkingDir), garantindo que o executável WPF e a API REST embutida localizem suas dependências sem falhas de inicialização.
+
+- **Conformidade de Interface:** Registro completo das chaves UninstallDisplayIcon e UninstallString, garantindo que a marca e o ícone do ReGraphik fiquem integrados ao painel nativo do Windows (Adicionar ou Remover Programas).
+
+### 6.5. Eficiência Operacional e Custo Total de Propriedade (TCO)
+- **Licenciamento Comercial Gratuito:** Solução open-source consolidada no mercado há décadas, eliminando custos de licenciamento de ferramentas de deploy proprietárias.
+
+- **Compatibilidade Extensa:** Roda de forma consistente em sistemas operacionais x64 sem exigência de pré-requisitos complexos do sistema operacional hospedeiro.
