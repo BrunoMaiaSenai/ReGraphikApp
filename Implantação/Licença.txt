@@ -64,6 +64,15 @@ IX — “Incidente de Segurança”: evento confirmado que comprometa ou possa 
 
 X — “Dia Útil”: dia de expediente comercial no Município de Nova Lima, Estado de Minas Gerais, excluídos sábados, domingos e feriados.
 
+XI — "Servidor de Licenciamento": ambiente controlado pela LICENCIANTE, responsável por 
+validar periodicamente, por meio de comunicação eletrônica com a Aplicação Desktop e/ou a API, 
+a autenticidade, o status, o prazo de vigência e as condições de uso da licença concedida à 
+LICENCIADA;
+
+XII — "Validação Periódica de Licença": procedimento automático pelo qual o Software se 
+conecta ao Servidor de Licenciamento, em intervalos regulares, para confirmar que a licença 
+permanece ativa, dentro do prazo contratado e nas condições autorizadas neste Contrato;
+
 CLÁUSULA 2 — OBJETO
 
 2.1. O presente Contrato tem por objeto a concessão, pela LICENCIANTE à LICENCIADA, de licença temporária de uso do Software ReGraphik pelo prazo de 12 (doze) meses, exclusivamente para as finalidades previstas neste instrumento.
@@ -176,6 +185,32 @@ CLÁUSULA 6 — PRAZO, ATIVAÇÃO E RENOVAÇÃO
 
 6.5. O uso após o término, sem renovação, não gera licença por prazo indeterminado e poderá ser bloqueado, ressalvado o período necessário para exportação de dados previsto neste Contrato.
 
+6.6. O ReGraphik opera sob modelo de licenciamento via servidor, no qual a validade e as 
+condições da licença são verificadas por meio de Validação Periódica de Licença, realizada 
+automaticamente pelo Software junto ao Servidor de Licenciamento da LICENCIANTE, observadas 
+as seguintes condições:
+
+I — a Validação Periódica ocorrerá em intervalos regulares, definidos pela LICENCIANTE e 
+informados no Guia de Instalação ou em comunicação oficial, não superiores a 30 (trinta) dias 
+entre verificações;
+
+II — o Software exigirá conexão com a internet, ainda que temporária, para concluir cada 
+Validação Periódica, sendo tolerado período de uso offline limitado, conforme parâmetro 
+técnico definido pela LICENCIANTE;
+
+III — esgotado o período de tolerância offline sem que a Validação Periódica seja concluída 
+com sucesso, o Software poderá restringir, suspender ou bloquear funcionalidades, até a 
+regularização da comunicação com o Servidor de Licenciamento;
+
+IV — a Validação Periódica confirmará, entre outros aspectos, o prazo de vigência da licença, 
+eventual inadimplemento, suspensão, revogação, encerramento do Contrato ou alteração da 
+versão licenciada;
+
+V — a indisponibilidade do Servidor de Licenciamento por falha da LICENCIANTE não será 
+interpretada como descumprimento contratual da LICENCIADA, devendo a LICENCIANTE restabelecer 
+o serviço em prazo razoável e, quando tecnicamente possível, estender o período de tolerância 
+offline.
+
 CLÁUSULA 7 — ENTREGA, INSTALAÇÃO, IMPLANTAÇÃO E ACEITE
 
 7.1. O Software será entregue por instalador, pacote de publicação, mídia digital, repositório autorizado ou procedimento de implantação definido pela LICENCIANTE.
@@ -229,6 +264,13 @@ VIII — Microsoft Edge WebView2 Runtime, quando exigido para exibição do mapa
 8.2. A LICENCIADA é responsável pela manutenção, segurança, atualização e licenciamento do sistema operacional, antivírus, rede, equipamentos e softwares de terceiros existentes em sua infraestrutura.
 
 8.3. A LICENCIANTE não responderá por falhas causadas por equipamento incompatível, sistema operacional sem suporte, bloqueio de firewall, proxy, antivírus, indisponibilidade de internet, falta de espaço, permissões insuficientes ou alteração do ambiente após a validação.
+
+8.4. Em razão do modelo de licenciamento via servidor previsto na Cláusula 6, a LICENCIADA 
+deverá garantir conectividade periódica com a internet, mesmo que não contínua, permitindo a 
+Validação Periódica de Licença, sob pena de restrição, suspensão ou bloqueio de 
+funcionalidades por impossibilidade de confirmação da validade da licença junto ao Servidor 
+de Licenciamento.
+
 
 CLÁUSULA 9 — REMUNERAÇÃO, TRIBUTOS E INADIMPLEMENTO
 
@@ -523,6 +565,9 @@ VI — inadimplemento, quando aplicável;
 VII — violação grave deste Contrato;
 
 VIII — risco à infraestrutura, ao Software ou a terceiros.
+
+IX — falha ou impossibilidade de conclusão da Validação Periódica de Licença junto ao Servidor 
+de Licenciamento, esgotado o período de tolerância offline previsto na Cláusula 6.
 
 22.2. Sempre que possível, a LICENCIANTE comunicará previamente a suspensão e indicará medidas para regularização.
 
