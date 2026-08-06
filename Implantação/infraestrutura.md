@@ -16,27 +16,26 @@
 
 ## Requisitos de Hardware
 
-O sistema é composto por um cliente desktop (WPF) e uma API REST. Os requisitos abaixo seguem a lógica de mínimo/recomendado apresentada em aula, adaptados à natureza da aplicação (não há uso de IA local, mas há renderização de mapa via WebView2, geração de PDF e gráficos).
+O sistema é composto por um cliente desktop (WPF) e uma API REST. Os requisitos abaixo seguem a lógica de mínimo/recomendado apresentada em aula, adaptados à natureza da aplicação (não há uso de IA local, mas há renderização de mapa via WebView2, geração de PDF e gráficos no cliente).
 
 ### Cliente Desktop (ReGraphik – WPF)
 
 | Recurso | Mínimo | Recomendado |
 |---|---|---|
-| Processador |	Intel Core i3-8100 / AMD Ryzen 3 2200G (ou equivalente) | Intel Core i5-10400 / AMD Ryzen 5 5500 (ou equivalente) |
+| Processador | Intel Core i3-8100 / AMD Ryzen 3 2200G (ou equivalente) | Intel Core i5-10400 / AMD Ryzen 5 5500 (ou equivalente) |
 | Memória RAM | 4 GB | 8 GB |
 | Armazenamento | 2 GB livres | 5 GB livres (SSD) |
 | Internet | 5 Mbps | 20 Mbps |
-| Vídeo | 	Intel UHD Graphics 620 (integrada, DirectX 11) | Intel Iris Xe Graphics / AMD Radeon Vega 8 (integrada) |
+| Vídeo | Intel UHD Graphics 620 (integrada, DirectX 11) | Intel Iris Xe Graphics / AMD Radeon Vega 8 (integrada) |
 
 ### Servidor da API (ApiRestReGraphik)
 
 | Recurso | Mínimo | Recomendado |
 |---|---|---|
-| Processador |	Intel Core i3-8100 / AMD Ryzen 3 2200G (ou equivalente) | Intel Core i5-10400 / AMD Ryzen 5 5500 (ou equivalente) |
-| Memória RAM | 4 GB | 8 GB |
-| Armazenamento | 2 GB livres | 5 GB livres (SSD) |
-| Internet | 5 Mbps | 20 Mbps |
-| Vídeo | 	Intel UHD Graphics 620 (integrada, DirectX 11) | Intel Iris Xe Graphics / AMD Radeon Vega 8 (integrada) |
+| Processador | Intel Xeon E-2224 / AMD EPYC 3251 (ou equivalente, 4 núcleos) | Intel Xeon E-2378 / AMD EPYC 7302P (ou equivalente, 8 núcleos) |
+| Memória RAM | 2 GB | 4 GB |
+| Armazenamento | 1 GB livre | 3 GB livres (SSD) |
+| Internet | 10 Mbps (upload estável) | 50 Mbps (upload estável) |
 
 > Observação: a API está publicada em produção no plano gratuito do runasp.net (`webregraphik.runasp.net`), o que implica um período de "aquecimento" (cold start) após inatividade — item relevante para o plano de contingência.
 
@@ -45,7 +44,7 @@ O sistema é composto por um cliente desktop (WPF) e uma API REST. Os requisitos
 ## Requisitos de Software
 
 ### Cliente Desktop
-- Sistema Operacional: **Windows 10 ou Windows 11** 
+- Sistema Operacional: **Windows 10 ou Windows 11**
 - **.NET 8 Desktop Runtime** (ou SDK completo em ambiente de desenvolvimento)
 - **Microsoft Edge WebView2 Runtime** (necessário para o mapa interativo com Leaflet.js)
 - Permissões de usuário padrão (não requer administrador para execução, apenas para instalação)
@@ -76,7 +75,7 @@ O sistema é composto por um cliente desktop (WPF) e uma API REST. Os requisitos
 | Microsoft.Web.WebView2 (1.0.2903.40) | Renderização do mapa interativo (Leaflet.js) — requer o **WebView2 Runtime** instalado no computador do cliente |
 | OxyPlot.Wpf (2.2.0) | Gráficos do módulo ESG/Dashboard |
 | QuestPDF (2026.5.0) | Geração de relatórios em PDF |
-| Microsoft.AspNetCore.Mvc.Core (2.3.11) | Suporte a chamadas HTTP para a API |
+| System.Net.Http.Json (incluso no .NET 8) | Suporte a chamadas HTTP para a API |
 
 ### API REST — ApiRestReGraphik (ASP.NET Core)
 
@@ -150,6 +149,8 @@ Uma das principais causas de falha em implantações é justamente a ausência d
 | Chave de API do Google Maps exposta em `appsettings.json` | Chave versionada no repositório | Uso indevido/consumo de cota por terceiros |
 | Falha ou indisponibilidade do Firebase | Serviço de terceiros fora do controle da equipe | Sistema inteiro fica indisponível (não há banco local de contingência) |
 | Antivírus bloqueando o instalador do cliente WPF | Aplicação recém-desenvolvida, sem assinatura digital | Bloqueio da instalação/execução no ambiente do cliente |
+| Falha em implantação de nova versão da API | Ausência de processo de rollback documentado para a API | Indisponibilidade prolongada até correção manual |
+| Perda de dados por falta de rotina de backup | Backup do Firebase realizado sem periodicidade ou processo definido | Impossibilidade de restaurar dados em caso de corrupção/exclusão acidental |
 
 ---
 
@@ -157,20 +158,22 @@ Uma das principais causas de falha em implantações é justamente a ausência d
 
 | Problema | Solução |
 |---|---|
-| API em cold start / indisponível | Aguardar aquecimento automático (runasp.net) ou migrar para hospedagem paga com always-on |
+| API em cold start / indisponível | Aguardar aquecimento automático (runasp.net); mitigar com *health-check* periódico (ping automatizado a cada poucos minutos) para manter a instância ativa; migrar para hospedagem paga com always-on caso o problema persista |
 | Firebase indisponível | Monitorar status oficial do Firebase; comunicar usuários; não há fallback local nesta versão — ação futura recomendada |
 | Falha na atualização do cliente WPF | Manter versão anterior do instalador disponível para rollback manual |
+| Falha na implantação de nova versão da API | Manter o build anterior disponível para redeploy imediato; validar em ambiente de homologação antes do Go Live |
 | Perda de credenciais do Firebase | Revogar a chave comprometida no Console do Firebase e gerar novo Service Account |
 | Antivírus bloqueando a aplicação | Testar previamente em ambiente semelhante ao do cliente; assinar digitalmente o executável quando possível |
 | Queda de internet no ambiente do cliente | Orientar o cliente sobre a dependência de conectividade; não há modo offline nesta versão |
 | Google Maps API indisponível/cota excedida | Módulo de mapa degrada graciosamente (demais módulos do sistema continuam funcionando) |
+| Perda ou corrupção de dados no Firebase | Realizar exportação periódica do Realtime Database (ex.: semanal) e armazenar em local seguro fora do Firebase, com processo documentado de restauração |
 
 ---
 
 ## Checklist de Implantação
 
 ### Hardware
-- [ ] Processador compatível (mínimo Dual Core)
+- [ ] Processador compatível (mínimo Dual Core no cliente / 2 vCPUs na API)
 - [ ] Memória RAM suficiente (mínimo 4 GB no cliente / 2 GB na API)
 - [ ] Espaço em disco disponível
 
@@ -183,7 +186,7 @@ Uma das principais causas de falha em implantações é justamente a ausência d
 - [ ] Projeto Firebase criado e Realtime Database configurado
 - [ ] Arquivo de credencial (`ReGraphikFirebaseKey.json`) disponível de forma segura na API
 - [ ] Regras de acesso (Rules) do Firebase revisadas
-- [ ] Backup/exportação do Firebase Realtime Database realizado
+- [ ] Backup/exportação do Firebase Realtime Database realizado, com periodicidade definida e processo de restauração testado
 
 ### Segurança
 - [ ] Firewall liberando as portas usadas pela API e por HTTPS
@@ -201,3 +204,4 @@ Uma das principais causas de falha em implantações é justamente a ausência d
 - [ ] `appsettings.json` da API configurado com URLs e chaves corretas do ambiente de destino
 - [ ] Swagger acessível para validação dos endpoints (`/`)
 - [ ] Cliente WPF testado em máquina semelhante à do usuário final antes do Go Live
+- [ ] Build anterior da API mantido disponível para rollback rápido em caso de falha na nova versão
