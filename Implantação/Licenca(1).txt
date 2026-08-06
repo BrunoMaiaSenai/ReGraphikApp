@@ -1,0 +1,722 @@
+REGRAPHIK — CONTRATO DE LICENÇA DE USO DE SOFTWARE
+LICENÇA TEMPORÁRIA POR PRAZO DETERMINADO DE 12 (DOZE) MESES
+Versão do documento: 1.0
+Software abrangido: ReGraphik — Sistema de Gestão de Estoque Reverso, versão 1.0.0
+Data de atualização: 05 de agosto de 2026
+
+Pelo presente instrumento, de um lado:
+
+LICENCIANTE: EQUIPE DESENVOLVEDORA REGRAPHIK, formada por Bruno Maia, Otávio Henrique, Lucas Aquino, Luna Beatriz e Kaio Alves, em conjunto denominados “LICENCIANTE”, na qualidade de autores, desenvolvedores ou pessoas autorizadas a disponibilizar o software objeto deste instrumento; e
+
+LICENCIADA: a pessoa jurídica, organização, estabelecimento ou profissional identificado no cadastro de implantação, na proposta comercial, na ordem de serviço, no termo de entrega, no registro de ativação ou no aceite eletrônico do Software, doravante denominado “LICENCIADA”;
+
+LICENCIANTE e LICENCIADA, quando mencionadas conjuntamente, serão denominadas “PARTES”.
+
+CONSIDERANDO QUE:
+
+a) o ReGraphik foi desenvolvido para apoiar o controle de estoque reverso e o gerenciamento de resíduos gerados por empresas do setor gráfico, permitindo registrar, classificar, acompanhar e destinar materiais reaproveitáveis ou descartáveis;
+
+b) o Software possui aplicação desktop para Windows, desenvolvida em WPF/.NET, integração com API REST em ASP.NET Core, persistência de dados em nuvem e integração com serviços externos, incluindo Firebase e Google Maps Places API;
+
+c) a LICENCIADA deseja utilizar o Software em suas atividades internas pelo prazo determinado de 12 (doze) meses;
+
+d) as PARTES pretendem estabelecer condições claras para instalação, ativação, utilização, suporte, proteção de dados, propriedade intelectual, suspensão e encerramento da licença;
+
+resolvem celebrar o presente CONTRATO DE LICENÇA DE USO DE SOFTWARE, mediante as cláusulas e condições seguintes.
+
+QUADRO-RESUMO CONTRATUAL
+
+1. Software: ReGraphik — Sistema de Gestão de Estoque Reverso.
+2. Versão inicial licenciada: 1.0.0, incluindo correções e atualizações disponibilizadas durante a vigência, conforme este Contrato.
+3. Modalidade: licença de uso temporária, limitada, não exclusiva, não transferível e não sublicenciável.
+4. Prazo: 12 (doze) meses contados da Data de Ativação.
+5. Data de Ativação: data do primeiro acesso autorizado, da instalação validada, da assinatura, do aceite eletrônico ou da emissão do registro de ativação, prevalecendo o evento que ocorrer primeiro.
+6. Território: República Federativa do Brasil.
+7. Finalidade: uso interno e legítimo da LICENCIADA para gestão de resíduos e estoque reverso.
+8. Ambiente: computadores Windows compatíveis com os requisitos técnicos do Software.
+9. Usuários: empregados, administradores, colaboradores ou prestadores autorizados pela LICENCIADA, vinculados a contas individuais.
+10. Remuneração: quando houver contratação onerosa, o valor, a forma de pagamento e os tributos constarão da proposta comercial, ordem de serviço, nota fiscal ou instrumento de contratação vinculado. Na ausência de cobrança formal, a licença será considerada gratuita e limitada à implantação piloto, validação, demonstração ou uso acadêmico autorizado.
+11. Validade técnica da versão: 12 (doze) meses a partir da Data de Ativação, sem prejuízo de correções críticas disponibilizadas durante esse período.
+12. Canal de atendimento: canal eletrônico, formulário, e-mail, sistema de chamados ou outro meio informado no aplicativo, no Guia de Instalação, no termo de implantação ou em comunicação oficial da LICENCIANTE.
+13. Documentos integrantes: este Contrato, o Termo de Uso, o Guia de Instalação, o Manual do Usuário, as Notas de Versão, a proposta comercial e a ordem de serviço, quando existentes.
+
+CLÁUSULA 1 — DEFINIÇÕES
+
+1.1. Para os fins deste Contrato:
+
+I — “Software” ou “ReGraphik”: conjunto formado pelo aplicativo desktop, componentes executáveis, bibliotecas, interfaces, integrações, configurações, documentação e atualizações disponibilizadas pela LICENCIANTE;
+
+II — “Aplicação Desktop”: programa para ambiente Windows utilizado pelos usuários da LICENCIADA;
+
+III — “API”: interface de programação responsável pela comunicação entre a aplicação, as regras de negócio, o banco de dados e serviços integrados;
+
+IV — “Conta”: identificação individual de usuário, protegida por credenciais de acesso;
+
+V — “Dados da LICENCIADA”: informações inseridas, importadas, transmitidas, armazenadas ou geradas pela LICENCIADA e seus usuários por meio do Software;
+
+VI — “Atualização”: correção, melhoria, ajuste de segurança ou nova compilação da mesma versão principal;
+
+VII — “Nova Versão”: edição que represente alteração substancial de arquitetura, funcionalidades ou modelo de licenciamento, identificada por mudança relevante na numeração da versão;
+
+VIII — “Serviços de Terceiros”: plataformas, bibliotecas, APIs, provedores de nuvem, mapas, autenticação, comunicação ou outros recursos não controlados diretamente pela LICENCIANTE;
+
+IX — “Incidente de Segurança”: evento confirmado que comprometa ou possa comprometer a confidencialidade, integridade, disponibilidade ou autenticidade de dados ou credenciais;
+
+X — “Dia Útil”: dia de expediente comercial no Município de Nova Lima, Estado de Minas Gerais, excluídos sábados, domingos e feriados.
+
+CLÁUSULA 2 — OBJETO
+
+2.1. O presente Contrato tem por objeto a concessão, pela LICENCIANTE à LICENCIADA, de licença temporária de uso do Software ReGraphik pelo prazo de 12 (doze) meses, exclusivamente para as finalidades previstas neste instrumento.
+
+2.2. A licença autoriza a instalação e execução do Software em ambiente compatível, bem como o acesso de usuários autorizados da LICENCIADA, respeitados os limites técnicos, operacionais e contratuais definidos no cadastro de implantação ou instrumento comercial vinculado.
+
+2.3. A licença não implica venda, cessão definitiva, transferência de tecnologia, entrega de código-fonte, cessão de propriedade intelectual, franquia, sociedade, representação comercial, vínculo empregatício ou exclusividade entre as PARTES.
+
+2.4. A disponibilização de código-fonte, documentação interna de desenvolvimento, chaves privadas, segredos, credenciais administrativas, diagramas internos não publicados ou materiais de engenharia somente ocorrerá mediante instrumento específico assinado pelas PARTES.
+
+CLÁUSULA 3 — DESCRIÇÃO DO SOFTWARE
+
+3.1. O ReGraphik é uma solução destinada à gestão de resíduos e estoque reverso no setor gráfico, podendo abranger, conforme a versão instalada e as permissões concedidas:
+
+I — cadastro, ativação, autenticação e gerenciamento de usuários;
+
+II — cadastro, consulta, edição, classificação e acompanhamento de resíduos;
+
+III — classificação de materiais, incluindo papel, cartão, vinil, lona, PVC e outros tipos cadastrados;
+
+IV — controle do status dos resíduos, como “Em Estoque”, “Reaproveitado” e “Descartado”;
+
+V — exibição de estoque reverso em painéis, listas ou cartões;
+
+VI — sugestões de reaproveitamento associadas ao tipo de material;
+
+VII — aplicação e registro de sugestões de reaproveitamento;
+
+VIII — dashboards, indicadores e relatórios operacionais ou gerenciais;
+
+IX — geração, impressão ou exportação de relatórios, inclusive em PDF, quando habilitada;
+
+X — localização de pontos de coleta por cidade ou região, mediante integração com mapas e serviços de geolocalização;
+
+XI — chat interno ou recursos de comunicação entre usuários, quando habilitados;
+
+XII — configurações de conta, perfil e imagem do usuário;
+
+XIII — funções administrativas, incluindo gerenciamento de usuários, tipos de materiais, sugestões e permissões;
+
+XIV — registros técnicos, logs, auditoria e mecanismos de validação necessários ao funcionamento e à segurança do Software.
+
+3.2. Algumas funcionalidades podem depender de configuração, perfil de acesso, conexão com a internet, disponibilidade da API, credenciais válidas, serviços externos ou atualização da versão instalada.
+
+3.3. As Notas de Versão identificarão os recursos efetivamente disponibilizados em cada versão. Funcionalidades descritas como futuras, experimentais, em teste ou em desenvolvimento não integram obrigação de entrega até que sejam formalmente liberadas.
+
+CLÁUSULA 4 — CONCESSÃO E LIMITES DA LICENÇA
+
+4.1. A LICENCIANTE concede à LICENCIADA licença:
+
+I — temporária, pelo prazo de 12 (doze) meses;
+
+II — limitada às atividades internas e legítimas da LICENCIADA;
+
+III — não exclusiva;
+
+IV — não transferível;
+
+V — não sublicenciável;
+
+VI — revogável nas hipóteses de inadimplemento, uso ilícito, risco de segurança ou violação deste Contrato;
+
+VII — restrita ao uso do código executável e dos componentes oficialmente distribuídos.
+
+4.2. A LICENCIADA poderá permitir o uso do Software por seus empregados, administradores e prestadores que necessitem do acesso para execução de atividades autorizadas, permanecendo integralmente responsável pelos atos desses usuários.
+
+4.3. Cada conta deverá ser individual. Contas genéricas, compartilhadas ou utilizadas simultaneamente por pessoas distintas somente serão admitidas quando tecnicamente necessárias e formalmente autorizadas.
+
+4.4. A licença não autoriza a LICENCIADA a explorar comercialmente o Software em favor de terceiros, oferecer o ReGraphik como serviço próprio, revender acessos, alugar, ceder, sublicenciar, publicar ou distribuir cópias.
+
+CLÁUSULA 5 — USOS PROIBIDOS
+
+5.1. É vedado à LICENCIADA e aos usuários:
+
+I — copiar, reproduzir, redistribuir ou disponibilizar o Software fora dos limites deste Contrato;
+
+II — vender, alugar, emprestar, sublicenciar, ceder ou transferir o Software ou as credenciais de acesso;
+
+III — realizar engenharia reversa, descompilação, desmontagem ou tentativa de obtenção do código-fonte, ressalvadas as hipóteses expressamente admitidas por lei;
+
+IV — remover avisos de autoria, marcas, identificações de versão, controles de licença ou mecanismos de segurança;
+
+V — contornar autenticação, restrições de acesso, limites técnicos ou mecanismos de auditoria;
+
+VI — inserir código malicioso, malware, scripts, arquivos contaminados ou instruções destinadas a comprometer o Software ou terceiros;
+
+VII — utilizar o Software para fraude, violação de direitos, discriminação, assédio, espionagem, monitoramento ilícito, descarte ambiental irregular ou qualquer atividade contrária à lei;
+
+VIII — acessar dados, contas, mensagens, relatórios ou registros sem autorização;
+
+IX — fornecer dados falsos ou utilizar identidade de terceiros;
+
+X — explorar falhas de segurança sem autorização, divulgar vulnerabilidades antes de comunicação responsável ou realizar testes invasivos no ambiente de produção;
+
+XI — utilizar automações, robôs ou integrações não autorizadas que prejudiquem a estabilidade, segurança ou disponibilidade do Software;
+
+XII — utilizar chaves, tokens, credenciais ou serviços externos fornecidos pela LICENCIANTE em aplicações diferentes do ReGraphik.
+
+5.2. A violação desta cláusula poderá resultar em bloqueio imediato, suspensão da licença, rescisão, preservação de evidências e adoção das medidas administrativas ou judiciais cabíveis.
+
+CLÁUSULA 6 — PRAZO, ATIVAÇÃO E RENOVAÇÃO
+
+6.1. O Contrato vigorará por 12 (doze) meses contados da Data de Ativação.
+
+6.2. A ativação poderá ocorrer por instalação validada, primeiro acesso autorizado, registro eletrônico, assinatura física ou eletrônica, emissão de chave, liberação de conta administrativa ou início efetivo de uso.
+
+6.3. O prazo é determinado e não se renovará automaticamente, salvo quando houver previsão expressa na proposta comercial, aceite eletrônico específico ou termo de renovação.
+
+6.4. A renovação deverá ser formalizada antes do encerramento ou em até 30 (trinta) dias após o término, podendo envolver atualização da versão, revisão de valores, migração de dados e nova validação técnica.
+
+6.5. O uso após o término, sem renovação, não gera licença por prazo indeterminado e poderá ser bloqueado, ressalvado o período necessário para exportação de dados previsto neste Contrato.
+
+CLÁUSULA 7 — ENTREGA, INSTALAÇÃO, IMPLANTAÇÃO E ACEITE
+
+7.1. O Software será entregue por instalador, pacote de publicação, mídia digital, repositório autorizado ou procedimento de implantação definido pela LICENCIANTE.
+
+7.2. A LICENCIADA deverá disponibilizar equipamento, conexão, permissões administrativas, usuários responsáveis e demais condições necessárias à instalação.
+
+7.3. Após a instalação, serão realizados testes mínimos de:
+
+I — inicialização do aplicativo;
+
+II — autenticação de usuário autorizado;
+
+III — comunicação com a API e banco de dados;
+
+IV — cadastro ou consulta de registro de teste;
+
+V — acesso às funções liberadas para a versão;
+
+VI — exibição do mapa, quando configurado;
+
+VII — geração de relatório, quando habilitada;
+
+VIII — persistência e recuperação das informações de teste.
+
+7.4. A LICENCIADA terá 5 (cinco) Dias Úteis após a implantação para comunicar, de forma detalhada, eventual desconformidade impeditiva em relação às funcionalidades oficialmente liberadas.
+
+7.5. A ausência de comunicação fundamentada no prazo acima, o início de uso operacional ou a aprovação do checklist de validação caracterizará aceite da implantação, sem prejuízo da correção de defeitos posteriormente identificados.
+
+7.6. Ajustes decorrentes de infraestrutura inadequada, bloqueio de rede, serviço de terceiro, credencial inválida, dado incorreto ou alteração não autorizada não serão considerados falha de implantação da LICENCIANTE.
+
+CLÁUSULA 8 — REQUISITOS TÉCNICOS
+
+8.1. O ambiente mínimo previsto para o cliente desktop compreende:
+
+I — sistema operacional Windows 10 ou Windows 11, em arquitetura de 64 bits;
+
+II — processador Intel Core i3 ou equivalente compatível;
+
+III — memória RAM mínima de 4 GB;
+
+IV — unidade de armazenamento SSD de 512 GB no equipamento, com espaço livre suficiente para o Software, dependências, atualizações, arquivos temporários e relatórios;
+
+V — conexão estável com a internet;
+
+VI — permissões para comunicação segura por HTTPS;
+
+VII — .NET Runtime compatível com a versão publicada ou pacote de instalação autossuficiente;
+
+VIII — Microsoft Edge WebView2 Runtime, quando exigido para exibição do mapa.
+
+8.2. A LICENCIADA é responsável pela manutenção, segurança, atualização e licenciamento do sistema operacional, antivírus, rede, equipamentos e softwares de terceiros existentes em sua infraestrutura.
+
+8.3. A LICENCIANTE não responderá por falhas causadas por equipamento incompatível, sistema operacional sem suporte, bloqueio de firewall, proxy, antivírus, indisponibilidade de internet, falta de espaço, permissões insuficientes ou alteração do ambiente após a validação.
+
+CLÁUSULA 9 — REMUNERAÇÃO, TRIBUTOS E INADIMPLEMENTO
+
+9.1. Quando a licença for onerosa, os valores, vencimentos, forma de pagamento, reajuste e tributos serão definidos em proposta comercial, ordem de serviço, nota fiscal ou instrumento complementar.
+
+9.2. Na ausência de valor formalmente pactuado, a licença será considerada gratuita e destinada a implantação piloto, demonstração, avaliação técnica, validação acadêmica ou uso interno autorizado, sem obrigação de fornecimento de recursos adicionais não descritos neste Contrato.
+
+9.3. O atraso de pagamento, quando aplicável, poderá resultar em notificação e suspensão após prazo razoável para regularização, preservado o acesso necessário à exportação dos dados, salvo risco de segurança ou uso ilícito.
+
+9.4. A suspensão por inadimplemento não elimina valores vencidos nem prorroga automaticamente o prazo contratual.
+
+CLÁUSULA 10 — SUPORTE TÉCNICO E NÍVEIS DE ATENDIMENTO
+
+10.1. Durante a validade técnica, a LICENCIANTE prestará suporte relacionado ao funcionamento do Software conforme suas especificações, limitado ao escopo da versão licenciada.
+
+10.2. O suporte poderá abranger:
+
+I — orientação de instalação e ativação;
+
+II — esclarecimento sobre funcionalidades;
+
+III — análise de erros reproduzíveis;
+
+IV — correções de defeitos confirmados;
+
+V — orientação para atualização;
+
+VI — recuperação de acesso, observados os procedimentos de segurança;
+
+VII — análise inicial de incidentes relacionados ao Software.
+
+10.3. Não estão incluídos, salvo contratação específica:
+
+I — administração da rede ou equipamentos da LICENCIADA;
+
+II — suporte a sistemas operacionais, antivírus ou softwares de terceiros;
+
+III — desenvolvimento de novas funcionalidades;
+
+IV — customização de telas, relatórios ou regras de negócio;
+
+V — migração complexa ou saneamento de dados;
+
+VI — atendimento presencial;
+
+VII — treinamento adicional;
+
+VIII — recuperação de dados perdidos por ausência de backup sob responsabilidade da LICENCIADA;
+
+IX — correção de alterações realizadas sem autorização.
+
+10.4. O atendimento observará, como metas de resposta inicial:
+
+I — Criticidade Crítica: indisponibilidade total, perda relevante de acesso ou incidente grave de segurança — até 8 (oito) horas úteis;
+
+II — Criticidade Alta: módulo essencial indisponível sem alternativa razoável — até 1 (um) Dia Útil;
+
+III — Criticidade Média: falha parcial com alternativa operacional — até 2 (dois) Dias Úteis;
+
+IV — Criticidade Baixa: dúvida, melhoria ou problema de baixo impacto — até 5 (cinco) Dias Úteis.
+
+10.5. Os prazos acima são metas para resposta inicial e classificação, não garantia de solução definitiva. A resolução dependerá da complexidade, possibilidade de reprodução, disponibilidade de terceiros e cooperação da LICENCIADA.
+
+10.6. A LICENCIADA deverá fornecer descrição, evidências, data, usuário afetado, passos de reprodução, mensagens de erro e demais informações necessárias, evitando o envio desnecessário de dados pessoais.
+
+CLÁUSULA 11 — ATUALIZAÇÕES, CORREÇÕES E EVOLUÇÃO
+
+11.1. Durante a vigência, a LICENCIANTE poderá disponibilizar correções de defeitos, atualizações de segurança e melhorias compatíveis com a versão principal licenciada.
+
+11.2. Atualizações poderão exigir reinicialização, nova instalação, alteração de dependências ou indisponibilidade programada.
+
+11.3. Novas versões principais, módulos adicionais, integrações especiais ou customizações poderão depender de contratação própria.
+
+11.4. A LICENCIANTE poderá descontinuar componente ou integração quando houver risco de segurança, inviabilidade técnica, mudança de serviço de terceiro ou exigência legal, oferecendo, quando razoavelmente possível, alternativa compatível.
+
+11.5. A LICENCIADA deverá instalar atualizações críticas de segurança dentro do prazo recomendado. A recusa injustificada poderá limitar o suporte para falhas já corrigidas.
+
+CLÁUSULA 12 — OBRIGAÇÕES DA LICENCIANTE
+
+12.1. São obrigações da LICENCIANTE:
+
+I — disponibilizar o Software conforme a versão e o escopo contratados;
+
+II — fornecer documentação de instalação e uso;
+
+III — empregar esforços técnicos razoáveis para manter o funcionamento do Software;
+
+IV — corrigir defeitos reproduzíveis que impeçam o uso regular das funções liberadas;
+
+V — proteger credenciais e informações acessadas durante suporte;
+
+VI — comunicar alterações relevantes que afetem o uso;
+
+VII — observar a legislação aplicável à proteção de software, contratos, internet e dados pessoais;
+
+VIII — manter registro de versão e documentação técnica compatíveis com a implantação;
+
+IX — cooperar na exportação dos dados ao final da licença, nos limites técnicos disponíveis;
+
+X — preservar a confidencialidade das informações da LICENCIADA.
+
+CLÁUSULA 13 — OBRIGAÇÕES DA LICENCIADA
+
+13.1. São obrigações da LICENCIADA:
+
+I — utilizar o Software de forma lícita e conforme este Contrato e o Termo de Uso;
+
+II — fornecer infraestrutura compatível;
+
+III — designar usuários e administrador responsável;
+
+IV — manter dados cadastrais e contatos atualizados;
+
+V — proteger senhas, tokens, dispositivos e credenciais;
+
+VI — revogar acessos de pessoas desligadas ou não autorizadas;
+
+VII — inserir somente dados verdadeiros, necessários e legitimamente obtidos;
+
+VIII — obter autorizações e bases legais para tratamento dos dados inseridos;
+
+IX — realizar e testar backups sob sua responsabilidade quando a arquitetura implantada assim exigir;
+
+X — comunicar incidentes, vulnerabilidades ou uso indevido;
+
+XI — não modificar arquivos, banco, integrações ou componentes sem autorização;
+
+XII — colaborar com diagnóstico, atualização e correção;
+
+XIII — respeitar direitos de propriedade intelectual;
+
+XIV — pagar os valores contratados, quando aplicável;
+
+XV — manter controle interno sobre os relatórios e decisões tomadas com apoio do Software.
+
+CLÁUSULA 14 — DADOS PESSOAIS E PRIVACIDADE
+
+14.1. As PARTES comprometem-se a tratar dados pessoais de acordo com a legislação aplicável, especialmente os princípios de finalidade, adequação, necessidade, segurança, prevenção, transparência e responsabilização.
+
+14.2. Em relação aos dados inseridos pela LICENCIADA para sua operação, a LICENCIADA atuará, em regra, como controladora, definindo finalidades, bases legais, usuários autorizados e prazos internos de conservação.
+
+14.3. A LICENCIANTE atuará como operadora quando tratar dados pessoais exclusivamente em nome da LICENCIADA para hospedagem, manutenção, suporte, correção, segurança ou execução técnica do Software.
+
+14.4. A LICENCIANTE poderá atuar como controladora independente quanto aos dados estritamente necessários à gestão contratual, faturamento, proteção de direitos, prevenção a fraude, segurança e comunicação administrativa.
+
+14.5. A LICENCIADA declara que:
+
+I — possui base legal para inserir e tratar os dados;
+
+II — informará os titulares quando exigido;
+
+III — limitará a coleta ao necessário;
+
+IV — atenderá solicitações dos titulares;
+
+V — não utilizará o Software para armazenar dados pessoais sensíveis sem necessidade, base legal e medidas adicionais de proteção;
+
+VI — não inserirá dados de crianças e adolescentes sem fundamento legal e salvaguardas adequadas.
+
+14.6. A LICENCIANTE adotará medidas técnicas e administrativas razoáveis, compatíveis com a natureza do Software e os riscos envolvidos, para proteger os dados contra acesso não autorizado, perda, destruição, alteração ou divulgação indevida.
+
+14.7. Havendo incidente confirmado que possa acarretar risco ou dano relevante, a PARTE que o identificar comunicará a outra sem atraso injustificado, fornecendo as informações disponíveis para avaliação e cumprimento das obrigações legais.
+
+14.8. A comunicação aos titulares e à autoridade competente será realizada pela PARTE responsável, conforme seu papel e a legislação aplicável, com cooperação da outra PARTE.
+
+14.9. O Software poderá utilizar provedores de nuvem, serviços de mapas e outras plataformas de terceiros. A LICENCIADA reconhece que o tratamento poderá envolver infraestrutura externa e deverá considerar os termos e políticas desses provedores.
+
+14.10. Encerrada a licença, a LICENCIADA poderá solicitar exportação dos dados em formato tecnicamente disponível dentro do prazo previsto na Cláusula 23.
+
+CLÁUSULA 15 — SEGURANÇA DA INFORMAÇÃO
+
+15.1. A LICENCIADA deverá aplicar controles de acesso, senhas fortes, autenticação disponível, atualização do sistema operacional, antivírus, firewall, bloqueio de sessão e gestão de usuários.
+
+15.2. A LICENCIANTE poderá manter logs técnicos de autenticação, operação, erro, auditoria e segurança, limitados ao necessário para funcionamento, prevenção de fraude, investigação e cumprimento de obrigações.
+
+15.3. Credenciais administrativas, chaves de API, tokens e segredos deverão permanecer restritos às pessoas autorizadas.
+
+15.4. É proibido transmitir credenciais por meios inseguros ou armazená-las em arquivos públicos, repositórios abertos ou mensagens acessíveis a terceiros.
+
+15.5. A LICENCIADA deverá comunicar imediatamente suspeita de comprometimento e alterar as credenciais afetadas.
+
+CLÁUSULA 16 — PROPRIEDADE INTELECTUAL
+
+16.1. O Software, seu código, estrutura, arquitetura, documentação, identidade visual, banco de regras, modelos, interfaces, textos e demais elementos são protegidos pela legislação de propriedade intelectual.
+
+16.2. Todos os direitos não expressamente concedidos permanecem reservados à LICENCIANTE ou aos respectivos titulares.
+
+16.3. Este Contrato não transfere à LICENCIADA titularidade sobre o Software, marca, nome, domínio, documentação, código-fonte ou tecnologia.
+
+16.4. Os Dados da LICENCIADA permanecerão de titularidade da LICENCIADA ou de seus respectivos titulares.
+
+16.5. Sugestões, comentários e relatos de erro poderão ser utilizados para melhoria do Software, sem acesso ou divulgação indevida de informações confidenciais.
+
+16.6. O desenvolvimento do ReGraphik ocorreu em contexto acadêmico. A instituição de ensino e o instrutor mencionados na documentação não se tornam parte deste Contrato nem assumem obrigações perante a LICENCIADA, salvo assinatura expressa em instrumento próprio.
+
+CLÁUSULA 17 — COMPONENTES E SERVIÇOS DE TERCEIROS
+
+17.1. O Software poderá utilizar componentes de código aberto, bibliotecas, runtimes, bancos em nuvem, APIs e serviços de terceiros, sujeitos às licenças e termos próprios.
+
+17.2. Entre os recursos que podem integrar a solução estão .NET, WPF, ASP.NET Core, Firebase, Google Maps Places API, Leaflet.js e Microsoft Edge WebView2.
+
+17.3. A disponibilidade, limites, preços, políticas, cobertura e continuidade dos serviços de terceiros não são controlados integralmente pela LICENCIANTE.
+
+17.4. Alterações, interrupções, bloqueios, limites de requisição, mudanças de preço ou encerramento de serviço de terceiro poderão afetar funcionalidades.
+
+17.5. A LICENCIANTE empregará esforços razoáveis para adaptar a solução ou indicar alternativa quando tecnicamente viável, sem assumir obrigação de manter indefinidamente integração descontinuada por terceiro.
+
+CLÁUSULA 18 — CONFIDENCIALIDADE
+
+18.1. Cada PARTE deverá manter em sigilo informações técnicas, comerciais, estratégicas, operacionais, pessoais ou de segurança recebidas da outra PARTE.
+
+18.2. As informações confidenciais somente poderão ser utilizadas para execução deste Contrato e compartilhadas com pessoas que necessitem conhecê-las e estejam sujeitas a dever de confidencialidade.
+
+18.3. Não serão consideradas confidenciais informações que:
+
+I — sejam públicas sem violação deste Contrato;
+
+II — já fossem legitimamente conhecidas pela PARTE receptora;
+
+III — sejam recebidas licitamente de terceiro;
+
+IV — sejam desenvolvidas de forma independente;
+
+V — devam ser divulgadas por lei, ordem judicial ou autoridade competente.
+
+18.4. O dever de confidencialidade permanecerá por 5 (cinco) anos após o encerramento, sem limitação temporal para segredos de negócio, credenciais, dados pessoais e informações cuja proteção deva persistir por lei.
+
+CLÁUSULA 19 — BACKUP, INTEGRIDADE E EXPORTAÇÃO DE DADOS
+
+19.1. A arquitetura do ReGraphik poderá armazenar dados em nuvem e configurações específicas no computador do usuário.
+
+19.2. As responsabilidades de backup serão definidas conforme o ambiente implantado. A LICENCIADA deverá manter cópias dos documentos, relatórios exportados, dados de origem e informações indispensáveis à continuidade do negócio.
+
+19.3. A LICENCIANTE não será responsável por perda causada por exclusão realizada por usuário autorizado, falha de equipamento da LICENCIADA, malware, credencial comprometida, serviço externo, ausência de conexão, alteração não autorizada ou falta de backup sob responsabilidade da LICENCIADA.
+
+19.4. A LICENCIADA poderá solicitar exportação dos dados em formato disponível, observadas as limitações técnicas, direitos de terceiros e requisitos de segurança.
+
+CLÁUSULA 20 — GARANTIAS E VALIDADE TÉCNICA
+
+20.1. A LICENCIANTE garante, durante a validade técnica de 12 (doze) meses, que o Software será apto a executar substancialmente as funcionalidades oficialmente liberadas, desde que instalado e utilizado conforme a documentação e os requisitos técnicos.
+
+20.2. A garantia consiste, a critério da LICENCIANTE, em corrigir o defeito, fornecer orientação, disponibilizar atualização, restaurar versão estável ou oferecer alternativa tecnicamente razoável.
+
+20.3. A garantia não cobre:
+
+I — uso contrário à documentação;
+
+II — alteração não autorizada;
+
+III — incompatibilidade decorrente de mudança na infraestrutura da LICENCIADA;
+
+IV — interrupção de internet ou serviço de terceiro;
+
+V — dados incorretos, incompletos ou ilícitos;
+
+VI — falha causada por malware, equipamento, sistema operacional ou software externo;
+
+VII — utilização de versão desatualizada quando houver correção disponível;
+
+VIII — expectativa de resultado econômico, ambiental ou operacional não garantido.
+
+20.4. O Software é ferramenta de apoio. A LICENCIADA permanece responsável por decisões de gestão, classificação, reaproveitamento, descarte, conformidade ambiental, registros contábeis e cumprimento de obrigações legais.
+
+CLÁUSULA 21 — RESPONSABILIDADE E LIMITAÇÃO
+
+21.1. Cada PARTE responderá pelos danos diretos comprovadamente causados por descumprimento de suas obrigações, respeitada a legislação aplicável.
+
+21.2. A LICENCIANTE não responderá por lucros cessantes, perda indireta, dano consequencial, perda de oportunidade, interrupção causada por terceiro ou decisão tomada exclusivamente com base em informação inserida incorretamente pela LICENCIADA, salvo quando a exclusão for vedada por lei.
+
+21.3. Quando a licença for onerosa, a responsabilidade total da LICENCIANTE por danos contratuais ficará limitada ao valor efetivamente pago pela LICENCIADA nos 12 (doze) meses anteriores ao evento. Quando gratuita, ficará limitada aos danos diretos comprovados e à obrigação de correção, exportação ou encerramento seguro, conforme aplicável.
+
+21.4. A limitação não se aplica a dolo, fraude, violação intencional de confidencialidade, infração deliberada de propriedade intelectual, descumprimento de obrigação legal não passível de limitação ou dano decorrente de tratamento ilícito de dados imputável à PARTE responsável.
+
+21.5. A LICENCIADA responderá por uso indevido de seus usuários, dados ilícitos, credenciais compartilhadas, decisões de descarte e violação de direitos de terceiros.
+
+CLÁUSULA 22 — SUSPENSÃO
+
+22.1. A LICENCIANTE poderá suspender total ou parcialmente o acesso quando necessário para:
+
+I — manutenção emergencial;
+
+II — contenção de incidente de segurança;
+
+III — proteção de dados ou usuários;
+
+IV — cumprimento de ordem legal;
+
+V — investigação de fraude ou acesso indevido;
+
+VI — inadimplemento, quando aplicável;
+
+VII — violação grave deste Contrato;
+
+VIII — risco à infraestrutura, ao Software ou a terceiros.
+
+22.2. Sempre que possível, a LICENCIANTE comunicará previamente a suspensão e indicará medidas para regularização.
+
+22.3. Em situação urgente, a suspensão poderá ser imediata, com comunicação posterior.
+
+CLÁUSULA 23 — RESCISÃO E EFEITOS DO ENCERRAMENTO
+
+23.1. O Contrato poderá ser rescindido:
+
+I — pelo término do prazo sem renovação;
+
+II — por acordo escrito;
+
+III — por inadimplemento não sanado em até 10 (dez) Dias Úteis após notificação;
+
+IV — imediatamente, em caso de fraude, uso ilícito, violação grave de segurança, propriedade intelectual ou confidencialidade;
+
+V — por impossibilidade técnica ou legal superveniente;
+
+VI — por encerramento definitivo do projeto, mediante comunicação razoável e medidas de transição.
+
+23.2. Encerrada a licença:
+
+I — cessará o direito de uso;
+
+II — a LICENCIADA deverá interromper o acesso e remover cópias não autorizadas;
+
+III — permanecerão exigíveis valores vencidos;
+
+IV — as cláusulas de confidencialidade, propriedade intelectual, proteção de dados, responsabilidade e foro continuarão vigentes;
+
+V — a LICENCIADA poderá solicitar exportação dos dados em até 30 (trinta) dias;
+
+VI — após o prazo de exportação, os dados poderão ser eliminados ou anonimizados em até 60 (sessenta) dias, ressalvadas cópias de segurança transitórias, obrigações legais e preservação necessária ao exercício de direitos.
+
+23.3. A rescisão por culpa da LICENCIADA não dará direito à restituição de valores referentes ao período já disponibilizado, salvo determinação legal ou acordo escrito.
+
+CLÁUSULA 24 — AUDITORIA E REGISTROS
+
+24.1. A LICENCIANTE poderá utilizar registros técnicos para verificar versão, ativação, integridade, segurança e cumprimento da licença, observados os princípios de necessidade e transparência.
+
+24.2. Havendo indício fundamentado de uso irregular, a LICENCIANTE poderá solicitar informações razoáveis sobre instalações e usuários.
+
+24.3. A auditoria não autoriza acesso irrestrito a dados da LICENCIADA e deverá evitar interferência indevida em sua operação.
+
+CLÁUSULA 25 — COMUNICAÇÕES
+
+25.1. Comunicações poderão ocorrer por mensagem no Software, e-mail cadastrado, sistema de chamados, termo de implantação ou outro canal oficial informado pela LICENCIANTE.
+
+25.2. A LICENCIADA é responsável por manter atualizados seus dados de contato e por acompanhar comunicações relacionadas a segurança, atualização, suspensão e vencimento.
+
+25.3. Notificações serão consideradas recebidas na data da confirmação eletrônica, da leitura, da entrega registrada ou, na ausência de confirmação, no primeiro Dia Útil após o envio ao contato cadastrado.
+
+CLÁUSULA 26 — FORÇA MAIOR
+
+26.1. Nenhuma PARTE será responsável por atraso ou impossibilidade causada por evento fora de controle razoável, incluindo desastre, incêndio, enchente, guerra, ato governamental, ataque cibernético de grande escala, falha generalizada de telecomunicações, energia, nuvem ou serviço essencial.
+
+26.2. A PARTE afetada deverá comunicar o evento, reduzir impactos e retomar as obrigações assim que possível.
+
+CLÁUSULA 27 — CONFORMIDADE LEGAL E AMBIENTAL
+
+27.1. A LICENCIADA utilizará o Software em conformidade com as normas aplicáveis à sua atividade, inclusive regras ambientais, trabalhistas, fiscais, de segurança da informação e proteção de dados.
+
+27.2. O ReGraphik não substitui licenças ambientais, laudos, manifestos, registros oficiais, pareceres técnicos, obrigações de destinação ou procedimentos exigidos pelas autoridades.
+
+27.3. Sugestões de reaproveitamento e pontos de coleta constituem apoio informacional. A LICENCIADA deverá verificar condições técnicas, comerciais, ambientais, sanitárias e regulatórias antes de executar qualquer destinação.
+
+CLÁUSULA 28 — ALTERAÇÕES CONTRATUAIS
+
+28.1. Alterações materiais deste Contrato dependerão de instrumento escrito, aceite eletrônico específico ou renovação.
+
+28.2. Ajustes operacionais, atualização de canal, melhoria de segurança ou mudança que não reduza direitos essenciais poderão ser comunicados pelos canais oficiais.
+
+28.3. Em caso de conflito, prevalecerá a seguinte ordem:
+
+I — termo aditivo ou proposta comercial específica;
+
+II — este Contrato;
+
+III — Termo de Uso;
+
+IV — ordem de serviço;
+
+V — Guia de Instalação, Manual do Usuário e Notas de Versão.
+
+CLÁUSULA 29 — CESSÃO, SUBCONTRATAÇÃO E SUCESSÃO
+
+29.1. A LICENCIADA não poderá ceder este Contrato sem autorização escrita.
+
+29.2. A LICENCIANTE poderá contratar provedores e prestadores necessários à hospedagem, suporte, segurança ou evolução, mantendo responsabilidade pelas obrigações que lhe competirem.
+
+29.3. O Contrato vinculará as PARTES e seus sucessores autorizados.
+
+CLÁUSULA 30 — ACEITE E ASSINATURA ELETRÔNICA
+
+30.1. O aceite poderá ocorrer por assinatura física, assinatura eletrônica, marcação de caixa de concordância, confirmação de instalação, ativação, primeiro acesso ou outra manifestação inequívoca.
+
+30.2. O registro eletrônico de data, hora, versão do documento, usuário, dispositivo ou endereço de rede poderá ser utilizado como evidência do aceite, observada a legislação aplicável.
+
+30.3. A pessoa que aceitar em nome da LICENCIADA declara possuir poderes para vinculá-la.
+
+CLÁUSULA 31 — DISPOSIÇÕES GERAIS
+
+31.1. A tolerância de uma PARTE não constituirá renúncia, alteração ou novação.
+
+31.2. A nulidade de uma disposição não afetará as demais, que permanecerão válidas.
+
+31.3. Este Contrato constitui o entendimento entre as PARTES sobre a licença, sem prejuízo dos instrumentos complementares.
+
+31.4. Títulos são utilizados apenas para organização e não limitam a interpretação.
+
+31.5. O idioma oficial é o português do Brasil.
+
+CLÁUSULA 32 — LEGISLAÇÃO E FORO
+
+32.1. Este Contrato será regido pelas leis da República Federativa do Brasil.
+
+32.2. As PARTES buscarão solução consensual antes de medida judicial.
+
+32.3. Fica eleito o foro da Comarca de Nova Lima, Estado de Minas Gerais, para dirimir controvérsias, sem prejuízo de foro obrigatório previsto em lei.
+
+ANEXO I — ESCOPO FUNCIONAL DE REFERÊNCIA
+
+1. Gestão de usuários e autenticação.
+2. Cadastro e classificação de resíduos.
+3. Controle de status e estoque reverso.
+4. Sugestões de reaproveitamento.
+5. Registro da aplicação de sugestões.
+6. Dashboard e indicadores.
+7. Relatórios e exportação.
+8. Mapa e busca de pontos de coleta.
+9. Chat interno, quando habilitado.
+10. Configurações de conta e perfil.
+11. Funções administrativas.
+12. Logs e controles técnicos de segurança.
+
+ANEXO II — MATRIZ DE RESPONSABILIDADES
+
+LICENCIANTE:
+a) disponibilização da versão;
+b) documentação;
+c) correção de defeitos confirmados;
+d) suporte do Software;
+e) segurança dos componentes sob seu controle;
+f) cooperação em incidentes e exportação.
+
+LICENCIADA:
+a) infraestrutura local;
+b) usuários e permissões;
+c) legalidade e qualidade dos dados;
+d) segurança de dispositivos e credenciais;
+e) decisões operacionais e ambientais;
+f) backup de documentos e dados sob sua guarda;
+g) comunicação de incidentes;
+h) uso conforme contrato.
+
+TERCEIROS:
+a) disponibilidade de nuvem, mapas, internet e runtimes;
+b) cumprimento dos respectivos termos;
+c) alterações ou limitações próprias de seus serviços.
+
+ANEXO III — TERMO DE ACEITE CONTRATUAL
+
+Ao assinar, aceitar eletronicamente, instalar, ativar ou utilizar o ReGraphik, a LICENCIADA declara:
+
+1. ter lido e compreendido este Contrato;
+2. aceitar a licença pelo prazo de 12 (doze) meses;
+3. conhecer os requisitos técnicos;
+4. responsabilizar-se pelos usuários e dados inseridos;
+5. aceitar o Termo de Uso;
+6. reconhecer os limites da licença e da propriedade intelectual;
+7. autorizar os registros técnicos necessários à segurança e comprovação do aceite.
+
+LICENCIADA:
+Razão social ou nome: ______________________________________________
+CNPJ/CPF: _________________________________________________________
+Representante: ____________________________________________________
+Cargo: ____________________________________________________________
+Data de ativação/aceite: ___________________________________________
+Assinatura: _______________________________________________________
+
+LICENCIANTE — EQUIPE REGRAPHIK:
+Representante: ____________________________________________________
+Data: _____________________________________________________________
+Assinatura: _______________________________________________________
+
+TESTEMUNHA 1:
+Nome: _____________________________________________________________
+CPF: ______________________________________________________________
+Assinatura: _______________________________________________________
+
+TESTEMUNHA 2:
+Nome: _____________________________________________________________
+CPF: ______________________________________________________________
+Assinatura: _______________________________________________________
+
+FIM DO CONTRATO DE LICENÇA DE USO DE SOFTWARE REGRAPHIK
