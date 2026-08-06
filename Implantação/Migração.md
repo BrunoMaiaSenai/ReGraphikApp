@@ -1,4 +1,4 @@
-# Migracao.md — ReGraphik
+# Migração de Dados — ReGraphik
 
 **Unidade Curricular:** Implantação de Sistemas
 **Projeto:** ReGraphik — Sistema de Gestão de Estoque Reverso
