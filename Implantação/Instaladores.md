@@ -141,39 +141,64 @@ Name: "{autodesktop}\ReGraphik"; Filename: "{app}\App\ReGraphik.exe"; WorkingDir
 Name: "desktopicon"; Description: "Criar atalho na Área de Trabalho"; GroupDescription: "Atalhos adicionais:"
 ```
 
-### 3.3 Passos para Criação:
+### 3.3 Guia de Instalação e Configuração do Inno Setup
 
-#### Como baixar e instalar
-- **1. Acesse o site oficial:** ***jrsoftware.org/isinfo.php*** e aperte em Downloads Inno Setup
+Siga os passos abaixo para preparar o ambiente e vincular o script de instalação à solução do projeto:
 
-<img width="1412" height="496" alt="image" src="https://github.com/user-attachments/assets/f1afb04a-8bbf-44a7-95f2-194b68ae3aa7" />
+#### Download e Instalação da Ferramenta
 
----
+1. **Acesso ao Portal Oficial**  
+   Acesse o site oficial do Inno Setup em [jrsoftware.org/isinfo.php](https://jrsoftware.org/isinfo.php) e clique no link **Inno Setup Downloads**.
 
-- **2. Vá até a seção de Downloads e baixe a versão mais recente.**
-
-<img width="1320" height="122" alt="image" src="https://github.com/user-attachments/assets/73a7637a-943d-495e-8681-1a92e21182df" />
+   <img width="1412" height="496" alt="Acesso ao site oficial do Inno Setup" src="https://github.com/user-attachments/assets/f1afb04a-8bbf-44a7-95f2-194b68ae3aa7" />
 
 ---
 
-- **3. Instale e abra o Inno Setup.**
-  
-<img width="1417" height="587" alt="image" src="https://github.com/user-attachments/assets/97a8aef5-9e2d-4122-aa09-9567aad49cdb" />
+2. **Obtenção do Executável**  
+   Navegue até a seção de downloads e faça o download da versão estável mais recente do instalador (`innosetup-x.x.x.exe`).
+
+   <img width="1320" height="122" alt="Seção de download da versão estável" src="https://github.com/user-attachments/assets/73a7637a-943d-495e-8681-1a92e21182df" />
 
 ---
 
-- **4. Adicione o script de compilação.**
-  
-<img width="1417" height="707" alt="image" src="https://github.com/user-attachments/assets/19b117b3-65d6-47b0-96d4-f553973f4e06" />
+3. **Instalação e Execução**  
+   Execute o arquivo baixado, siga o assistente padrão de instalação do Windows e abra o **Inno Setup Compiler**.
+
+   <img width="1417" height="587" alt="Tela inicial do Inno Setup Compiler" src="https://github.com/user-attachments/assets/97a8aef5-9e2d-4122-aa09-9567aad49cdb" />
 
 ---
 
-- **5. Salve na solução do seu projeto, apertando em file e save as**
-  
-  <img width="603" height="347" alt="image" src="https://github.com/user-attachments/assets/818bbfa3-5019-4396-ae69-69e017091740" />
+#### Configuração do Script no Projeto
 
-  <img width="1225" height="682" alt="image" src="https://github.com/user-attachments/assets/c054f1ad-8e25-4b30-ae69-9900018301ae" />
-  
+4. **Inclusão do Script de Compilação**  
+   Cole o script `.iss` configurado para o ReGraphik no editor do Inno Setup.
+
+   <img width="1417" height="707" alt="Script de compilação inserido no editor" src="https://github.com/user-attachments/assets/19b117b3-65d6-47b0-96d4-f553973f4e06" />
+
+---
+
+5. **Vincular e Salvar na Solução**  
+   Acesse o menu **File > Save As...** e salve o arquivo do script (`.iss`) diretamente no diretório raiz da solução do seu projeto.
+
+   <img width="603" height="347" alt="Menu File Save As no Inno Setup" src="https://github.com/user-attachments/assets/818bbfa3-5019-4396-ae69-69e017091740" />
+
+   <img width="1225" height="682" alt="Seleção da pasta raiz do projeto no Windows Explorer" src="https://github.com/user-attachments/assets/c054f1ad-8e25-4b30-ae69-9900018301ae" />
+
+---
+
+#### 3. Compilação e Localização do Instalador (`.exe`)
+
+6. **Compilação do Script e Acesso ao Arquivo Gerado**  
+   * No Inno Setup Compiler, pressione **F9** ou clique no menu superior **Build > Compile** para gerar o instalador.
+   * Após a compilação, acesse a pasta de saída clicando no menu **Build > Open Output Folder** (ou pressione `Ctrl + F9`).
+   * O executável final estará salvo no diretório especificado pelo script:
+     ```text
+     ReGraphik\Installer_InnoSetup\ReGraphik_Setup.exe
+     ```
+     <img width="775" height="63" alt="image" src="https://github.com/user-attachments/assets/c28b5376-e022-402d-a9be-2b1cb10f034c" />
+
+   * **Este arquivo `ReGraphik_Setup.exe` é o único executável necessário para enviar e instalar a aplicação no cliente.**
+
 ---
 
 ## 4. Etapa 3: Criação do Instalador do Windows Installer (.msi) com WiX Toolset
@@ -275,54 +300,83 @@ O WiX Toolset (v3.11) foi utilizado para gerar o pacote corporativo de instalaç
 </Wix>
 ```
 
-### 4.3 Passos para Criação:
+### 4.3 Guia de Configuração e Criação do Projeto WiX Toolset
 
-- **1. Abra o Visual Studio e entre em extensão (Extensions) e selecione manager extensions.**
+Siga o passo a passo abaixo para instalar a extensão do WiX Toolset no Visual Studio, preparar o compilador e criar o pacote de instalação `.msi`:
 
-<img width="951" height="76" alt="image" src="https://github.com/user-attachments/assets/67d2ef63-c8b5-4778-af9c-34ee4faaaa65" />
+#### 1. Instalação da Extensão no Visual Studio
 
+1. **Acesso ao Gerenciador de Extensões**  
+   Abra o Visual Studio, acesse o menu superior em **Extensions** (Extensões) e clique em **Manage Extensions** (Gerenciar Extensões).
 
----
-
-- **2. Instalação do compilador WiX Toolset v3.11 no Windows e da extensão WiX Toolset Extension no Visual Studio.**
-
-<img width="1432" height="781" alt="Captura de tela 2026-08-04 155320" src="https://github.com/user-attachments/assets/ae7fbb63-b000-4a17-bbbe-d115c6d15f98" />
+   <img width="951" height="76" alt="Acesso ao menu Extensions no Visual Studio" src="https://github.com/user-attachments/assets/67d2ef63-c8b5-4778-af9c-34ee4faaaa65" />
 
 ---
 
-- **3. Abra o Wix e deixe instalar os recursos.**
+2. **Instalação da Extensão WiX**  
+   Na barra de pesquisa, busque por **WiX Toolset Extension**, selecione a extensão correspondente e clique em **Download/Install**.
 
-<img width="545" height="408" alt="Captura de tela 2026-08-04 155348" src="https://github.com/user-attachments/assets/a571c39e-fc9b-4f41-af56-8f3ca80141d4" />
-
-<img width="542" height="408" alt="Captura de tela 2026-08-04 155454" src="https://github.com/user-attachments/assets/652b0eee-81d6-4a81-8cdf-7289fa5f0698" />
-
----
-
-- **4. Selecione a solução com o botão direito, vá em Add e crie um projeto wix.**
-
-<img width="440" height="211" alt="Captura de tela 2026-08-04 155808" src="https://github.com/user-attachments/assets/ae546b08-ceb5-469d-8076-44583fccd8c2" />
-
-<img width="752" height="747" alt="Captura de tela 2026-08-04 155827" src="https://github.com/user-attachments/assets/119cdfe4-9e66-40e0-ac83-95a56ae03f08" />
-
-<img width="1298" height="238" alt="Captura de tela 2026-08-04 155851" src="https://github.com/user-attachments/assets/c13b6b31-e7e8-4db8-b820-6acd99db0c50" />
+   <img width="1432" height="781" alt="Busca e instalação da extensão WiX Toolset Extension" src="https://github.com/user-attachments/assets/ae7fbb63-b000-4a17-bbbe-d115c6d15f98" />
 
 ---
 
-- **5. Baixe o aplicativo wix, utilizando o link https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311.exe e instale.**
+3. **Conclusão do VSIX Installer**  
+   Feche o Visual Studio para permitir que o instalador **VSIX** aplique as modificações necessárias e instale os recursos da extensão.
 
-<img width="250" height="67" alt="image" src="https://github.com/user-attachments/assets/b38fedf5-844e-4cea-9fe5-832bf276d5c0" />
+   <img width="545" height="408" alt="Assistente de instalação do VSIX em andamento" src="https://github.com/user-attachments/assets/a571c39e-fc9b-4f41-af56-8f3ca80141d4" />
 
-<img width="492" height="498" alt="image" src="https://github.com/user-attachments/assets/e05a3d20-06c3-40b5-93c1-00036e7a37f4" />
+   <img width="542" height="408" alt="Conclusão da instalação da extensão no VSIX Installer" src="https://github.com/user-attachments/assets/652b0eee-81d6-4a81-8cdf-7289fa5f0698" />
 
 ---
 
-- **6. Entre no Product.wxs do seu novo Setup e coloque os arquivos atualizados das configurações XML.**
+#### 2. Download e Instalação do Compilador WiX
 
-**Modelo Padrão criado:**
-<img width="1128" height="487" alt="Captura de tela 2026-08-04 160827" src="https://github.com/user-attachments/assets/c70b7b8e-5ea2-4da5-bb75-483d95c27a5b" />
+4. **Instalação do Engine do WiX Toolset v3.11**  
+   Faça o download do executável oficial do compilador no GitHub através do link [wix311.exe](https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311.exe) e conclua a instalação em sua máquina.
 
-**Modelo novo atualizado:**
-<img width="1246" height="955" alt="image" src="https://github.com/user-attachments/assets/d3ab1107-b088-4523-8d43-a552f9fed84f" />
+   <img width="250" height="67" alt="Arquivo wix311.exe baixado" src="https://github.com/user-attachments/assets/b38fedf5-844e-4cea-9fe5-832bf276d5c0" />
+
+   <img width="492" height="498" alt="Tela de instalação do WiX Toolset Build Tools" src="https://github.com/user-attachments/assets/e05a3d20-06c3-40b5-93c1-00036e7a37f4" />
+
+---
+
+#### 3. Criação e Configuração do Projeto Setup
+
+5. **Inclusão do Projeto na Solução**  
+   No **Solution Explorer**, clique com o botão direito sobre a **Solução**, navegue até **Add > New Project...** e selecione o modelo **WPF / Windows Setup Project** (WiX).
+
+   <img width="440" height="211" alt="Menu de contexto Add New Project na Solução" src="https://github.com/user-attachments/assets/ae546b08-ceb5-469d-8076-44583fccd8c2" />
+
+   <img width="752" height="747" alt="Janela de seleção do modelo de projeto WiX" src="https://github.com/user-attachments/assets/119cdfe4-9e66-40e0-ac83-95a56ae03f08" />
+
+   <img width="1298" height="238" alt="Projeto WiX adicionado à arvore de arquivos da Solução" src="https://github.com/user-attachments/assets/c13b6b31-e7e8-4db8-b820-6acd99db0c50" />
+
+---
+
+6. **Edição do Arquivo `Product.wxs`**  
+   Abra o arquivo `Product.wxs` gerado automaticamente pelo template e substitua o código padrão pelas configurações XML atualizadas do ReGraphik.
+
+   * **Modelo Padrão (Gerado pelo Template):**
+   <img width="1128" height="487" alt="Código padrão do arquivo Product.wxs" src="https://github.com/user-attachments/assets/c70b7b8e-5ea2-4da5-bb75-483d95c27a5b" />
+
+   * **Modelo Atualizado (Customizado para o ReGraphik):**
+   <img width="1246" height="955" alt="Código XML atualizado com as regras do ReGraphik" src="https://github.com/user-attachments/assets/d3ab1107-b088-4523-8d43-a552f9fed84f" />
+   
+---
+
+#### 4. Compilação e Localização do Instalador (`.msi`)
+
+7. **Compilação do Pacote e Acesso ao Arquivo Gerado**  
+   * No Visual Studio, clique com o botão direito sobre o projeto WiX (`ReGraphikSetup`) no **Solution Explorer** e selecione **Build** (ou **Rebuild**).
+   * Após a compilação bem-sucedida, clique novamente com o botão direito sobre o projeto WiX e selecione **Open Folder in File Explorer**.
+   * O instalador gerado estará localizado no seguinte diretório:
+     ```text
+     ReGraphik\ReGraphikSetup\bin\Release\ReGraphikSetup.msi
+     ```
+     
+     <img width="795" height="97" alt="image" src="https://github.com/user-attachments/assets/a7123ebc-1dcb-4fbf-8edf-5ba2bcdc78ef" />
+
+   * **Este arquivo `.msi` é o pacote final de instalação que deve ser disponibilizado ao cliente.**
 
 ---
 
