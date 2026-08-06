@@ -20,7 +20,7 @@ A solução centraliza o mapeamento de materiais gerados, acompanha seus ciclos 
 <br />
 
 <p align="center">
-  <img src="./img/image1.png" width="650" alt="Fluxo operacional planejado para os usuários do ReGraphik" />
+  <img src="./img/image1.png" width="7000" alt="Fluxo operacional planejado para os usuários do ReGraphik" />
   <br />
   <em>Figura 1 — Fluxo operacional planejado para os usuários do ReGraphik.</em>
 </p>
