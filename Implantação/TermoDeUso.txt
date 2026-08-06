@@ -1,0 +1,578 @@
+REGRAPHIK — TERMO DE USO DO SOFTWARE
+Versão do documento: 1.0
+Software: ReGraphik — Sistema de Gestão de Estoque Reverso, versão 1.0.0
+Data de atualização: 05 de agosto de 2026
+
+1. APRESENTAÇÃO
+
+1.1. Este Termo de Uso estabelece as regras aplicáveis ao acesso e à utilização do ReGraphik — Sistema de Gestão de Estoque Reverso.
+
+1.2. O ReGraphik é uma solução para empresas e profissionais que necessitam registrar, classificar, acompanhar e gerenciar resíduos gerados no setor gráfico, apoiar processos de reaproveitamento e localizar pontos de coleta.
+
+1.3. O Software pode incluir aplicação desktop para Windows, API REST, banco de dados em nuvem, serviços de mapas, relatórios, chat, painéis e outros componentes necessários ao funcionamento.
+
+1.4. Este Termo complementa o Contrato de Licença de Uso. Em caso de conflito, prevalecerá o Contrato de Licença ou instrumento específico assinado com a organização usuária.
+
+2. ACEITAÇÃO
+
+2.1. Ao instalar, acessar, criar conta, receber credenciais, marcar a opção de concordância ou utilizar o Software, o usuário declara que leu, compreendeu e aceita este Termo.
+
+2.2. O usuário que utiliza o Software em nome de empresa ou organização declara possuir autorização para agir em nome dela.
+
+2.3. Quem não concordar deverá interromper o uso e comunicar o administrador responsável.
+
+2.4. O aceite poderá ser registrado eletronicamente com data, hora, conta, versão do documento, dispositivo e outros dados técnicos necessários à segurança e comprovação.
+
+3. QUEM PODE UTILIZAR
+
+3.1. O Software destina-se a usuários autorizados por empresa, organização, estabelecimento, equipe acadêmica ou responsável pela implantação.
+
+3.2. O acesso de menor de idade somente será permitido quando necessário, autorizado por responsável legal e compatível com a legislação e finalidade do Software.
+
+3.3. O usuário deverá fornecer informações verdadeiras e manter seus dados atualizados.
+
+3.4. A conta é pessoal. O compartilhamento de senha ou utilização da conta por terceiros é proibido.
+
+4. CONTAS, PERFIS E CREDENCIAIS
+
+4.1. O acesso poderá depender de pré-cadastro, token de ativação, validação de e-mail, login e senha.
+
+4.2. O usuário é responsável por:
+
+I — criar senha segura;
+
+II — manter credenciais em sigilo;
+
+III — não compartilhar tokens;
+
+IV — bloquear o computador quando se afastar;
+
+V — comunicar acesso suspeito;
+
+VI — atualizar os dados da conta;
+
+VII — utilizar somente o perfil que lhe foi atribuído.
+
+4.3. A organização usuária deverá revogar o acesso de pessoas desligadas, transferidas ou não autorizadas.
+
+4.4. A equipe responsável poderá solicitar confirmação de identidade antes de recuperar acesso, alterar cadastro ou fornecer informações de conta.
+
+5. PERFIS E PERMISSÕES
+
+5.1. As permissões podem variar conforme o perfil do usuário.
+
+5.2. Usuários comuns poderão acessar funções operacionais liberadas pela organização.
+
+5.3. Administradores poderão gerenciar usuários, materiais, resíduos, sugestões, permissões e outras configurações.
+
+5.4. A exclusão de registros, alteração de permissões ou acesso a funções administrativas poderá gerar logs e exigir autenticação adicional.
+
+5.5. É proibido tentar utilizar funções não liberadas ao próprio perfil.
+
+6. USO PERMITIDO
+
+6.1. O usuário poderá utilizar o ReGraphik para:
+
+I — cadastrar resíduos gerados;
+
+II — classificar materiais;
+
+III — consultar o estoque reverso;
+
+IV — acompanhar status;
+
+V — registrar reaproveitamento ou descarte autorizado;
+
+VI — consultar e aplicar sugestões;
+
+VII — visualizar indicadores;
+
+VIII — gerar relatórios;
+
+IX — localizar pontos de coleta;
+
+X — comunicar-se com usuários autorizados;
+
+XI — atualizar dados de perfil;
+
+XII — executar outras funções oficialmente liberadas.
+
+6.2. O uso deverá estar relacionado às atividades legítimas da organização usuária.
+
+6.3. O Software não substitui análise técnica, responsabilidade ambiental, decisão gerencial, licença, laudo, manifesto, documento fiscal ou obrigação exigida por autoridade.
+
+7. USO PROIBIDO
+
+7.1. O usuário não poderá:
+
+I — utilizar o Software para atividade ilegal;
+
+II — inserir informação falsa, enganosa ou obtida sem autorização;
+
+III — acessar conta ou dado de outra pessoa;
+
+IV — compartilhar senha, token ou chave;
+
+V — copiar, revender, sublicenciar ou redistribuir o Software;
+
+VI — realizar engenharia reversa ou tentar obter o código-fonte, salvo autorização legal;
+
+VII — remover marcas, autoria, avisos ou mecanismos de segurança;
+
+VIII — explorar vulnerabilidade, testar invasão ou interferir na infraestrutura sem autorização;
+
+IX — enviar malware, arquivo contaminado ou código malicioso;
+
+X — sobrecarregar a API, automatizar acessos de forma abusiva ou contornar limites;
+
+XI — utilizar o chat para ameaça, assédio, discriminação, spam, fraude ou conteúdo ilícito;
+
+XII — inserir dados pessoais excessivos ou desnecessários;
+
+XIII — divulgar informações confidenciais;
+
+XIV — usar pontos de coleta ou sugestões como garantia de regularidade sem verificação própria;
+
+XV — alterar arquivos de instalação, banco, configurações ou integrações sem autorização.
+
+7.2. O descumprimento poderá resultar em alerta, remoção de conteúdo, bloqueio, suspensão, cancelamento da conta, encerramento da licença e medidas legais.
+
+8. CADASTRO E GESTÃO DE RESÍDUOS
+
+8.1. O usuário deverá cadastrar informações corretas sobre material, peso, quantidade, data, origem, status, observações e demais campos disponíveis.
+
+8.2. O usuário é responsável por verificar a classificação do resíduo e corrigir informações incorretas.
+
+8.3. O sistema poderá impedir o cadastro quando campos obrigatórios estiverem ausentes ou inválidos.
+
+8.4. Os estados “Em Estoque”, “Reaproveitado” e “Descartado” representam registros operacionais e devem ser atualizados conforme a realidade.
+
+8.5. A organização deverá estabelecer procedimento interno para aprovar alterações relevantes e exclusões.
+
+9. SUGESTÕES DE REAPROVEITAMENTO
+
+9.1. O ReGraphik poderá apresentar sugestões relacionadas ao tipo de material cadastrado.
+
+9.2. As sugestões possuem caráter informativo e de apoio à decisão.
+
+9.3. Antes de aplicar uma sugestão, o usuário deverá avaliar:
+
+I — condição e composição do material;
+
+II — segurança do processo;
+
+III — viabilidade técnica;
+
+IV — custos;
+
+V — legislação ambiental;
+
+VI — normas internas;
+
+VII — riscos a pessoas, equipamentos e meio ambiente.
+
+9.4. A aplicação de uma sugestão poderá gerar registro de data, usuário e resíduo associado.
+
+9.5. A equipe do ReGraphik não garante resultado econômico, comercial, ambiental ou produtivo específico.
+
+10. MAPA E PONTOS DE COLETA
+
+10.1. O módulo de mapa poderá utilizar localização informada pelo usuário, cidade pesquisada, coordenadas aproximadas e dados fornecidos por serviços externos.
+
+10.2. Os resultados poderão estar incompletos, desatualizados ou sujeitos a limites do provedor.
+
+10.3. Antes de enviar material, o usuário deverá confirmar diretamente com o ponto de coleta:
+
+I — endereço;
+
+II — horário;
+
+III — materiais aceitos;
+
+IV — quantidade mínima ou máxima;
+
+V — documentação exigida;
+
+VI — custos ou remuneração;
+
+VII — licenças e regularidade;
+
+VIII — condições de transporte e segurança.
+
+10.4. A exibição de um ponto não representa recomendação, parceria, certificação ou garantia da equipe ReGraphik.
+
+11. CHAT E COMUNICAÇÃO INTERNA
+
+11.1. Quando habilitado, o chat destina-se à comunicação profissional entre usuários autorizados.
+
+11.2. É proibido enviar conteúdo ofensivo, discriminatório, ilegal, confidencial sem autorização, publicidade indevida, malware ou dado pessoal desnecessário.
+
+11.3. Mensagens poderão ser armazenadas para funcionamento, entrega, marcação de leitura, segurança, auditoria e investigação de abuso.
+
+11.4. A organização usuária deverá informar seus usuários sobre regras internas de monitoramento e retenção.
+
+12. RELATÓRIOS, INDICADORES E EXPORTAÇÕES
+
+12.1. Relatórios e indicadores são gerados com base nos dados cadastrados.
+
+12.2. A precisão depende da qualidade, atualização e completude das informações inseridas.
+
+12.3. O usuário deverá revisar o relatório antes de utilizá-lo em decisão, apresentação, auditoria ou comunicação externa.
+
+12.4. A exportação ou impressão não transforma o relatório em documento oficial, fiscal, ambiental ou regulatório, salvo validação por responsável competente.
+
+12.5. O usuário é responsável pela guarda, compartilhamento e descarte seguro dos arquivos exportados.
+
+13. ENVIO DE ARQUIVOS E IMAGENS
+
+13.1. O Software poderá permitir o envio de imagens em formatos autorizados, como JPG, JPEG, PNG ou BMP.
+
+13.2. O usuário deverá enviar somente arquivos:
+
+I — relacionados à finalidade do Software;
+
+II — livres de malware;
+
+III — de sua autoria ou com autorização;
+
+IV — sem conteúdo ilícito;
+
+V — sem dados pessoais excessivos.
+
+13.3. Arquivos incompatíveis, perigosos ou indevidos poderão ser bloqueados ou removidos.
+
+14. DADOS PESSOAIS E PRIVACIDADE
+
+14.1. O tratamento de dados pessoais deverá observar finalidade legítima, necessidade, segurança, transparência e demais princípios aplicáveis.
+
+14.2. A organização usuária é, em regra, responsável por definir a finalidade e a base legal dos dados que insere no Software.
+
+14.3. O usuário deverá inserir apenas os dados necessários à operação.
+
+14.4. O Software poderá tratar, conforme o uso:
+
+I — nome;
+
+II — login;
+
+III — e-mail;
+
+IV — CPF, quando necessário ao cadastro;
+
+V — empresa e perfil;
+
+VI — foto de perfil;
+
+VII — registros de acesso;
+
+VIII — atividades realizadas;
+
+IX — mensagens;
+
+X — dados técnicos do dispositivo;
+
+XI — localização pesquisada;
+
+XII — informações necessárias à segurança.
+
+14.5. Dados pessoais sensíveis não devem ser inseridos, salvo quando estritamente necessários, autorizados e protegidos conforme a lei.
+
+14.6. O usuário poderá solicitar correção ou atualização por meio do administrador da organização ou canal oficial de atendimento.
+
+14.7. Registros poderão ser conservados pelo período necessário ao funcionamento, segurança, cumprimento de obrigação e exercício de direitos.
+
+14.8. O Software poderá utilizar infraestrutura de nuvem e serviços externos, sujeitos a políticas próprias.
+
+15. SEGURANÇA
+
+15.1. A equipe ReGraphik adotará medidas técnicas e administrativas razoáveis nos componentes sob seu controle.
+
+15.2. Nenhum sistema é totalmente imune a falhas. O usuário deverá colaborar com a segurança.
+
+15.3. O usuário deverá:
+
+I — manter Windows e antivírus atualizados;
+
+II — utilizar rede confiável;
+
+III — não instalar cópias de origem desconhecida;
+
+IV — não desativar permanentemente controles de segurança;
+
+V — não compartilhar credenciais;
+
+VI — comunicar incidente;
+
+VII — encerrar sessão em equipamento compartilhado;
+
+VIII — verificar destinatários antes de enviar relatórios ou mensagens.
+
+15.4. Suspeitas de vulnerabilidade deverão ser comunicadas de forma reservada, sem exploração ou divulgação pública prematura.
+
+16. REGISTROS, LOGS E AUDITORIA
+
+16.1. O Software poderá registrar:
+
+I — autenticação;
+
+II — ativação;
+
+III — data e hora;
+
+IV — usuário;
+
+V — operações relevantes;
+
+VI — alterações;
+
+VII — exclusões;
+
+VIII — erros;
+
+IX — desempenho;
+
+X — eventos de segurança.
+
+16.2. Os registros serão utilizados para funcionamento, auditoria, suporte, prevenção de fraude, investigação, melhoria e proteção de direitos.
+
+16.3. O acesso aos logs será restrito a pessoas autorizadas.
+
+17. PROPRIEDADE INTELECTUAL
+
+17.1. O ReGraphik, seu código, arquitetura, marca, documentação, telas, textos, modelos e componentes próprios são protegidos.
+
+17.2. O usuário recebe apenas direito de uso durante a vigência da licença.
+
+17.3. Nenhuma disposição transfere propriedade intelectual ao usuário ou à organização.
+
+17.4. O usuário mantém os direitos sobre os dados e conteúdos que inserir, desde que possua legitimidade para utilizá-los.
+
+17.5. Ao enviar sugestão de melhoria, o usuário autoriza sua análise e eventual implementação sem obrigação de remuneração, preservadas informações confidenciais.
+
+18. SERVIÇOS DE TERCEIROS
+
+18.1. O Software poderá depender de serviços como:
+
+I — Firebase;
+
+II — Google Maps Places API;
+
+III — Leaflet.js;
+
+IV — Microsoft Edge WebView2;
+
+V — .NET e ASP.NET Core;
+
+VI — conexão de internet e infraestrutura de hospedagem.
+
+18.2. Esses serviços podem alterar funcionamento, limites, políticas, preços e disponibilidade.
+
+18.3. A equipe ReGraphik não controla integralmente serviços externos.
+
+18.4. O usuário deverá respeitar os termos aplicáveis aos serviços utilizados.
+
+19. DISPONIBILIDADE, MANUTENÇÃO E ATUALIZAÇÕES
+
+19.1. A equipe empregará esforços razoáveis para manter o Software disponível durante a vigência.
+
+19.2. O acesso poderá ser interrompido por:
+
+I — manutenção;
+
+II — atualização;
+
+III — correção;
+
+IV — falha de internet;
+
+V — serviço externo;
+
+VI — incidente;
+
+VII — ordem legal;
+
+VIII — risco de segurança;
+
+IX — força maior.
+
+19.3. Manutenções programadas serão comunicadas quando razoavelmente possível.
+
+19.4. Atualizações poderão alterar telas, fluxos, requisitos e funcionalidades.
+
+19.5. O usuário deverá instalar correções de segurança e utilizar versão suportada.
+
+20. SUPORTE
+
+20.1. O suporte será prestado pelo canal informado no aplicativo, Guia de Instalação, termo de implantação ou comunicação oficial.
+
+20.2. Para solicitar suporte, o usuário deverá informar:
+
+I — versão;
+
+II — descrição do problema;
+
+III — passos executados;
+
+IV — mensagem de erro;
+
+V — data e hora;
+
+VI — impacto;
+
+VII — evidências sem exposição desnecessária de dados pessoais.
+
+20.3. O suporte não inclui administração da infraestrutura do usuário, customização, treinamento adicional ou desenvolvimento de nova função, salvo contratação específica.
+
+21. SUSPENSÃO OU BLOQUEIO
+
+21.1. O acesso poderá ser suspenso quando houver:
+
+I — tentativa de invasão;
+
+II — uso ilegal;
+
+III — violação deste Termo;
+
+IV — risco à segurança;
+
+V — conta comprometida;
+
+VI — ordem de autoridade;
+
+VII — inadimplemento contratual;
+
+VIII — uso abusivo de recursos;
+
+IX — necessidade de manutenção emergencial.
+
+21.2. Sempre que possível, o usuário ou a organização será informado e poderá corrigir a situação.
+
+21.3. Em caso urgente, o bloqueio poderá ser imediato.
+
+22. ENCERRAMENTO DA CONTA E DA LICENÇA
+
+22.1. O acesso terminará com:
+
+I — encerramento do contrato;
+
+II — fim do prazo de 12 meses sem renovação;
+
+III — desligamento do usuário;
+
+IV — solicitação autorizada da organização;
+
+V — violação grave;
+
+VI — impossibilidade legal ou técnica.
+
+22.2. Após o encerramento, o usuário não poderá continuar utilizando o Software.
+
+22.3. A organização poderá solicitar exportação dos dados conforme o Contrato de Licença.
+
+22.4. Registros necessários a obrigações legais, segurança ou exercício de direitos poderão ser preservados pelo prazo aplicável.
+
+23. GARANTIAS E LIMITAÇÕES
+
+23.1. O Software será disponibilizado conforme a versão e as funcionalidades oficialmente liberadas.
+
+23.2. A equipe não garante:
+
+I — funcionamento sem qualquer interrupção;
+
+II — compatibilidade com todo equipamento;
+
+III — continuidade de serviço externo;
+
+IV — resultado econômico ou ambiental específico;
+
+V — correção de dado inserido pelo usuário;
+
+VI — regularidade de ponto de coleta;
+
+VII — adequação a finalidade não informada;
+
+VIII — substituição de análise profissional.
+
+23.3. Defeitos confirmados serão tratados conforme o Contrato e a validade técnica.
+
+23.4. A responsabilidade será apurada conforme a conduta de cada parte e a legislação aplicável.
+
+24. RESPONSABILIDADE DO USUÁRIO E DA ORGANIZAÇÃO
+
+24.1. O usuário responde por suas ações, credenciais, informações, mensagens, relatórios e decisões.
+
+24.2. A organização responde pela gestão dos acessos, treinamento interno, bases legais, procedimentos ambientais e infraestrutura.
+
+24.3. O usuário deverá indenizar prejuízos decorrentes de fraude, acesso indevido, violação de direito de terceiro ou uso intencionalmente contrário a este Termo, respeitada a legislação.
+
+25. ALTERAÇÕES DESTE TERMO
+
+25.1. Este Termo poderá ser atualizado para refletir mudanças legais, técnicas, funcionais ou de segurança.
+
+25.2. Alterações materiais serão comunicadas por meio do Software ou canal oficial.
+
+25.3. Quando necessário, será solicitado novo aceite.
+
+25.4. A continuação do uso após comunicação válida representará concordância, quando permitido pela legislação e pelo Contrato.
+
+26. COMUNICAÇÕES
+
+26.1. Avisos poderão ser enviados por:
+
+I — mensagem no aplicativo;
+
+II — e-mail cadastrado;
+
+III — sistema de chamados;
+
+IV — documentação de versão;
+
+V — comunicação ao administrador da organização.
+
+26.2. O usuário deverá manter seu contato atualizado e acompanhar avisos de segurança e atualização.
+
+27. LEGISLAÇÃO E SOLUÇÃO DE CONFLITOS
+
+27.1. Este Termo será regido pelas leis brasileiras.
+
+27.2. Dúvidas e conflitos deverão ser inicialmente encaminhados ao canal oficial de atendimento.
+
+27.3. Não sendo possível acordo, será competente o foro definido no Contrato de Licença, sem prejuízo de foro obrigatório previsto em lei.
+
+28. DECLARAÇÃO FINAL DE ACEITE
+
+Ao utilizar o ReGraphik, o usuário declara:
+
+I — ter lido este Termo;
+
+II — compreender as funcionalidades e limitações;
+
+III — possuir autorização da organização;
+
+IV — utilizar conta individual;
+
+V — proteger credenciais;
+
+VI — inserir somente dados legítimos;
+
+VII — respeitar a propriedade intelectual;
+
+VIII — verificar sugestões, relatórios e pontos de coleta antes de tomar decisões;
+
+IX — cumprir normas ambientais, de segurança e proteção de dados;
+
+X — aceitar o registro técnico necessário ao funcionamento e à segurança;
+
+XI — comunicar incidentes e uso indevido;
+
+XII — utilizar o Software durante a vigência da licença aplicável.
+
+REGISTRO DE ACEITE
+
+Nome do usuário: __________________________________________________
+Empresa/organização: ______________________________________________
+Perfil: ___________________________________________________________
+Data: _____________________________________________________________
+Assinatura ou aceite eletrônico: ___________________________________
+
+FIM DO TERMO DE USO DO SOFTWARE REGRAPHIK
