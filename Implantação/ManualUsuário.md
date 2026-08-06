@@ -1,186 +1,203 @@
 # Manual de Usuário — ReGraphik
 
-## 1 Apresentação
+## 1. Apresentação
 
-O ReGraphik é um sistema de gestão de estoque reverso criado para apoiar empresas do setor gráfico no controle de resíduos como papel, cartão, vinil, lona e PVC. A solução permite organizar materiais gerados, acompanhar seu status, identificar possibilidades de reaproveitamento e localizar pontos de coleta quando o resíduo não puder ser reutilizado internamente.
+O **ReGraphik** é um sistema de gestão de estoque reverso projetado para apoiar empresas do setor gráfico no controle e destinação sustentável de resíduos (como papel, cartão, vinil, lona e PVC). 
 
-## 1.2 Objetivo do sistema
+A solução centraliza o mapeamento de materiais gerados, acompanha seus ciclos de vida, sugere possibilidades de reaproveitamento e localiza pontos de coleta homologados quando o resíduo não puder ser reutilizado internamente.
 
-- Centralizar o cadastro dos resíduos gerados pela empresa.
+---
 
-- Reduzir o uso de planilhas e controles manuais dispersos.
+### 1.1 Objetivo do Sistema
 
-- Acompanhar os estados Em Estoque, Reaproveitado e Descartado.
+* **Centralizar o cadastro** de resíduos gerados na operação gráfica.
+* **Eliminar a dependência** de planilhas e controles manuais descentralizados.
+* **Monitorar o ciclo de vida** através dos status: `Em Estoque`, `Reaproveitado` e `Descartado`.
+* **Apoiar a tomada de decisão** para reaproveitamento interno e destinação ecologicamente correta.
+* **Disponibilizar indicadores** por meio de dashboards, relatórios consolidados e mapa interativo de pontos de coleta.
+* **Garantir rastreabilidade** e maximizar o aproveitamento de insumos.
 
-- Apoiar decisões de reaproveitamento e destinação.
+<br />
 
-- Disponibilizar indicadores, relatórios e localização de pontos de coleta.
+<p align="center">
+  <img src="./img/image1.png" width="650" alt="Fluxo operacional planejado para os usuários do ReGraphik" />
+  <br />
+  <em>Figura 1 — Fluxo operacional planejado para os usuários do ReGraphik.</em>
+</p>
 
-- Promover rastreabilidade e melhor aproveitamento dos materiais.
+---
 
-<img src="./img/image1.png" style="width:6.37795in;height:2.55118in" />
+### 1.2 Perfis de Acesso
 
-Figura 2 — Fluxo operacional planejado para os usuários do ReGraphik.
+| Perfil | Permissões Principais |
+| :--- | :--- |
+| **Usuário Comum** | Autenticação, cadastro de resíduos, consulta ao estoque reverso, aplicação de sugestões de reuso, consulta ao mapa e geração de relatórios operacionais. |
+| **Administrador** | Todas as funções do Usuário Comum, além da gestão de usuários, parametrização de tipos de materiais, gerenciamento de permissões e exclusões restritas acompanhadas de auditoria. |
+| **Equipe Técnica** | Instalação, parametrização de ambiente, atualizações, diagnóstico de falhas e validação de integrações/APIs. *(Uso de credenciais de terceiros é estritamente vedado).* |
 
-## 1.3 Perfis de acesso
+---
 
-| **Perfil**     | **Permissões principais**                                                                                                          |
-|----------------|------------------------------------------------------------------------------------------------------------------------------------|
-| Usuário comum  | Realizar login, cadastrar resíduos, consultar estoque reverso, aplicar sugestões, consultar mapa e gerar relatórios habilitados.   |
-| Administrador  | Executar as funções do usuário e gerenciar usuários, tipos de materiais, permissões e exclusões restritas com auditoria.           |
-| Equipe técnica | Instalar, configurar, atualizar, diagnosticar falhas e validar integrações. Não deve usar credenciais de usuários sem autorização. |
+### 1.3 Primeiro Acesso e Cadastro
 
-## 1.4 Primeiro acesso
+1. Na tela inicial da aplicação, selecione a opção **Cadastrar-se** ou **Pré-cadastro**.
+2. Preencha os campos obrigatórios. O sistema executará validações automáticas de formato (ex: CPF/CNPJ e e-mail).
+3. Verifique a caixa de entrada do e-mail informado para obter o **token de verificação de 6 dígitos**.
+4. Insira o token na tela de validação para ativar o pré-cadastro.
+5. Complete o formulário com os dados complementares e defina sua senha de acesso.
+6. Retorne à tela inicial e realize o login.
 
-**1.** Na tela inicial, selecione a opção de cadastro ou pré-cadastro, quando disponível.
+> **Nota de Segurança:**  
+> As senhas são protegidas por algoritmos de *hash* criptográfico e nunca armazenadas em texto claro. Não compartilhe suas credenciais. Ao utilizar computadores compartilhados, sempre encerre a sessão (*Logout*) ao finalizar suas atividades.
 
-**2.** Informe os dados solicitados. O sistema realiza validações como CPF e formato de campos.
+---
 
-**3.** Aguarde o token numérico de 6 dígitos enviado por e-mail.
+## 2. Autenticação e Navegação
 
-**4.** Digite o token para ativar o pré-cadastro.
+### 2.1 Login
 
-**5.** Finalize o cadastro com os dados e a senha solicitados.
+<p align="center">
+  <img src="./img/image2.png" width="650" alt="Tela de Login do ReGraphik" />
+  <br />
+  <em>Figura 2 — Tela de autenticação no sistema.</em>
+</p>
 
-**6.** Retorne à tela de login e acesse com usuário/login e senha.
+1. Inicie a aplicação **ReGraphik**.
+2. Informe o **Login/E-mail** e a **Senha** cadastrados.
+3. Clique no botão **Entrar**.
+4. Aguarde a validação de credenciais junto à API.
+5. *Em caso de falhas de autenticação:* certifique-se de que os dados foram digitados corretamente, valide a conexão de rede e confirme se a conta foi devidamente ativada via token.
 
-<table>
-<colgroup>
-<col style="width: 100%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th><p><strong>Segurança</strong></p>
-<p>A senha não deve ser compartilhada. O projeto determina armazenamento por hash, nunca em texto claro. O usuário deve encerrar a sessão ao utilizar computador compartilhado.</p></th>
-</tr>
-</thead>
-<tbody>
-</tbody>
-</table>
+---
 
-## 1.5 Login
+### 2.2 Tela Inicial e Módulos do Sistema
 
-<img src="./img/image2.png" style="width:6.84583in;height:3.37014in" />
+<p align="center">
+  <img src="./img/image3.png" width="650" alt="Tela Principal do ReGraphik" />
+  <br />
+  <em>Figura 3 — Visão geral da interface do ReGraphik.</em>
+</p>
 
-**1.** Abra o ReGraphik.
+A interface do ReGraphik é organizada em uma janela principal com navegação simplificada por menu lateral:
 
-**2.** Informe o login e a senha cadastrados.
+| Módulo / Menu | Finalidade Operacional |
+| :--- | :--- |
+| **Dashboard** | Exibe indicadores consolidados (KPIs) e resumos gráficos do estoque reverso. |
+| **Cadastro de Resíduos** | Permite registrar, detalhar e consultar novos materiais gerados. |
+| **Estoque Reverso** | Acompanhamento analítico de resíduos categorizados por status e destinação. |
+| **Sugestões** | Consulta e aplicação de técnicas recomendadas de reutilização de materiais. |
+| **Mapa** | Localização geográfica de pontos de coleta e reciclagem filtrados por município. |
+| **Relatórios** | Consolidação de dados operacionais com opções de impressão e exportação em PDF. |
+| **Configurações / Perfil** | Gestão de dados do usuário local, alteração de credenciais e foto de perfil. |
+| **Chat** | Canal de comunicação interna entre usuários *(disponível mediante habilitação na versão)*. |
 
-**3.** Selecione o comando de entrar/acessar.
+---
 
-**4.** Aguarde a validação junto à API.
+## 3. Operação do Sistema
 
-**5.** Em caso de falha, verifique os dados digitados, a internet e se o cadastro foi ativado.
+### 3.1 Cadastro de Resíduos
 
-## 1.6 Tela inicial e navegação
+<p align="center">
+  <img src="./img/image4.png" width="650" alt="Interface de Cadastro de Resíduos" />
+  <br />
+  <em>Figura 4 — Formulário de registro de resíduos.</em>
+</p>
 
-<img src="./img/image3.png" style="width:6.84583in;height:3.46736in" />
+1. Acesse o menu **Cadastro de Resíduos**.
+2. Clique no botão **Novo Registro** (`+`).
+3. Preencha as propriedades do material: tipo de insumo, origem, quantidade, dimensões e estado físico.
+4. Anexe evidências fotográficas do resíduo (Formatos suportados: `.jpg`, `.jpeg`, `.png`, `.bmp`).
+5. Revise as informações e confirme a operação.
+6. Verifique se o item foi incorporado à listagem do **Estoque Reverso** com o status inicial previsto.
 
-A aplicação foi modelada com uma janela principal e páginas para Dashboard, Resíduos, Estoque Reverso, Mapa e Relatórios. O usuário deve utilizar o menu lateral ou principal para alternar entre os módulos disponíveis. A ordem e os nomes visuais precisam ser confirmados na versão final instalada.
+---
 
-| **Menu/Módulo**      | **Finalidade**                                                                           |
-|----------------------|------------------------------------------------------------------------------------------|
-| Dashboard            | Exibir indicadores e resumo do estoque reverso.                                          |
-| Cadastro de Resíduos | Registrar e consultar materiais gerados.                                                 |
-| Estoque Reverso      | Acompanhar resíduos por status e possíveis destinações.                                  |
-| Sugestões            | Consultar e aplicar formas de reaproveitamento.                                          |
-| Mapa                 | Buscar pontos de coleta por cidade.                                                      |
-| Relatórios           | Consolidar dados e gerar saída em PDF/impressão.                                         |
-| Configurações/Perfil | Atualizar informações locais, incluindo foto de perfil, quando habilitado.               |
-| Chat                 | Comunicação entre usuários, somente se o recurso estiver habilitado na versão instalada. |
+### 3.2 Gestão de Estoque Reverso e Status
 
-## 1.7 Cadastro de resíduos
+O módulo de Estoque Reverso apresenta os resíduos cadastrados organizados em *cards* visuais. O ciclo de vida do resíduo é controlado pelos seguintes estados:
 
-<img src="./img/image4.png" style="width:6.84583in;height:5.52083in" />
+* **Em Estoque:** Material cadastrado, mensurado e aguardando definição de destinação.
+* **Reaproveitado:** Material direcionado com sucesso para um processo interno de reuso.
+* **Descartado:** Material encaminhado para descarte consciente ou coleta externa homologada.
 
-**1.** Acesse o módulo Cadastro de Resíduos.
+> **Restrição de Acesso:**  
+> A exclusão definitiva de registros é uma atribuição exclusiva do perfil **Administrador** e gera registros rastreáveis no log de auditoria do sistema.
 
-**2.** Selecione a opção para adicionar um novo registro.
+---
 
-**3.** Informe o tipo de material e os demais dados exigidos, como origem, quantidade, dimensões e estado físico, conforme a tela final.
+### 3.3 Sugestões de Reaproveitamento
 
-**4.** Anexe fotografias quando necessário. Os formatos documentados são JPG, JPEG, PNG e BMP.
+<p align="center">
+  <img src="./img/image5.png" width="650" alt="Módulo de Sugestões de Reaproveitamento" />
+  <br />
+  <em>Figura 5 — Interface de sugestões técnicas de reuso.</em>
+</p>
 
-**5.** Revise os dados e confirme o cadastro.
+1. Selecione um item no **Estoque Reverso** ou navegue até o menu **Sugestões**.
+2. Visualize as recomendações de reuso filtradas automaticamente conforme o tipo de insumo.
+3. Avalie a viabilidade técnica da aplicação sugerida para o resíduo selecionado.
+4. Clique em **Aplicar Sugestão**.
+5. Confirme a ação. O sistema atualizará o histórico do resíduo vinculando a técnica utilizada e a data de aplicação.
 
-**6.** Verifique se o item aparece na lista ou no estoque reverso com o status inicial previsto.
+---
 
-## 1.8 Estoque reverso e status
+### 3.4 Localização de Pontos de Coleta (Mapa)
 
-O estoque reverso concentra os resíduos cadastrados. A documentação da solução prevê visualização em cards e diferenciação por status. Os estados são:
+<p align="center">
+  <img src="./img/image6.png" width="650" alt="Módulo de Mapa e Pontos de Coleta" />
+  <br />
+  <em>Figura 6 — Busca de pontos de coleta por município.</em>
+</p>
 
-- **Em Estoque —** material cadastrado e aguardando decisão.
+1. Acesse o menu **Mapa**.
+2. Informe o município desejado no campo de pesquisa.
+3. Clique no botão **Buscar**.
+4. Aguarde a renderização dos marcadores geográficos fornecidos pela API.
+5. Selecione um ponto no mapa para visualizar detalhes do estabelecimento parceiro.
 
-- **Reaproveitado —** material destinado a uma forma de reutilização.
+> **Uso de Dados Externos:**  
+> A exibição dos pontos de coleta depende de serviços de geolocalização externos. Antes de realizar o deslocamento ou envio de resíduos, confirme os horários de funcionamento e tipos de materiais aceitos diretamente com a instituição de coleta.
 
-- **Descartado —** material encaminhado para descarte ou coleta adequada.
+---
 
-Para alterar o status, selecione o resíduo, escolha a ação permitida e confirme. Operações de exclusão devem permanecer restritas ao Administrador e gerar registro de auditoria.
+### 3.5 Dashboard e Emissão de Relatórios
 
-## 1.9 Sugestões de reaproveitamento
+<p align="center">
+  <img src="./img/image7.png" width="650" alt="Painel de Dashboard do ReGraphik" />
+  <br />
+  <em>Figura 7 — Visão geral de indicadores do Dashboard.</em>
+</p>
 
-<img src="./img/image5.png" style="width:6.84583in;height:5.23264in" />
+<p align="center">
+  <img src="./img/image8.png" width="650" alt="Geração de Relatórios e Exportação PDF" />
+  <br />
+  <em>Figura 8 — Módulo de relatórios operacionais.</em>
+</p>
 
-**1.** Abra o resíduo desejado ou o módulo de Sugestões.
+O painel de indicadores apresenta métricas em tempo real, incluindo: volume total de resíduos, peso acumulado (kg), taxa de reaproveitamento (%) e estimativa de valor econômico recuperado.
 
-**2.** Consulte as recomendações filtradas pelo tipo de material.
+1. Navegue até o módulo **Dashboard** ou **Relatórios**.
+2. Aplique os filtros desejados (ex: período, tipo de material ou status).
+3. Confira os dados consolidados apresentados em tela.
+4. Clique em **Gerar PDF** ou **Imprimir**.
+5. Defina o diretório de destino em seu computador e salve o documento.
 
-**3.** Analise a aplicação sugerida e sua adequação ao resíduo.
+---
 
-**4.** Selecione a opção de aplicar a sugestão.
+## 4. Configurações e Perfil do Usuário
 
-**5.** Confirme a operação. O sistema deve registrar a relação e a data de aplicação.
+<p align="center">
+  <img src="./img/image9.png" width="650" alt="Painel de Configurações do Perfil" />
+  <br />
+  <em>Figura 9 — Gerenciamento de perfil e credenciais.</em>
+</p>
 
-## 1.10 Mapa e pontos de coleta
+No menu **Configurações / Perfil**, o usuário poderá:
+* Atualizar dados cadastrais básicos.
+* Alterar sua senha de acesso periodicamente.
+* Upload ou atualização da foto de exibição do perfil.
 
-<img src="./img/image6.png" style="width:6.84583in;height:4.15208in" />
+---
 
-**1.** Acesse o menu Mapa.
-
-**2.** Informe a cidade desejada no campo de busca.
-
-**3.** Selecione Buscar.
-
-**4.** Aguarde a consulta à API e a renderização do mapa.
-
-**5.** Analise os pontos retornados e selecione o local adequado.
-
-**6.** Caso nenhum ponto seja exibido, confirme internet, cidade informada e disponibilidade do serviço.
-
-<table>
-<colgroup>
-<col style="width: 100%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th><p><strong>Uso de dados externos</strong></p>
-<p>Os pontos de coleta dependem de serviços externos e podem variar. Antes de encaminhar resíduos, confirme endereço, horário e tipo de material aceito diretamente com o estabelecimento.</p></th>
-</tr>
-</thead>
-<tbody>
-</tbody>
-</table>
-
-## 1.11 Dashboard e relatórios
-
-<img src="./img/image7.png" style="width:6.84583in;height:3.41042in" />
-
-<img src="./img/image8.png" style="width:6.84583in;height:3.88958in" />
-
-Quando habilitados, os indicadores previstos incluem total de resíduos, peso total, quantidade reaproveitada e valor econômico. A geração do relatório deve consolidar os registros e permitir impressão ou exportação em PDF.
-
-**1.** Acesse Dashboard ou Relatórios.
-
-**2.** Selecione os filtros de período, status ou material, caso estejam disponíveis.
-
-**3.** Confira os totais e os registros exibidos.
-
-**4.** Selecione Gerar, Imprimir ou Exportar PDF, conforme a interface.
-
-**5.** Escolha o local de salvamento e confirme se o arquivo abre corretamente.
-
-## 1.12 Configurações e foto de perfil
-
-<img src="./img/image9.png" style="width:6.84583in;height:4.38403in" />
-
-A solução registra a foto de perfil, alteração de senha.
+<p align="center">
+  <em>© ReGraphik — Gestão Inteligente de Estoque Reverso Gráfico. Todos os direitos reservados.</em>
+</p>
