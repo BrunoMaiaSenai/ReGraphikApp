@@ -6,6 +6,17 @@
 
 ---
 
+## Material de uso exclusivo
+
+Este documento é de uso exclusivo da equipe do projeto ReGraphik e do SENAI
+Afonso Greco – Nova Lima, elaborado como artefato obrigatório da Unidade
+Curricular *Implantação de Sistemas*, sob orientação do instrutor **Frederico
+Martins Aguiar**. Sua reprodução ou redistribuição fora do contexto acadêmico
+não é autorizada. O conteúdo deve ser mantido versionado no repositório
+GitHub do projeto, refletindo sempre o estado mais recente da estratégia de
+migração e backup adotada pela equipe.
+
+---
 
 ## 1. Dados do Sistema
 
@@ -64,8 +75,30 @@ Relacionamentos principais:
 - `CADASTRO_RESIDUOS` N:N `SUGESTOES`, resolvido por `SUGESTOES_RESIDUOS`
 - Demais entidades de apoio: `PontosColeta`, `Mensagens`/`Conversas` (chat interno)
 
-### 3.2 Volume de dados atual
-Projeto em fase piloto: volume ainda reduzido (dados de teste da equipe e da empresa AML). Não há histórico de produção em larga escala até o momento.
+### 3.2 Arquitetura em camadas
+| Camada | Componentes | Responsabilidade |
+|---|---|---|
+| VIEW | MainWindow, DashboardPage, ResiduosPage, EstoqueReversoPage, MapaPage, RelatoriosPage | Apresentação (XAML), sem lógica de negócio |
+| VIEWMODEL | BaseViewModel, ResiduoViewModel, LoginViewModel, MapViewModel | Lógica de apresentação, `INotifyPropertyChanged`, `RelayCommand` |
+| MODEL | Usuario, Residuo, Sugestao, SugestaoResiduo, PontosColeta | Entidades de domínio (POCOs) |
+| SERVICE LAYER | GooglePlacesService, ApiService | Integração HTTP com API REST e Google Maps |
+| BACKEND | API REST (ASP.NET Core, 5 controllers CRUD) | Regras de negócio e persistência no Firebase |
+| PERSISTÊNCIA | Firebase Realtime Database | Armazenamento NoSQL em nuvem |
+
+### 3.3 Status atual dos módulos
+| Módulo | Status |
+|---|---|
+| Mapa / Pontos de Coleta | Disponível |
+| Dashboard | Em construção |
+| Cadastro de Resíduo | Em construção |
+| Sugestões | Em construção |
+| Relatórios | Em construção |
+| Chat Interno | Implementação futura |
+| Central de Notificações | Implementação futura |
+| Log de Consulta | Implementação futura |
+
+### 3.4 Volume de dados atual
+Projeto em fase acadêmica/piloto: volume ainda reduzido (dados de teste da equipe e da empresa AML). Não há histórico de produção em larga escala até o momento.
 
 ---
 
@@ -157,7 +190,7 @@ no cliente.
    - Identificar volume de dados (linhas por tabela) e qualidade dos dados (nulos, duplicados,
      inconsistências, campos livres sem padronização).
 
-2. **Mapeamento De-Para**
+2. **Mapeamento De-Para (Data Mapping)**
    - Construir uma planilha/tabela de mapeamento campo a campo entre o schema do cliente e as
      cinco entidades do ReGraphik (`Usuario`, `TipoMaterial`, `Residuo`, `Sugestao`,
      `SugestaoResiduo`).
@@ -230,7 +263,108 @@ no cliente.
 - [ ] Plano de rollback testado
 - [ ] Janela de manutenção definida e comunicada ao cliente
 
-### 6.6 Plano de rollback
+### 6.6 Cenário: Importação de Dados a partir de Arquivos PDF e Excel
+
+Cenário aplicável quando uma empresa cliente (especialmente gráficas pequenas e médias, que
+ainda não possuem nenhum sistema informatizado de controle de resíduos) controla seus dados
+apenas em **planilhas Excel** e **relatórios em PDF**, e deseja trazer esse histórico para
+dentro do ReGraphik. É exatamente o cenário descrito no problema que deu origem ao projeto:
+empresas que recorrem a planilhas manuais por falta de uma ferramenta digital própria. Esse
+tipo de origem é bem diferente de migrar de um banco de dados, porque **não existe uma
+estrutura fixa e confiável de tabelas** — os dados foram digitados por pessoas, em formatos
+livres, e podem conter erros de digitação, células mescladas, colunas fora de ordem e até
+páginas de PDF que são apenas imagens escaneadas, sem texto que possa ser copiado.
+
+#### 6.6.1 Características e desafios das fontes de dados
+
+| Fonte | Formato típico | Principais desafios |
+|---|---|---|
+| Planilha Excel | Uma linha por resíduo, com colunas como tipo de material, data, quantidade e origem | Colunas fora de padrão, células mescladas, fórmulas em vez de valores prontos, uso de vírgula ou ponto para separar decimais, linhas em branco ou de totalização misturadas com os dados |
+| Relatório em PDF gerado por computador | Texto selecionável, geralmente em formato de tabela | Texto que "quebra" ao ser copiado (colunas viram uma linha só de texto corrido), cabeçalhos repetidos em cada página |
+| Relatório em PDF escaneado (papel digitalizado) | Apenas uma imagem da página, sem texto selecionável | Não é possível copiar o texto diretamente; é necessário reconhecimento de caracteres a partir da imagem (uma tecnologia chamada OCR), que pode errar letras e números parecidos (ex.: confundir "0" com "O", ou "1" com "l") |
+
+#### 6.6.2 Etapas específicas
+
+1. **Levantamento das fontes**
+   - Reunir todas as planilhas e PDFs que a empresa possui, identificando quais realmente têm
+     dados de resíduos, materiais e pontos de coleta, e quais são apenas anotações soltas ou
+     relatórios administrativos sem relação com o estoque reverso.
+   - Verificar se os PDFs têm texto que pode ser selecionado/copiado ou se são apenas imagens
+     escaneadas, pois isso muda totalmente a forma de extrair os dados.
+
+2. **Extração dos dados**
+   - **Planilhas Excel:** ler o arquivo diretamente com uma ferramenta de programação
+     (por exemplo, um script simples em Python usando bibliotecas de leitura de planilhas), ou,
+     em último caso, exportar a planilha para o formato CSV (texto separado por vírgulas) antes
+     de processar.
+   - **PDFs com texto selecionável:** usar uma ferramenta de extração de texto/tabelas de PDF,
+     que localiza as colunas e linhas da tabela dentro do documento e as transforma em dados
+     organizados.
+   - **PDFs escaneados (apenas imagem):** usar uma ferramenta de reconhecimento de caracteres a
+     partir de imagem (OCR) para transformar a imagem da página em texto, e só depois aplicar a
+     extração de tabela sobre esse texto reconhecido.
+
+3. **Conferência manual dos dados extraídos**
+   - Toda extração automática de PDF/Excel deve passar por uma conferência humana, comparando
+     uma amostra dos dados extraídos com o arquivo original, especialmente nos casos que
+     passaram por OCR, já que o reconhecimento de caracteres pode gerar erros silenciosos
+     (números trocados, por exemplo).
+
+4. **Padronização e transformação**
+   - Definir um mapeamento de-para entre as colunas encontradas nas planilhas/PDFs e os campos
+     do ReGraphik (`TipoMaterial`, `Quantidade`, `Origem`, `Data`, `Status`, etc.), da mesma
+     forma feita para uma migração de banco de dados.
+   - Padronizar formatos que variam bastante em arquivos preenchidos manualmente: datas escritas
+     de formas diferentes (ex.: "05/08/2026", "5 de agosto de 2026", "2026-08-05"), quantidades
+     com vírgula ou ponto decimal, nomes de materiais escritos de formas diferentes para o mesmo
+     tipo (ex.: "papelão", "papel/cartão", "PAPELAO").
+   - Descartar ou sinalizar linhas de totalização, cabeçalhos repetidos e linhas em branco que
+     não representam um resíduo de verdade.
+
+5. **Carga dos dados**
+   - Após a padronização, os dados seguem o mesmo caminho de uma carga normal: scripts de
+     inserção ou chamadas em lote aos endpoints da API REST do ReGraphik (ex.:
+     `POST /api/residuos`), sempre verificando antes se aquele registro já foi inserido, para
+     não duplicar.
+
+6. **Testes da importação**
+   - **Teste com um arquivo pequeno primeiro:** extrair e importar uma única planilha ou um
+     único PDF antes de processar o lote completo, revisando manualmente todos os registros
+     gerados.
+   - **Teste de arquivo "difícil":** testar deliberadamente com uma planilha com células
+     mescladas, um PDF com tabela quebrada entre páginas e, se houver, um PDF escaneado, para
+     garantir que o processo lida bem com os piores casos, e não só com os arquivos "perfeitos".
+   - **Teste de reconciliação:** comparar a quantidade total de resíduos (em kg, por exemplo)
+     somada nos arquivos originais com o total que entrou no ReGraphik após a importação.
+
+7. **Validações**
+   - Nenhum registro deve entrar no ReGraphik sem um tipo de material reconhecido pelo
+     sistema — registros com material não identificado devem ficar pendentes de revisão manual,
+     nunca ser descartados silenciosamente.
+   - Datas fora de um intervalo plausível (ex.: datas futuras ou muito antigas, geradas por erro
+     de digitação ou de leitura do OCR) devem ser sinalizadas para conferência antes de entrar
+     em produção.
+   - Quantidades zeradas, negativas ou absurdamente altas (indicando erro de digitação ou de
+     leitura) devem ser sinalizadas, não apenas aceitas automaticamente.
+   - Ao final, um relatório de importação deve listar quantos registros foram importados com
+     sucesso, quantos ficaram pendentes de revisão e quantos foram descartados, com o motivo de
+     cada descarte.
+
+#### 6.6.3 Checklist da importação de PDF e Excel
+- [ ] Todas as planilhas e PDFs relevantes foram reunidos e identificados
+- [ ] Verificado quais PDFs têm texto selecionável e quais são apenas imagem escaneada
+- [ ] Ferramenta de extração definida para cada tipo de arquivo (planilha, PDF com texto, PDF escaneado com OCR)
+- [ ] Amostra dos dados extraídos conferida manualmente contra o arquivo original
+- [ ] Mapeamento de-para das colunas/campos definido e documentado
+- [ ] Formatos de data, decimal e nomes de material padronizados
+- [ ] Linhas de totalização, cabeçalhos repetidos e linhas em branco tratadas
+- [ ] Teste realizado com arquivo pequeno antes do lote completo
+- [ ] Teste realizado com arquivo "difícil" (células mescladas, tabela quebrada, PDF escaneado)
+- [ ] Reconciliação de totais entre arquivo original e sistema realizada
+- [ ] Registros com material não identificado, data ou quantidade suspeita sinalizados para revisão manual
+- [ ] Relatório final de importação gerado (sucesso, pendente, descartado)
+
+### 6.7 Plano de rollback
 - Manter o backup validado, gerado conforme a estratégia de backup adotada pela equipe, pronto para restauração imediata.
 - Manter a versão anterior da API publicada (ou facilmente reimplantável) em caso de falha após o Go Live.
 - Documentar, a cada migração, os passos exatos de reversão (ex.: reimportar o JSON anterior, reverter deploy da API para a tag de release anterior no GitHub).
