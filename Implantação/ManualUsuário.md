@@ -1,6 +1,4 @@
-## REGRAPHIK
-
-### MANUAL DO USUARIO
+# Manual de Usuário — ReGraphik
 
 ## 1 Apresentação
 

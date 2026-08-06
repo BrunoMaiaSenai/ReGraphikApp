@@ -186,7 +186,7 @@ Siga os passos abaixo para preparar o ambiente e vincular o script de instalaç�
 
 ---
 
-#### 3. Compilação e Localização do Instalador (`.exe`)
+#### Compilação e Localização do Instalador (`.exe`)
 
 6. **Compilação do Script e Acesso ao Arquivo Gerado**  
    * No Inno Setup Compiler, pressione **F9** ou clique no menu superior **Build > Compile** para gerar o instalador.
@@ -304,7 +304,7 @@ O WiX Toolset (v3.11) foi utilizado para gerar o pacote corporativo de instalaç
 
 Siga o passo a passo abaixo para instalar a extensão do WiX Toolset no Visual Studio, preparar o compilador e criar o pacote de instalação `.msi`:
 
-#### 1. Instalação da Extensão no Visual Studio
+#### Instalação da Extensão no Visual Studio
 
 1. **Acesso ao Gerenciador de Extensões**  
    Abra o Visual Studio, acesse o menu superior em **Extensions** (Extensões) e clique em **Manage Extensions** (Gerenciar Extensões).
@@ -329,7 +329,7 @@ Siga o passo a passo abaixo para instalar a extensão do WiX Toolset no Visual S
 
 ---
 
-#### 2. Download e Instalação do Compilador WiX
+#### Download e Instalação do Compilador WiX
 
 4. **Instalação do Engine do WiX Toolset v3.11**  
    Faça o download do executável oficial do compilador no GitHub através do link [wix311.exe](https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311.exe) e conclua a instalação em sua máquina.
@@ -340,7 +340,7 @@ Siga o passo a passo abaixo para instalar a extensão do WiX Toolset no Visual S
 
 ---
 
-#### 3. Criação e Configuração do Projeto Setup
+#### Criação e Configuração do Projeto Setup
 
 5. **Inclusão do Projeto na Solução**  
    No **Solution Explorer**, clique com o botão direito sobre a **Solução**, navegue até **Add > New Project...** e selecione o modelo **WPF / Windows Setup Project** (WiX).
@@ -364,7 +364,7 @@ Siga o passo a passo abaixo para instalar a extensão do WiX Toolset no Visual S
    
 ---
 
-#### 4. Compilação e Localização do Instalador (`.msi`)
+#### Compilação e Localização do Instalador (`.msi`)
 
 7. **Compilação do Pacote e Acesso ao Arquivo Gerado**  
    * No Visual Studio, clique com o botão direito sobre o projeto WiX (`ReGraphikSetup`) no **Solution Explorer** e selecione **Build** (ou **Rebuild**).
