@@ -186,6 +186,21 @@ Siga os passos abaixo para preparar o ambiente e vincular o script de instalaç�
 
 ---
 
+#### 3. Compilação e Localização do Instalador (`.exe`)
+
+6. **Compilação do Script e Acesso ao Arquivo Gerado**  
+   * No Inno Setup Compiler, pressione **F9** ou clique no menu superior **Build > Compile** para gerar o instalador.
+   * Após a compilação, acesse a pasta de saída clicando no menu **Build > Open Output Folder** (ou pressione `Ctrl + F9`).
+   * O executável final estará salvo no diretório especificado pelo script:
+     ```text
+     ReGraphik\Installer_InnoSetup\ReGraphik_Setup.exe
+     ```
+     <img width="775" height="63" alt="image" src="https://github.com/user-attachments/assets/c28b5376-e022-402d-a9be-2b1cb10f034c" />
+
+   * **Este arquivo `ReGraphik_Setup.exe` é o único executável necessário para enviar e instalar a aplicação no cliente.**
+
+---
+
 ## 4. Etapa 3: Criação do Instalador do Windows Installer (.msi) com WiX Toolset
 ### 4.1 Decisões de Implementação
 O WiX Toolset (v3.11) foi utilizado para gerar o pacote corporativo de instalação no formato nativo da Microsoft (.msi).
@@ -347,6 +362,22 @@ Siga o passo a passo abaixo para instalar a extensão do WiX Toolset no Visual S
    * **Modelo Atualizado (Customizado para o ReGraphik):**
    <img width="1246" height="955" alt="Código XML atualizado com as regras do ReGraphik" src="https://github.com/user-attachments/assets/d3ab1107-b088-4523-8d43-a552f9fed84f" />
    
+---
+
+#### 4. Compilação e Localização do Instalador (`.msi`)
+
+7. **Compilação do Pacote e Acesso ao Arquivo Gerado**  
+   * No Visual Studio, clique com o botão direito sobre o projeto WiX (`ReGraphikSetup`) no **Solution Explorer** e selecione **Build** (ou **Rebuild**).
+   * Após a compilação bem-sucedida, clique novamente com o botão direito sobre o projeto WiX e selecione **Open Folder in File Explorer**.
+   * O instalador gerado estará localizado no seguinte diretório:
+     ```text
+     ReGraphik\ReGraphikSetup\bin\Release\ReGraphikSetup.msi
+     ```
+     
+     <img width="795" height="97" alt="image" src="https://github.com/user-attachments/assets/a7123ebc-1dcb-4fbf-8edf-5ba2bcdc78ef" />
+
+   * **Este arquivo `.msi` é o pacote final de instalação que deve ser disponibilizado ao cliente.**
+
 ---
 
 ## 5. Matriz Comparativa e Resumo dos Artefatos
