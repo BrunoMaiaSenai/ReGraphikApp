@@ -162,6 +162,29 @@ Sempre que houver um novo deploy na API ou nova versão do cliente WPF, as 5 fun
 4. **`CT007` - Sincronização do Chat em Tempo Real:** Validar que as mensagens continuam trafegando com baixa latência.
 5. **`CT008` - Compilação de Relatórios em PDF:** Garantir que o QuestPDF continua gerando o documento sem erros de layout ou dados zerados.
 
+### 9.3 Critérios de Classificação de Severidade e Prioridade
+
+Para padronizar a triagem de defeitos, a equipe adotará os seguintes critérios objetivos:
+
+**Severidade (impacto técnico no sistema)**
+
+| Nível | Critério no ReGraphik |
+| :--- | :--- |
+| **Crítica** | Sistema trava, dados são perdidos/corrompidos no Firebase, ou login/API ficam totalmente inacessíveis. |
+| **Alta** | Funcionalidade principal (Cadastro, Estoque, ESG) não funciona, mas o sistema não trava. |
+| **Média** | Funcionalidade secundária falha (ex: Chat com atraso, Mapa não carrega um pin) mas existe alternativa. |
+| **Baixa** | Problemas visuais, de layout ou usabilidade que não impedem o uso (ex: ícone desalinhado). |
+
+**Prioridade (urgência de correção para o negócio)**
+
+| Nível | Critério no ReGraphik |
+| :--- | :--- |
+| **Alta** | Bloqueia o fluxo principal do operador ou compromete a apresentação/entrega do TCC. |
+| **Média** | Afeta a experiência, mas há contorno possível até a próxima versão. |
+| **Baixa** | Pode ser corrigido em ciclos futuros sem impacto imediato. |
+
+> Importante: Severidade e Prioridade são avaliadas separadamente. Um defeito de baixa severidade técnica (ex: erro visual na tela de login) pode receber prioridade alta se ocorrer durante a apresentação da banca.
+
 ---
 
 ## 10. Critérios de Entrada e Saída
