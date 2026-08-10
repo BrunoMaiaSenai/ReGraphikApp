@@ -234,3 +234,15 @@ Ao encontrar qualquer falha, o testador deverá abrir uma **Issue no GitHub** ut
 - Prioridade: Alta (Bloqueia o fluxo principal do operador)
 - Ambiente: Windows 11 64-bits / ReGraphik v1.0.0 / .NET 8.0 Runtime
 - Evidência: print_erro_crash.png (em anexo)
+
+---
+
+## 12. Recursos Necessários
+
+| Tipo | Recurso |
+| :--- | :--- |
+| **Equipe** | 5 integrantes atuando em revezamento entre desenvolvimento e testes |
+| **Ambiente** | 1 máquina Windows 10/11 64-bits para testes de instalação e execução do WPF |
+| **Ferramentas** | Postman/Swagger (API), GitHub Issues (defeitos), WebView2 Runtime |
+| **Dados de Teste** | Massa de dados fictícia de resíduos, usuários e conversas no Firebase (ambiente de homologação) |
+| **Acessos** | Chaves de API válidas (Google Places, Imgur) configuradas em ambiente de teste |
