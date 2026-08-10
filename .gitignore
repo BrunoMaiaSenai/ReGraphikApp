@@ -364,3 +364,12 @@ FodyWeavers.xsd
 
 # Chaves confidenciais do Firebase
 ReGraphikFirebaseKey.json
+
+# Ignorar executaveis e instaladores gerados
+*.exe
+*.msi
+*.cab
+*.wixobj
+Installer_InnoSetup/
+ReGraphikSetup/bin/
+ReGraphikSetup/obj/
