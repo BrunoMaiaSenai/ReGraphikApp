@@ -106,12 +106,13 @@ brazilianportuguese.MaintenanceTitle=Opções de Manutenção
 brazilianportuguese.MaintenanceSubTitle=Uma versão anterior do ReGraphik já está instalada no sistema.
 brazilianportuguese.SelectAction=Selecione a ação que deseja realizar:
 brazilianportuguese.OptionUpdate=Atualizar (Instalar versão mais recente)
-brazilianportuguese.OptionReinstall=Restaurar / Reparar (Remove a versão atual e instala do zero)
+brazilianportuguese.OptionReinstall=Restaurar/Reparar (Remove a versão atual e instala do 0)
 brazilianportuguese.OptionUninstall=Desinstalar o ReGraphik do computador
 brazilianportuguese.NewVersionNotice=Uma nova versão (%1) está disponível!%nVersão atual instalada: %2.%n%nDeseja atualizar agora?
 brazilianportuguese.CompApp=Aplicação Principal ReGraphik
 brazilianportuguese.CompAPI=Pacote de Serviços e API Rest
 brazilianportuguese.AlreadyInstalled=A versão %1 do ReGraphik já está instalada no seu computador.%n%nNão há uma versão mais recente disponível para atualização.%nCaso queira corrigir arquivos corrompidos, marque a caixa "Restaurar / Reparar".
+brazilianportuguese.SelectOptionWarning=Por favor, selecione uma das opções de manutenção para prosseguir.
 
 ; Inglês
 english.AppRunningWarning=ReGraphik is currently running.%n%nIf you proceed, the application will be closed automatically to complete the operation.%n%nDo you wish to continue?
@@ -125,6 +126,7 @@ english.NewVersionNotice=A new version (%1) is available!%nCurrent version insta
 english.CompApp=ReGraphik Main Application
 english.CompAPI=REST API & Services Package
 english.AlreadyInstalled=Version %1 of ReGraphik is already installed on your computer.%n%nThere is no newer version available for update.%nIf you want to repair corrupted files, check the "Repair / Restore" option.
+english.SelectOptionWarning=Please select one of the maintenance options to proceed.
 
 [Components]
 Name: "main"; Description: "{cm:CompApp}"; Types: full compact custom; Flags: fixed
@@ -149,6 +151,26 @@ var
   IsOldVersionInstalled: Boolean;
   UninstPath: String;
   InstalledVersion: String;
+
+// --- GARANTE QUE APENAS UMA OPÇÃO FIQUE MARCADA ---
+procedure OnCheckBoxClick(Sender: TObject);
+begin
+  if (Sender = ChkUpdate) and ChkUpdate.Checked then
+  begin
+    ChkReinstall.Checked := False;
+    ChkUninstall.Checked := False;
+  end
+  else if (Sender = ChkReinstall) and ChkReinstall.Checked then
+  begin
+    ChkUpdate.Checked := False;
+    ChkUninstall.Checked := False;
+  end
+  else if (Sender = ChkUninstall) and ChkUninstall.Checked then
+  begin
+    ChkUpdate.Checked := False;
+    ChkReinstall.Checked := False;
+  end;
+end;
 
 // --- FUNÇÃO PARA COMPARAR VERSÕES ---
 function CompareVersion(V1, V2: String): Integer;
@@ -235,7 +257,7 @@ begin
   IsOldVersionInstalled := RegQueryStringValue(HKLM, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{C918494A-DA28-4F94-A9B5-246200DBF17E}_is1', 'UninstallString', UninstPath) or
                           RegQueryStringValue(HKCU, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{C918494A-DA28-4F94-A9B5-246200DBF17E}_is1', 'UninstallString', UninstPath);
 
-  // --- CRIAÇÃO DA PÁGINA CUSTOMIZADA DE MANUTENÇÃO (TEXTOS MULTI-IDIOMA) ---
+  // --- CRIAÇÃO DA PÁGINA CUSTOMIZADA DE MANUTENÇÃO ---
   if IsOldVersionInstalled then
   begin
     MaintenancePage := CreateCustomPage(wpWelcome, CustomMessage('MaintenanceTitle'), CustomMessage('MaintenanceSubTitle'));
@@ -254,6 +276,7 @@ begin
     ChkUpdate.Top := 45;
     ChkUpdate.Width := 400;
     ChkUpdate.Checked := False;
+    ChkUpdate.OnClick := @OnCheckBoxClick; // Atribui evento de seleção exclusiva
 
     ChkReinstall := TCheckBox.Create(MaintenancePage);
     ChkReinstall.Caption := CustomMessage('OptionReinstall');
@@ -262,6 +285,7 @@ begin
     ChkReinstall.Top := 80;
     ChkReinstall.Width := 400;
     ChkReinstall.Checked := False;
+    ChkReinstall.OnClick := @OnCheckBoxClick; // Atribui evento de seleção exclusiva
 
     ChkUninstall := TCheckBox.Create(MaintenancePage);
     ChkUninstall.Caption := CustomMessage('OptionUninstall');
@@ -270,6 +294,7 @@ begin
     ChkUninstall.Top := 115;
     ChkUninstall.Width := 400;
     ChkUninstall.Checked := False;
+    ChkUninstall.OnClick := @OnCheckBoxClick; // Atribui evento de seleção exclusiva
   end;
 end;
 
@@ -285,8 +310,11 @@ begin
 
   if (IsOldVersionInstalled) and (CurPageID = MaintenancePage.ID) then
   begin
+    // SE NENHUMA OPÇÃO ESTIVER CHECADA, EXIBE AVISO E BLOQUEIA
     if (not ChkUpdate.Checked) and (not ChkReinstall.Checked) and (not ChkUninstall.Checked) then
     begin
+      MsgBox(CustomMessage('SelectOptionWarning'), mbError, MB_OK);
+      Result := False;
       Exit;
     end;
 
