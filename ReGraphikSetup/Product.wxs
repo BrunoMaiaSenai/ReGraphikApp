@@ -1,67 +1,80 @@
-<?xml version="1.0" encoding="Windows-1252"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="*" Name="ReGraphik" Language="1046" Version="1.0.0.0" Manufacturer="Equipe ReGraphik" UpgradeCode="c918494a-da28-4f94-a9b5-246200dbf17e" Codepage="1252">
-		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" SummaryCodepage="1252" />
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-		<!-- Impede reinstalação/downgrade de versões mais antigas -->
+	<!-- CONFIGURAÃ‡Ã•ES DO PRODUTO (X64) -->
+	<Product Id="*"
+			 Name="ReGraphik"
+			 Language="1046"
+			 Version="1.0.0.0"
+			 Manufacturer="Equipe ReGraphik"
+			 UpgradeCode="C918494A-DA28-4F94-A9B5-246200DBF17E">
+
+		<Package InstallerVersion="200"
+				 Compressed="yes"
+				 InstallScope="perMachine"
+				 Platform="x64"
+				 SummaryCodepage="1252" />
+
+		<!-- UPGRADES E MANUTENÃ‡ÃƒO AUTOMÃTICA -->
 		<MajorUpgrade
-			Schedule="afterInstallInitialize"
-			AllowSameVersionUpgrades="yes"
-			DowngradeErrorMessage="Uma versão mais recente do [ProductName] já está instalada." />
+		  Schedule="afterInstallInitialize"
+		  AllowSameVersionUpgrades="yes"
+		  DowngradeErrorMessage="Uma versÃ£o mais recente do ReGraphik jÃ¡ estÃ¡ instalada no sistema." />
+
 		<MediaTemplate EmbedCab="yes" />
 
-		<!-- ÍCONE DO PAINEL DE CONTROLE ("Adicionar ou Remover Programas") -->
+		<!-- VERIFICA E FECHA O REGRAPHIK.EXE EM EXECUÃ‡ÃƒO -->
+		<util:CloseApplication Id="CloseReGraphikApp"
+							   Target="ReGraphik.exe"
+							   CloseMessage="yes"
+							   RebootPrompt="no" />
+		
+		<!-- ÃCONE DO PAINEL DE CONTROLE -->
 		<Icon Id="AppIcon.ico" SourceFile="logoRegraphik.ico" />
 		<Property Id="ARPPRODUCTICON" Value="AppIcon.ico" />
 
-		<Feature Id="ProductFeature" Title="ReGraphik" Level="1">
-			<ComponentGroupRef Id="ProductComponents" />
+		<!-- VARIÃVEL DE LICENÃ‡A (RTF) -->
+		<WixVariable Id="WixUILicenseRtf" Value="TermoDeUso.rtf" />
+
+		<!-- INTERFACE DE INSTALAÃ‡ÃƒO COM ESCOLHA DE PASTA -->
+		<UIRef Id="WixUI_InstallDir" />
+		<UIRef Id="WixUI_ErrorProgressText" />
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+
+		<!-- RECURSOS DO SISTEMA -->
+		<Feature Id="MainApplication" Title="AplicaÃ§Ã£o Principal ReGraphik" Level="1" Absent="disallow">
+			<ComponentGroupRef Id="AppPublishComponents" />
+			<ComponentGroupRef Id="ApiPublishComponents" />
 			<ComponentRef Id="ApplicationShortcut" />
 			<ComponentRef Id="DesktopShortcut" />
 		</Feature>
 	</Product>
 
+	<!-- ESTRUTURA DE DIRETÃ“RIOS -->
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
-			<!-- Pasta Arquivos de Programas -->
-			<Directory Id="ProgramFilesFolder">
+			<Directory Id="ProgramFiles64Folder">
 				<Directory Id="INSTALLFOLDER" Name="ReGraphik">
 					<Directory Id="APPFOLDER" Name="App" />
 					<Directory Id="APIFOLDER" Name="API" />
 				</Directory>
 			</Directory>
-
-			<!-- Pasta do Menu Iniciar -->
 			<Directory Id="ProgramMenuFolder">
 				<Directory Id="ApplicationProgramsFolder" Name="ReGraphik" />
 			</Directory>
-
-			<!-- Área de Trabalho -->
 			<Directory Id="DesktopFolder" Name="Desktop" />
 		</Directory>
 	</Fragment>
 
+	<!-- ATALHOS -->
 	<Fragment>
-		<ComponentGroup Id="ProductComponents">
-			<!-- Executável da Aplicação WPF -->
-			<Component Id="WpfExecutable" Directory="APPFOLDER" Guid="b2c3d4e5-f6a7-8901-bcde-2345678901bc">
-				<File Id="ReGraphikEXE" Source="..\ReGraphik\bin\Release\net8.0-windows\win-x64\publish\ReGraphik.exe" KeyPath="yes" />
-			</Component>
-
-			<!-- Executável da API REST -->
-			<Component Id="ApiExecutable" Directory="APIFOLDER" Guid="c3d4e5f6-a7b8-9012-cdef-3456789012cd">
-				<File Id="ApiRestReGraphikEXE" Source="..\ApiRestReGraphik\bin\Release\net8.0\win-x64\publish\ApiRestReGraphik.exe" KeyPath="yes" />
-			</Component>
-		</ComponentGroup>
-
-		<!-- ATALHO NO MENU INICIAR -->
 		<DirectoryRef Id="ApplicationProgramsFolder">
-			<Component Id="ApplicationShortcut" Guid="d4e5f6a7-b890-1234-cdef-5678901234de">
-				<!-- Usar [#ReGraphikEXE] garante que o Windows ache o arquivo e o ícone sem erros -->
+			<Component Id="ApplicationShortcut" Guid="D4E5F6A7-B890-1234-CDEF-5678901234DE">
 				<Shortcut Id="ApplicationStartMenuShortcut"
 						  Name="ReGraphik"
 						  Description="Sistema ReGraphik"
-						  Target="[#ReGraphikEXE]"
+						  Target="[APPFOLDER]ReGraphik.exe"
 						  WorkingDirectory="APPFOLDER"
 						  Icon="AppIcon.ico" />
 				<RemoveFolder Id="RemoveApplicationProgramsFolder" On="uninstall" />
@@ -69,13 +82,12 @@
 			</Component>
 		</DirectoryRef>
 
-		<!-- ATALHO NA ÁREA DE TRABALHO -->
 		<DirectoryRef Id="DesktopFolder">
-			<Component Id="DesktopShortcut" Guid="e5f6a7b8-9012-3456-cdef-6789012345ef">
+			<Component Id="DesktopShortcut" Guid="E5F6A7B8-9012-3456-CDEF-6789012345EF">
 				<Shortcut Id="ApplicationDesktopShortcut"
 						  Name="ReGraphik"
 						  Description="Sistema ReGraphik"
-						  Target="[#ReGraphikEXE]"
+						  Target="[APPFOLDER]ReGraphik.exe"
 						  WorkingDirectory="APPFOLDER"
 						  Icon="AppIcon.ico" />
 				<RegistryValue Root="HKCU" Key="Software\ReGraphik" Name="desktopShortcut" Type="integer" Value="1" KeyPath="yes" />
