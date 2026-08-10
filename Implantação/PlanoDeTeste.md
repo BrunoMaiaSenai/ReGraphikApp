@@ -246,3 +246,5 @@ Ao encontrar qualquer falha, o testador deverá abrir uma **Issue no GitHub** ut
 | **Ferramentas** | Postman/Swagger (API), GitHub Issues (defeitos), WebView2 Runtime |
 | **Dados de Teste** | Massa de dados fictícia de resíduos, usuários e conversas no Firebase (ambiente de homologação) |
 | **Acessos** | Chaves de API válidas (Google Places, Imgur) configuradas em ambiente de teste |
+
+---
