@@ -58,12 +58,12 @@ O Inno Setup foi selecionado para gerar o instalador executável padrão pela su
     - **{app}\API:** Contém o serviço Web API.
 
 - **Experiência do Usuário (UX):** Criação automática de atalhos no Menu Iniciar e caixa de seleção opcional para criação de atalho na Área de Trabalho.
+- **Detecção de Versão Anterior:** O código em Pascal Script identifica instalações antigas no Registro e oferece a remoção automática silenciosa antes de gravar os novos arquivos.
 
 ### 3.2 Script de Compilação (instalador_innosetup.iss)
 
 ```Delphi
 [Setup]
-; ID Único (Uma chave externa para escapar o GUID)
 AppId={{C918494A-DA28-4F94-A9B5-246200DBF17E}
 AppName=ReGraphik
 AppVersion=1.0.0
@@ -78,67 +78,271 @@ SolidCompression=yes
 PrivilegesRequired=admin
 ArchitecturesInstallIn64BitMode=x64
 
-; --- CONFIGURAÇÕES DE ÍCONES (INSTALADOR E PAINEL DE CONTROLE) ---
+; --- CONFIGURAÇÕES DE ÍCONES E IMAGENS ---
 UsePreviousAppDir=yes
 DirExistsWarning=yes
 SetupIconFile=logoRegraphik.ico
-
-; --- DEFINE O ÍCONE NO "ADICIONAR OU REMOVER PROGRAMAS"
 UninstallDisplayIcon={app}\App\logoRegraphik.ico
 
-[Code]
-// Função executada logo ao iniciar o instalador
-function InitializeSetup(): Boolean;
-var
-  UninstPath: String;
-  ResultCode: Integer;
-  UserChoice: Integer;
-begin
-  Result := True;
-  
-  // Procura pelo desinstalador antigo no Registro do Windows
-  if RegQueryStringValue(HKLM, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{C918494A-DA28-4F94-A9B5-246200DBF17E}_is1', 'UninstallString', UninstPath) or
-     RegQueryStringValue(HKCU, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{C918494A-DA28-4F94-A9B5-246200DBF17E}_is1', 'UninstallString', UninstPath) then
-  begin
-    // Exibe a mensagem avisando o usuário antes de prosseguir
-    UserChoice := MsgBox(
-      'Uma versão anterior do ReGraphik foi detectada no sistema.' + #13#10 + #13#10 +
-      'Deseja desinstalá-la automaticamente para prosseguir com a nova instalação?',
-      mbConfirmation, MB_YESNO
-    );
-    
-    if UserChoice = IDYES then
-    begin
-      // Limpa as aspas do caminho do desinstalador
-      UninstPath := RemoveQuotes(UninstPath);
-      
-      // Executa a remoção silenciosa
-      Exec(UninstPath, '/SILENT /NORESTART /SUPPRESSMSGBOXES', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
-    end
-    else
-    begin
-      // Cancela o instalador caso o usuário escolha NÃO
-      Result := False;
-    end;
-  end;
-end;
+; Permite ao usuário escolher o idioma no início
+ShowLanguageDialog=yes
+
+; Imagens do assistente
+WizardImageFile=wizardLogo.png
+WizardSmallImageFile=logoRegraphik.png
+
+LicenseFile=TermoDeUso.txt
+
+; --- SUPORTE A IDIOMAS ---
+[Languages]
+Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
+Name: "english"; MessagesFile: "compiler:Default.isl"
+
+; --- TRADUÇÕES COMPLETAS DE TODAS AS MENSAGENS ---
+[CustomMessages]
+; Português
+brazilianportuguese.AppRunningWarning=O ReGraphik está em execução no momento.%n%nSe você prosseguir, a aplicação será fechada automaticamente para concluir a operação.%n%nDeseja continuar?
+brazilianportuguese.MaintenanceTitle=Opções de Manutenção
+brazilianportuguese.MaintenanceSubTitle=Uma versão anterior do ReGraphik já está instalada no sistema.
+brazilianportuguese.SelectAction=Selecione a ação que deseja realizar:
+brazilianportuguese.OptionUpdate=Atualizar (Instalar versão mais recente)
+brazilianportuguese.OptionReinstall=Restaurar / Reparar (Remove a versão atual e instala do zero)
+brazilianportuguese.OptionUninstall=Desinstalar o ReGraphik do computador
+brazilianportuguese.NewVersionNotice=Uma nova versão (%1) está disponível!%nVersão atual instalada: %2.%n%nDeseja atualizar agora?
+brazilianportuguese.CompApp=Aplicação Principal ReGraphik
+brazilianportuguese.CompAPI=Pacote de Serviços e API Rest
+brazilianportuguese.AlreadyInstalled=A versão %1 do ReGraphik já está instalada no seu computador.%n%nNão há uma versão mais recente disponível para atualização.%nCaso queira corrigir arquivos corrompidos, marque a caixa "Restaurar / Reparar".
+
+; Inglês
+english.AppRunningWarning=ReGraphik is currently running.%n%nIf you proceed, the application will be closed automatically to complete the operation.%n%nDo you wish to continue?
+english.MaintenanceTitle=Maintenance Options
+english.MaintenanceSubTitle=A previous version of ReGraphik is already installed on your system.
+english.SelectAction=Select the action you want to perform:
+english.OptionUpdate=Update (Install the latest version)
+english.OptionReinstall=Repair / Restore (Remove current version and perform a clean install)
+english.OptionUninstall=Uninstall ReGraphik from this computer
+english.NewVersionNotice=A new version (%1) is available!%nCurrent version installed: %2.%n%nDo you wish to update now?
+english.CompApp=ReGraphik Main Application
+english.CompAPI=REST API & Services Package
+english.AlreadyInstalled=Version %1 of ReGraphik is already installed on your computer.%n%nThere is no newer version available for update.%nIf you want to repair corrupted files, check the "Repair / Restore" option.
+
+[Components]
+Name: "main"; Description: "{cm:CompApp}"; Types: full compact custom; Flags: fixed
+Name: "api"; Description: "{cm:CompAPI}"; Types: full compact custom; Flags: fixed
+
+[Tasks]
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Files]
-; Publicação do App WPF (Arquivos compilados)
-Source: "ReGraphik\bin\Release\net8.0-windows\win-x64\publish\*"; DestDir: "{app}\App"; Flags: ignoreversion recursesubdirs
-
-; Publicação da API REST (Arquivos compilados)
-Source: "ApiRestReGraphik\bin\Release\net8.0\win-x64\publish\*"; DestDir: "{app}\API"; Flags: ignoreversion recursesubdirs
-
-; Copia o arquivo de ícone para dentro da pasta do App
+Source: "ReGraphik\bin\Release\net8.0-windows\win-x64\publish\*"; DestDir: "{app}\App"; Components: main; Flags: ignoreversion recursesubdirs
+Source: "ApiRestReGraphik\bin\Release\net8.0\win-x64\publish\*"; DestDir: "{app}\API"; Components: api; Flags: ignoreversion recursesubdirs
 Source: "logoRegraphik.ico"; DestDir: "{app}\App"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\ReGraphik"; Filename: "{app}\App\ReGraphik.exe"; WorkingDir: "{app}\App"; IconFilename: "{app}\App\logoRegraphik.ico"
 Name: "{autodesktop}\ReGraphik"; Filename: "{app}\App\ReGraphik.exe"; WorkingDir: "{app}\App"; IconFilename: "{app}\App\logoRegraphik.ico"; Tasks: desktopicon
 
-[Tasks]
-Name: "desktopicon"; Description: "Criar atalho na Área de Trabalho"; GroupDescription: "Atalhos adicionais:"
+[Code]
+var
+  MaintenancePage: TWizardPage;
+  ChkUpdate, ChkReinstall, ChkUninstall: TCheckBox;
+  IsOldVersionInstalled: Boolean;
+  UninstPath: String;
+  InstalledVersion: String;
+
+// --- FUNÇÃO PARA COMPARAR VERSÕES ---
+function CompareVersion(V1, V2: String): Integer;
+var
+  P1, P2, N1, N2: Integer;
+  S1, S2: String;
+begin
+  Result := 0;
+  S1 := V1;
+  S2 := V2;
+
+  while (Length(S1) > 0) or (Length(S2) > 0) do
+  begin
+    P1 := Pos('.', S1);
+    if P1 > 0 then
+    begin
+      N1 := StrToIntDef(Copy(S1, 1, P1 - 1), 0);
+      Delete(S1, 1, P1);
+    end
+    else
+    begin
+      N1 := StrToIntDef(S1, 0);
+      S1 := '';
+    end;
+
+    P2 := Pos('.', S2);
+    if P2 > 0 then
+    begin
+      N2 := StrToIntDef(Copy(S2, 1, P2 - 1), 0);
+      Delete(S2, 1, P2);
+    end
+    else
+    begin
+      N2 := StrToIntDef(S2, 0);
+      S2 := '';
+    end;
+
+    if N1 > N2 then
+    begin
+      Result := 1;
+      Exit;
+    end;
+    if N1 < N2 then
+    begin
+      Result := -1;
+      Exit;
+    end;
+  end;
+end;
+
+// --- VERIFICA E FECHA A APLICAÇÃO CASO ESTEJA ABERTA ---
+function CheckAndCloseApp(): Boolean;
+var
+  ResultCode: Integer;
+  UserChoice: Integer;
+begin
+  Result := True;
+  Exec('cmd.exe', '/c tasklist /FI "IMAGENAME eq ReGraphik.exe" | find /I "ReGraphik.exe"', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+
+  if ResultCode = 0 then
+  begin
+    UserChoice := MsgBox(CustomMessage('AppRunningWarning'), mbConfirmation, MB_YESNO);
+    if UserChoice = IDYES then
+    begin
+      Exec('taskkill.exe', '/F /IM ReGraphik.exe', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+      Result := True;
+    end
+    else
+    begin
+      Result := False;
+    end;
+  end;
+end;
+
+// --- INICIALIZAÇÃO DO ASSISTENTE ---
+procedure InitializeWizard();
+var
+  lblSelect: TLabel;
+begin
+  // --- BUSCA DA VERSÃO INSTALADA ---
+  if not RegQueryStringValue(HKLM, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{C918494A-DA28-4F94-A9B5-246200DBF17E}_is1', 'DisplayVersion', InstalledVersion) then
+    RegQueryStringValue(HKCU, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{C918494A-DA28-4F94-A9B5-246200DBF17E}_is1', 'DisplayVersion', InstalledVersion);
+
+  IsOldVersionInstalled := RegQueryStringValue(HKLM, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{C918494A-DA28-4F94-A9B5-246200DBF17E}_is1', 'UninstallString', UninstPath) or
+                          RegQueryStringValue(HKCU, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{C918494A-DA28-4F94-A9B5-246200DBF17E}_is1', 'UninstallString', UninstPath);
+
+  // --- CRIAÇÃO DA PÁGINA CUSTOMIZADA DE MANUTENÇÃO (TEXTOS MULTI-IDIOMA) ---
+  if IsOldVersionInstalled then
+  begin
+    MaintenancePage := CreateCustomPage(wpWelcome, CustomMessage('MaintenanceTitle'), CustomMessage('MaintenanceSubTitle'));
+
+    lblSelect := TLabel.Create(MaintenancePage);
+    lblSelect.Caption := CustomMessage('SelectAction');
+    lblSelect.Parent := MaintenancePage.Surface;
+    lblSelect.Left := 0;
+    lblSelect.Top := 10;
+    lblSelect.Font.Style := [fsBold];
+
+    ChkUpdate := TCheckBox.Create(MaintenancePage);
+    ChkUpdate.Caption := CustomMessage('OptionUpdate');
+    ChkUpdate.Parent := MaintenancePage.Surface;
+    ChkUpdate.Left := 15;
+    ChkUpdate.Top := 45;
+    ChkUpdate.Width := 400;
+    ChkUpdate.Checked := False;
+
+    ChkReinstall := TCheckBox.Create(MaintenancePage);
+    ChkReinstall.Caption := CustomMessage('OptionReinstall');
+    ChkReinstall.Parent := MaintenancePage.Surface;
+    ChkReinstall.Left := 15;
+    ChkReinstall.Top := 80;
+    ChkReinstall.Width := 400;
+    ChkReinstall.Checked := False;
+
+    ChkUninstall := TCheckBox.Create(MaintenancePage);
+    ChkUninstall.Caption := CustomMessage('OptionUninstall');
+    ChkUninstall.Parent := MaintenancePage.Surface;
+    ChkUninstall.Left := 15;
+    ChkUninstall.Top := 115;
+    ChkUninstall.Width := 400;
+    ChkUninstall.Checked := False;
+  end;
+end;
+
+// --- AÇÕES AO CLICAR EM AVANÇAR ---
+function NextButtonClick(CurPageID: Integer): Boolean;
+var
+  ResultCode: Integer;
+  UserChoice: Integer;
+  MsgText: String;
+  CompResult: Integer;
+begin
+  Result := True;
+
+  if (IsOldVersionInstalled) and (CurPageID = MaintenancePage.ID) then
+  begin
+    if (not ChkUpdate.Checked) and (not ChkReinstall.Checked) and (not ChkUninstall.Checked) then
+    begin
+      Exit;
+    end;
+
+    if ChkUpdate.Checked then
+    begin
+      if InstalledVersion <> '' then
+      begin
+        CompResult := CompareVersion('{#SetupSetting("AppVersion")}', InstalledVersion);
+
+        if CompResult <= 0 then
+        begin
+          MsgBox(FmtMessage(CustomMessage('AlreadyInstalled'), [InstalledVersion]), mbInformation, MB_OK);
+          Result := False;
+          Exit;
+        end;
+
+        if CompResult > 0 then
+        begin
+          MsgText := FmtMessage(CustomMessage('NewVersionNotice'), ['{#SetupSetting("AppVersion")}', InstalledVersion]);
+          UserChoice := MsgBox(MsgText, mbInformation, MB_YESNO);
+          if UserChoice = IDNO then
+          begin
+            Result := False;
+            Exit;
+          end;
+        end;
+      end;
+    end;
+
+    if not CheckAndCloseApp() then
+    begin
+      Result := False;
+      Exit;
+    end;
+
+    if ChkUninstall.Checked then
+    begin
+      UninstPath := RemoveQuotes(UninstPath);
+      Exec(UninstPath, '/SILENT /NORESTART', '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
+      WizardForm.Close;
+      Result := False;
+      Exit;
+    end;
+
+    if ChkReinstall.Checked then
+    begin
+      UninstPath := RemoveQuotes(UninstPath);
+      Exec(UninstPath, '/SILENT /NORESTART /SUPPRESSMSGBOXES', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+    end;
+  end;
+
+  if CurPageID = wpSelectDir then
+  begin
+    Result := CheckAndCloseApp();
+  end;
+end;
 ```
 
 ### 3.3 Guia de Instalação e Configuração do Inno Setup
@@ -173,14 +377,15 @@ Siga os passos abaixo para preparar o ambiente e vincular o script de instalaç�
 4. **Inclusão do Script de Compilação**  
    Cole o script `.iss` configurado para o ReGraphik no editor do Inno Setup.
 
-   <img width="1417" height="707" alt="Script de compilação inserido no editor" src="https://github.com/user-attachments/assets/19b117b3-65d6-47b0-96d4-f553973f4e06" />
+   <img width="1412" height="951" alt="image" src="https://github.com/user-attachments/assets/0462917c-0953-4183-b469-7af76d5c5159" />
+
 
 ---
 
 5. **Vincular e Salvar na Solução**  
    Acesse o menu **File > Save As...** e salve o arquivo do script (`.iss`) diretamente no diretório raiz da solução do seu projeto.
 
-   <img width="603" height="347" alt="Menu File Save As no Inno Setup" src="https://github.com/user-attachments/assets/818bbfa3-5019-4396-ae69-69e017091740" />
+   <img width="291" height="298" alt="image" src="https://github.com/user-attachments/assets/e3896dcb-a926-4fb7-91fa-50dd008ada85" />
 
    <img width="1225" height="682" alt="Seleção da pasta raiz do projeto no Windows Explorer" src="https://github.com/user-attachments/assets/c054f1ad-8e25-4b30-ae69-9900018301ae" />
 
@@ -205,78 +410,148 @@ Siga os passos abaixo para preparar o ambiente e vincular o script de instalaç�
 ### 4.1 Decisões de Implementação
 O WiX Toolset (v3.11) foi utilizado para gerar o pacote corporativo de instalação no formato nativo da Microsoft (.msi).
 
-- **Integração Nativa na Solution:** Utilizou-se o projeto do tipo Setup Project (WiX) direto no Visual Studio, permitindo que a construção do instalador faça parte do fluxo de build da solução.
+- **Interface de Instalação Comercial (WixUI_InstallDir):** Utiliza o fluxo estendido da interface do WiX que permite ao usuário escolher o diretório de destino (C:\Program Files\ReGraphik), aceitar o contrato de licença (RTF) e visualizar a barra de progresso de forma limpa.
 
-- **Compatibilidade de Codificação ANSI (Codepage="1252"):** O motor do Windows Installer exige estritamente a tabela ANSI para a tabela de resumo (Summary Information). Foi configurado Codepage="1252" para evitar erros de compilação sem afetar a localização em Português-BR.
+- **Fechamento Automático de Processos (util:CloseApplication):** Integrado via extensão WixUtilExtension. Durante a instalação/upgrade, o WiX notifica o sistema para encerrar o processo ReGraphik.exe caso ele esteja em execução, prevenindo erros de bloqueio de arquivo.
 
-- **Gerenciamento de GUIDs:** Utilização de identificadores únicos universais (GUIDs) para os componentes WpfExecutable e ApiExecutable, assegurando a rastreabilidade pelo registro do Windows e facilitando upgrades ou desinstalações automáticas.
+- **Geração Automática das Imagens do Wizard:** Utilizou-se automação via PowerShell para desenhar as artes Bitmap (wizardLogo.bmp e logoRegraphik.bmp). As imagens mantêm o fundo branco no painel direito, garantindo que os textos nativos do Windows Installer permaneçam em preto e com legibilidade ideal.
 
-### 4.2 Arquivo de Configuração XML (Product.wxs)
+- **Codificação e Arquitetura x64:** Configurado com Platform="x64", InstallScope="perMachine" e codificação ANSI (Codepage="1252" / Language="1046" para Português-BR).
+
+- **Estrutura de Referências no .wixproj:** O arquivo de projeto inclui explicitamente as DLLs WixUIExtension.dll e WixUtilExtension.dll dentro do MSBuild, permitindo compilar diretamente no Visual Studio sem erros de elementos não tratados.
+
+### 4.2 Arquivo do Projeto Visual Studio (ReGraphikSetup.wixproj)
 ```xml
-<?xml version="1.0" encoding="Windows-1252"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="*" Name="ReGraphik" Language="1046" Version="1.0.0.0" Manufacturer="Equipe ReGraphik" UpgradeCode="c918494a-da28-4f94-a9b5-246200dbf17e" Codepage="1252">
-		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" SummaryCodepage="1252" />
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.10</ProductVersion>
+    <ProjectGuid>e01c995a-90f4-4e25-8a3a-b5767f6dbf6f</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>ReGraphikSetup</OutputName>
+    <OutputType>Package</OutputType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
 
-		<!-- Impede reinstalação/downgrade de versões mais antigas -->
+  <ItemGroup>
+    <Compile Include="Product.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="logoRegraphik.ico" />
+    <Content Include="wizardLogo.bmp" />
+    <Content Include="logoRegraphik.bmp" />
+    <Content Include="TermoDeUso.rtf" />
+  </ItemGroup>
+
+  <!-- REFERÊNCIAS DE EXTENSÕES WIX -->
+  <ItemGroup>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+
+  <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
+  <Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
+    <Error Text="The WiX Toolset v3.11 build tools must be installed to build this project." />
+  </Target>
+</Project>
+```
+### 4.3 Arquivo de Configuração XML (Product.wxs)
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+	<Product Id="*" 
+			 Name="ReGraphik" 
+			 Language="1046" 
+			 Version="1.0.0.0" 
+			 Manufacturer="Equipe ReGraphik" 
+			 UpgradeCode="C918494A-DA28-4F94-A9B5-246200DBF17E">
+
+		<Package InstallerVersion="200" 
+				 Compressed="yes" 
+				 InstallScope="perMachine" 
+				 Platform="x64" 
+				 SummaryCodepage="1252" />
+
+		<!-- GERENCIAMENTO DE UPGRADES -->
 		<MajorUpgrade
-			Schedule="afterInstallInitialize"
-			AllowSameVersionUpgrades="yes"
-			DowngradeErrorMessage="Uma versão mais recente do [ProductName] já está instalada." />
+		  Schedule="afterInstallInitialize"
+		  AllowSameVersionUpgrades="yes"
+		  DowngradeErrorMessage="Uma versão mais recente do ReGraphik já está instalada no sistema." />
+
 		<MediaTemplate EmbedCab="yes" />
 
-		<!-- ÍCONE DO PAINEL DE CONTROLE ("Adicionar ou Remover Programas") -->
+		<!-- FECHAMENTO AUTOMÁTICO DO PROCESSO SE TIVER EM EXECUÇÃO -->
+		<util:CloseApplication Id="CloseReGraphikApp" 
+							   Target="ReGraphik.exe" 
+							   CloseMessage="yes" 
+							   RebootPrompt="no" />
+
+		<!-- ÍCONE DO PAINEL DE CONTROLE -->
 		<Icon Id="AppIcon.ico" SourceFile="logoRegraphik.ico" />
 		<Property Id="ARPPRODUCTICON" Value="AppIcon.ico" />
 
-		<Feature Id="ProductFeature" Title="ReGraphik" Level="1">
-			<ComponentGroupRef Id="ProductComponents" />
+		<!-- PERSONALIZAÇÃO VISUAL E LICENÇA -->
+		<WixVariable Id="WixUILicenseRtf" Value="TermoDeUso.rtf" />
+		<WixVariable Id="WixUIBannerBmp" Value="logoRegraphik.bmp" />
+		<WixVariable Id="WixUIDialogBmp" Value="wizardLogo.bmp" />
+
+		<!-- INTERFACE COM SELEÇÃO DE PASTA -->
+		<UIRef Id="WixUI_InstallDir" />
+		<UIRef Id="WixUI_ErrorProgressText" />
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+
+		<!-- RECURSOS DO SISTEMA -->
+		<Feature Id="MainApplication" Title="Aplicação Principal ReGraphik" Level="1" Absent="disallow">
+			<ComponentGroupRef Id="AppPublishComponents" />
+			<ComponentGroupRef Id="ApiPublishComponents" />
 			<ComponentRef Id="ApplicationShortcut" />
 			<ComponentRef Id="DesktopShortcut" />
 		</Feature>
 	</Product>
 
+	<!-- ESTRUTURA DE DIRETÓRIOS -->
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
-			<!-- Pasta Arquivos de Programas -->
-			<Directory Id="ProgramFilesFolder">
+			<Directory Id="ProgramFiles64Folder">
 				<Directory Id="INSTALLFOLDER" Name="ReGraphik">
 					<Directory Id="APPFOLDER" Name="App" />
 					<Directory Id="APIFOLDER" Name="API" />
 				</Directory>
 			</Directory>
-
-			<!-- Pasta do Menu Iniciar -->
 			<Directory Id="ProgramMenuFolder">
 				<Directory Id="ApplicationProgramsFolder" Name="ReGraphik" />
 			</Directory>
-
-			<!-- Área de Trabalho -->
 			<Directory Id="DesktopFolder" Name="Desktop" />
 		</Directory>
 	</Fragment>
 
+	<!-- ATALHOS -->
 	<Fragment>
-		<ComponentGroup Id="ProductComponents">
-			<!-- Executável da Aplicação WPF -->
-			<Component Id="WpfExecutable" Directory="APPFOLDER" Guid="b2c3d4e5-f6a7-8901-bcde-2345678901bc">
-				<File Id="ReGraphikEXE" Source="..\ReGraphik\bin\Release\net8.0-windows\win-x64\publish\ReGraphik.exe" KeyPath="yes" />
-			</Component>
-
-			<!-- Executável da API REST -->
-			<Component Id="ApiExecutable" Directory="APIFOLDER" Guid="c3d4e5f6-a7b8-9012-cdef-3456789012cd">
-				<File Id="ApiRestReGraphikEXE" Source="..\ApiRestReGraphik\bin\Release\net8.0\win-x64\publish\ApiRestReGraphik.exe" KeyPath="yes" />
-			</Component>
-		</ComponentGroup>
-
-		<!-- ATALHO NO MENU INICIAR -->
 		<DirectoryRef Id="ApplicationProgramsFolder">
-			<Component Id="ApplicationShortcut" Guid="d4e5f6a7-b890-1234-cdef-5678901234de">
-				<!-- Usar [#ReGraphikEXE] garante que o Windows ache o arquivo e o ícone sem erros -->
+			<Component Id="ApplicationShortcut" Guid="D4E5F6A7-B890-1234-CDEF-5678901234DE">
 				<Shortcut Id="ApplicationStartMenuShortcut"
 						  Name="ReGraphik"
 						  Description="Sistema ReGraphik"
-						  Target="[#ReGraphikEXE]"
+						  Target="[APPFOLDER]ReGraphik.exe"
 						  WorkingDirectory="APPFOLDER"
 						  Icon="AppIcon.ico" />
 				<RemoveFolder Id="RemoveApplicationProgramsFolder" On="uninstall" />
@@ -284,13 +559,12 @@ O WiX Toolset (v3.11) foi utilizado para gerar o pacote corporativo de instalaç
 			</Component>
 		</DirectoryRef>
 
-		<!-- ATALHO NA ÁREA DE TRABALHO -->
 		<DirectoryRef Id="DesktopFolder">
-			<Component Id="DesktopShortcut" Guid="e5f6a7b8-9012-3456-cdef-6789012345ef">
+			<Component Id="DesktopShortcut" Guid="E5F6A7B8-9012-3456-CDEF-6789012345EF">
 				<Shortcut Id="ApplicationDesktopShortcut"
 						  Name="ReGraphik"
 						  Description="Sistema ReGraphik"
-						  Target="[#ReGraphikEXE]"
+						  Target="[APPFOLDER]ReGraphik.exe"
 						  WorkingDirectory="APPFOLDER"
 						  Icon="AppIcon.ico" />
 				<RegistryValue Root="HKCU" Key="Software\ReGraphik" Name="desktopShortcut" Type="integer" Value="1" KeyPath="yes" />
@@ -300,7 +574,7 @@ O WiX Toolset (v3.11) foi utilizado para gerar o pacote corporativo de instalaç
 </Wix>
 ```
 
-### 4.3 Guia de Configuração e Criação do Projeto WiX Toolset
+### 4.4 Guia de Configuração e Criação do Projeto WiX Toolset
 
 Siga o passo a passo abaixo para instalar a extensão do WiX Toolset no Visual Studio, preparar o compilador e criar o pacote de instalação `.msi`:
 
@@ -360,9 +634,11 @@ Siga o passo a passo abaixo para instalar a extensão do WiX Toolset no Visual S
    <img width="1128" height="487" alt="Código padrão do arquivo Product.wxs" src="https://github.com/user-attachments/assets/c70b7b8e-5ea2-4da5-bb75-483d95c27a5b" />
 
    * **Modelo Atualizado (Customizado para o ReGraphik):**
-   <img width="1246" height="955" alt="Código XML atualizado com as regras do ReGraphik" src="https://github.com/user-attachments/assets/d3ab1107-b088-4523-8d43-a552f9fed84f" />
+  	<img width="967" height="987" alt="image" src="https://github.com/user-attachments/assets/c036ab9b-d22c-4b3e-9af1-2fa1f1ad0c69" />
+
    
 ---
+
 
 #### Compilação e Localização do Instalador (`.msi`)
 
@@ -372,6 +648,8 @@ Siga o passo a passo abaixo para instalar a extensão do WiX Toolset no Visual S
    * O instalador gerado estará localizado no seguinte diretório:
      ```text
      ReGraphik\ReGraphikSetup\bin\Release\ReGraphikSetup.msi
+     ou
+     ReGraphik\ReGraphikSetup\ReGraphikSetup.msi
      ```
      
      <img width="795" height="97" alt="image" src="https://github.com/user-attachments/assets/a7123ebc-1dcb-4fbf-8edf-5ba2bcdc78ef" />
