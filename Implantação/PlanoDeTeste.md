@@ -235,6 +235,8 @@ Ao encontrar qualquer falha, o testador deverá abrir uma **Issue no GitHub** ut
 - Ambiente: Windows 11 64-bits / ReGraphik v1.0.0 / .NET 8.0 Runtime
 - Evidência: print_erro_crash.png (em anexo)
 
+````
+
 ---
 
 ## 12. Recursos Necessários
