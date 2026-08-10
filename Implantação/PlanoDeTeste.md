@@ -77,7 +77,7 @@ O objetivo deste Plano de Testes é validar a estabilidade, integridade, usabili
 ## 4. Base de Teste
 
 Artefatos e especificações técnicas utilizados para desenhar e executar os cenários de teste:
-* **Especificação da API REST / Swagger (OpenAPI):** Disponível em `https://webregraphik.runasp.net`.
+* **Especificação da API REST / Swagger (OpenAPI):** Disponível em `https://webregraphik.runasp.net.`.
 * **Documentação Mintlify do Projeto:** Publicada em `https://brunomaia.mintlify.app/`.
 * **Modelagem de Dados:** Diagramas Conceitual, Lógico e Físico do sistema (Firebase / API / WPF).
 * **Diagramas da UML:** Casos de Uso, Diagramas de Fluxo, Diagramas de Sequência e Mapa de Bounded Contexts.
@@ -110,6 +110,8 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **Análise de Valor Limite (AVL)** | Aplicada em dimensões em cm/m ($0$, valores negativos, casas decimais), quantidades de resíduo ($0$, $1$, $999999$) e limites de caracteres de texto no Chat. |
 | **Tabela de Decisão** | Regras de alteração de Status do Resíduo (`Disponível` $\rightarrow$ `Reservado` $\rightarrow$ `Descartado`) baseadas no perfil do usuário (Administrador vs. Operador). |
 | **Testes Baseados em Cenários** | Simulação do fluxo de trabalho diário de um operador de gráfica registrando aparas de papel e buscando reciclagem. |
+| **Testes de Aceitação:** | Aplicável nas entregas para o instrutor orientador e stakeholders do SENAI, validando se o sistema atende aos critérios definidos nos Casos de Uso e histórias de usuário do TCC (ex: operador consegue cadastrar, buscar e reciclar um resíduo do início ao fim). |
+| **Testes Baseados em Cenários:** | Simulação de fluxos reais de uso do dia a dia de uma gráfica (ex: operador cadastra apara de papel → sistema sugere reaproveitamento → chat combina retirada → status muda para Reservado → relatório ESG reflete a movimentação).|
 
 ---
 
