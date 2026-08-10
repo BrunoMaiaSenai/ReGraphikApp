@@ -250,3 +250,17 @@ Ao encontrar qualquer falha, o testador deverá abrir uma **Issue no GitHub** ut
 | **Acessos** | Chaves de API válidas (Google Places, Imgur) configuradas em ambiente de teste |
 
 ---
+
+## 13. Cronograma
+
+| Atividade | Período Previsto |
+| :--- | :--- |
+| Preparação do ambiente e dados de teste | Semana 1 |
+| Execução dos Casos de Teste funcionais | Semana 2 |
+| Testes de integração (API, Firebase, Google Maps, Imgur) | Semana 2–3 |
+| Testes não funcionais e exploratórios | Semana 3 |
+| Correção de defeitos, reteste e regressão | Semana 4 |
+| Fechamento e relatório final | Semana 5 |
+
+> Este cronograma deverá ser atualizado a cada ciclo de desenvolvimento (sprint) do TCC.
+
