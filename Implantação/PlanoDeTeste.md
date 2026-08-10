@@ -112,6 +112,7 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **Testes Baseados em Cenários** | Simulação do fluxo de trabalho diário de um operador de gráfica registrando aparas de papel e buscando reciclagem. |
 | **Testes de Aceitação:** | Aplicável nas entregas para o instrutor orientador e stakeholders do SENAI, validando se o sistema atende aos critérios definidos nos Casos de Uso e histórias de usuário do TCC (ex: operador consegue cadastrar, buscar e reciclar um resíduo do início ao fim). |
 | **Testes Baseados em Cenários:** | Simulação de fluxos reais de uso do dia a dia de uma gráfica (ex: operador cadastra apara de papel → sistema sugere reaproveitamento → chat combina retirada → status muda para Reservado → relatório ESG reflete a movimentação).|
+| **Testes Exploratórios** | Sessões livres guiadas por checklist mínimo, focadas em interações inesperadas na tela de Cadastro de Resíduos e no comportamento do WebView2 sob perda de conexão. |
 
 ---
 
