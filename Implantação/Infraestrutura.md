@@ -5,8 +5,8 @@
 | Campo | Descrição |
 |---|---|
 | **Nome do Projeto** | ReGraphik — Plataforma de Gestão de Estoque Reverso |
-| **Instituição** | SENAI  |
-| **Versão** | 1.0.0 |
+| **Instituição** | SENAI Afonso Greco – Nova Lima  |
+| **Versão** | `1.0.0` |
 | **Repositorio** | https://github.com/BrunoMaiaSenai/ReGraphikApp/tree/master|
 | **Domínio da Aplicação** | Gestão de resíduos reaproveitáveis (papel, cartão, vinil) no setor gráfico, com sugestões de economia circular e localização de pontos de coleta |
 | **Componentes do Sistema** | Cliente Desktop (WPF), API REST (ASP.NET Core), Banco de Dados em nuvem (Firebase Realtime Database) |
