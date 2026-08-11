@@ -130,6 +130,30 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **CT008** | Relatórios / ESG | Exportação de relatório consolidado em PDF | Clicar em *"Exportar PDF"* | Arquivo PDF gerado via QuestPDF e salvo no computador com os dados e gráficos compilados. | — | ⏳ Pendente |
 | **CT009** | Instalação | Execução do instalador Windows | Executar `ReGraphik_Setup.msi` | Instalação concluída no pasta `Program Files`, com atalhos criados no Menu Iniciar/Área de Trabalho. | — | ⏳ Pendente |
 
+### 7.1 Validação de Teste
+
+- **CT001:**
+
+- **CT002:** 
+
+- **CT003:** 
+
+- **CT004:** 
+
+- **CT005:** 
+
+- **CT006:** 
+
+- **CT007:** 
+
+- **CT008:** 
+
+- **CT009:** 
+
+- **CT0010:** 
+
+- **CT0011:** 
+
 ---
 
 ## 8. Análise de Riscos
