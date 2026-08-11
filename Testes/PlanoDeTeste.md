@@ -128,7 +128,7 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **CT006** | Pontos de Coleta | Busca de pontos de reciclagem por cidade | Cidade: `Nova Lima` | Chamada à Google Places API e exibição dos pins dos pontos no mapa Leaflet/WebView2. | — | ⏳ Pendente |
 | **CT007** | Chat Tempo Real | Envio de mensagem entre dois usuários ativos | Texto: *"Resíduo reservado para coleta"* | Mensagem é salva no Firebase e aparece instantaneamente na janela do destinatário. | — | ⏳ Pendente |
 | **CT008** | Relatórios / ESG | Exportação de relatório consolidado em PDF | Clicar em *"Exportar PDF"* | Arquivo PDF gerado via QuestPDF e salvo no computador com os dados e gráficos compilados. | — | ⏳ Pendente |
-| **CT009** | Instalação | Execução do instalador Windows | Executar `ReGraphik_Setup.msi` | Instalação concluída no pasta `Program Files`, com atalhos criados no Menu Iniciar/Área de Trabalho. | — | ⏳ Pendente |
+| **CT009** | Instalação | Execução do instalador Windows | Executar `ReGraphik_Setup.exe` | Instalação concluída no pasta `Program Files`, com atalhos criados no Menu Iniciar/Área de Trabalho. | — | ⏳ Pendente |
 
 ### 7.1 Validação de Teste
 
