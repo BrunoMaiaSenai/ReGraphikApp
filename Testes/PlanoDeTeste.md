@@ -118,19 +118,84 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 
 ## 7. Casos de Teste
 
+### 7.1. Autenticação, Cadastro de Usuários e Segurança
+
 | ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **CT001** | Login | Autenticação com credenciais válidas | Login: `operador`, Senha: `123456` | Acesso liberado, Token JWT/Firebase gerado e redirecionamento para a Dashboard. | — | ⏳ Pendente |
-| **CT002** | Login | Tentativa de login com senha incorreta | Login: `operador`, Senha: `errada` | Mensagem de erro *"Usuário ou senha inválidos"* e acesso bloqueado. | — | ⏳ Pendente |
-| **CT003** | Cadastro de Resíduo | Inclusão de aparas de papel com dados válidos | Tipo: `Papel A4`, Qtd: `50`, Dimensões: `21x29.7cm` | Resíduo cadastrado com sucesso, status `Disponível` e visível no Estoque Reverso. | — | ⏳ Pendente |
-| **CT004** | Cadastro de Resíduo | Tentativa de cadastro com quantidade zerada/negativa (AVL) | Tipo: `Vinil`, Qtd: `-5` | Bloqueio do formulário exibindo mensagem *"Quantidade deve ser maior que zero"*. | — | ⏳ Pendente |
-| **CT005** | Estoque Reverso | Filtragem dinâmica por tipo de resíduo | Filtro: `Vinil` | A listagem atualiza via `ICollectionView` mostrando apenas resíduos do tipo Vinil. | — | ⏳ Pendente |
-| **CT006** | Pontos de Coleta | Busca de pontos de reciclagem por cidade | Cidade: `Nova Lima` | Chamada à Google Places API e exibição dos pins dos pontos no mapa Leaflet/WebView2. | — | ⏳ Pendente |
-| **CT007** | Chat Tempo Real | Envio de mensagem entre dois usuários ativos | Texto: *"Resíduo reservado para coleta"* | Mensagem é salva no Firebase e aparece instantaneamente na janela do destinatário. | — | ⏳ Pendente |
-| **CT008** | Relatórios / ESG | Exportação de relatório consolidado em PDF | Clicar em *"Exportar PDF"* | Arquivo PDF gerado via QuestPDF e salvo no computador com os dados e gráficos compilados. | — | ⏳ Pendente |
-| **CT009** | Instalação | Execução do instalador Windows | Executar `ReGraphik_Setup.exe` | Instalação concluída no pasta `Program Files`, com atalhos criados no Menu Iniciar/Área de Trabalho. | — | ⏳ Pendente |
+| **CT001** | Login | Autenticação com credenciais válidas | Login: `operador@gmail.com`, Senha: `123456` | Acesso liberado, Token de sessão salvo no Firebase Auth e redirecionamento para a Dashboard. | — | ⏳ Pendente |
+| **CT002** | Login | Tentativa de login com senha incorreta | Login: `operador@gmail.com`, Senha: `errada` | Mensagem de erro *"Usuário ou senha inválidos"* e acesso bloqueado. | — | ⏳ Pendente |
+| **CT003** | Login | Tentativa de login com e-mail fora do domínio da empresa | Login: `usuario@gmail.com`, Senha: `123456` | Alerta do sistema *"É necessário utilizar um e-mail corporativo válido (@regraphik.com.br)"*. | — | ⏳ Pendente |
+| **CT004** | Cadastro / Convite | Registro de novo usuário com Token de Convite Válido | E-mail: `novo@gmail.com`, Token: `849201` | Conta ativada com sucesso no Firebase e permissão concedida. | — | ⏳ Pendente |
+| **CT005** | Cadastro / Convite | Registro de novo usuário com Token Invalidador/Expirado | E-mail: `novo@gmail.com`, Token: `000000` | Mensagem de erro *"Token de convite inválido ou já utilizado"* e bloqueio do cadastro. | — | ⏳ Pendente |
+| **CT006** | Perfil do Usuário | Upload e alteração de foto de perfil via Imgur API | Selecionar imagem `avatar.png` (PNG < 2MB) | Upload concluído, URL gerada no Imgur v5 e atualizada na interface WPF. | — | ⏳ Pendente |
 
-### 7.1 Validação de Teste
+---
+
+### 7.2. Gestão do Estoque Reverso e Resíduos
+
+| ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **CT007** | Cadastro de Resíduo | Inclusão de aparas de papel com dados válidos | Tipo: `Papel A4`, Qtd: `50`, Dimensões: `21x29.7cm` | Resíduo salvo no Firebase com status `Disponível` e atualização imediata do estoque. | — | ⏳ Pendente |
+| **CT008** | Cadastro de Resíduo | Tentativa de cadastro com quantidade zerada ou negativa | Tipo: `Vinil`, Qtd: `-5` | Validação de formulário impedindo envio: *"A quantidade deve ser maior que zero"*. | — | ⏳ Pendente |
+| **CT009** | Cadastro de Resíduo | Omissão de campos obrigatórios no cadastro | Tipo: `Em Branco`, Qtd: `10` | Indicação em vermelho nos campos nulos com mensagem *"Preencha os campos obrigatórios"*. | — | ⏳ Pendente |
+| **CT010** | Consulta de Estoque | Filtragem dinâmica por tipo de resíduo | Filtro em memória: `Vinil` | A listagem atualiza via `ICollectionView` exibindo apenas os resíduos do tipo Vinil sem travamentos. | — | ⏳ Pendente |
+| **CT011** | Alteração de Status | Transição do estado do resíduo de "Disponível" para "Reservado" | Clicar em *"Reservar Resíduo"* ID `#104` | Status no Firebase alterado para `Reservado`, mudando a cor do indicador no card do app. | — | ⏳ Pendente |
+| **CT012** | Alteração de Status | Finalização do ciclo de vida para "Descartado/Reaproveitado" | Clicar em *"Dar Baixa / Concluir"* | Resíduo movido para a lista de concluídos e contabilizado na métrica da Dashboard ESG. | — | ⏳ Pendente |
+| **CT013** | Exclusão de Resíduo | Remoção de item do estoque por perfil Usuário vs Administrador | Perfil: `Usuário` clicando em Excluir | Opção desabilitada ou com mensagem *"Ação restrita a Administradores"*. | — | ⏳ Pendente |
+
+---
+
+### 7.3. Módulo de Geolocalização e Pontos de Coleta
+
+| ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **CT014** | Pontos de Coleta | Busca de pontos de reciclagem por cidade válida | Cidade: `Nova Lima` | Consulta enviada à Google Places API e marcadores (pins) desenhados no Leaflet/WebView2. | — | ⏳ Pendente |
+| **CT015** | Pontos de Coleta | Pesquisa por cidade sem retorno ou inexistente | Cidade: `CityX99` | Retorno limpo e exibição da mensagem *"Nenhum ponto de coleta localizado nesta região"*. | — | ⏳ Pendente |
+| **CT016** | Interatividade do Mapa | Clique no Pin do Ponto de Coleta | Clicar no marcador no mapa | Janela (popup) é aberta contendo endereço, telefone de contato e tipos de materiais aceitos. | — | ⏳ Pendente |
+| **CT017** | Fallback do Mapa | Execução sem conexão com a internet ou API fora do ar | Desconectar internet / Buscar mapa | Tratamento de exceção exibindo *"Serviço de mapa indisponível. Verifique sua conexão"*. | — | ⏳ Pendente |
+
+---
+
+### 7.4. Comunicação Corporativa (Chat em Tempo Real)
+
+| ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **CT018** | Chat Tempo Real | Envio de mensagem de texto simples entre dois usuários | Texto: *"Resíduo #104 liberado para coleta."* | Mensagem enviada e renderizada instantaneamente via Firebase Realtime na tela do destinatário. | — | ⏳ Pendente |
+| **CT019** | Chat Tempo Real | Tentativa de envio de mensagem vazia | Texto: `""` (vazio/espaços) | O botão de envio permanece inativo ou ignora a ação. | — | ⏳ Pendente |
+| **CT020** | Notificação de Chat | Recebimento de mensagem com a janela do chat minitimizada | Envio de mensagem externa | Indicador visual de alerta de "Nova Mensagem" exibido na barra superior da aplicação. | — | ⏳ Pendente |
+
+---
+
+### 7.5. Indicadores, Dashboard e Relatórios ESG
+
+| ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **CT021** | Dashboard | Atualização automática dos cards de métricas (Kg Reaproveitados) | Inserir baixa de 100Kg de Papel | Total acumulado de kg reaproveitados atualiza automaticamente sem necessidade de reiniciar o app. | — | ⏳ Pendente |
+| **CT022** | Relatórios ESG | Exportação do Relatório Consolidado em PDF | Clicar no botão *"Exportar PDF"* | O QuestPDF compila a estrutura, gera o arquivo `.pdf` com formatação e salva no diretório escolhido. | — | ⏳ Pendente |
+| **CT023** | Relatórios ESG | Exportação de relatório em período sem dados registrados | Filtrar Período: `Data sem registros` | Arquivo PDF gerado exibindo o cabeçalho oficial e a mensagem *"Nenhum resíduo movimentado neste período"*. | — | ⏳ Pendente |
+
+---
+
+### 7.6. Instalação, Manutenção e Atualização (Inno Setup)
+
+| ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **CT024** | Instalador | Instalação limpa em um computador sem o ReGraphik | Executar `ReGraphik_Setup.exe` | Arquivos copiados para `Program Files`, registro criado e atalhos adicionados à Área de Trabalho. | — | ⏳ Pendente |
+| **CT025** | Instalador (Manutenção) | Reexecutar instalador com a mesma versão já instalada no sistema | Selecionar nenhuma opção e clicar em *"Avançar"* | **Bloqueio ativado:** Exibe alerta exigindo a seleção de uma das opções de manutenção (Atualizar, Reparar ou Desinstalar). | — | ⏳ Pendente |
+| **CT026** | Instalador (Seleção) | Teste de exclusividade das CheckBoxes de Manutenção | Marcar *"Atualizar"* e depois *"Desinstalar"* | Comportamento de radio-button: A marcação de "Atualizar" é removida automaticamente ao clicar na outra. | — | ⏳ Pendente |
+| **CT027** | Instalador (Atualização) | Execução do setup em sistema que já possui versão antiga instalada | Selecionar *"Atualizar (Versão mais recente)"* | O instalador sobrepõe os binários mantendo as configurações do usuário e atualiza a versão no Registro. | — | ⏳ Pendente |
+| **CT028** | Instalador (Execução) | Tentar instalar/atualizar com a aplicação ReGraphik aberta | Clicar em *"Avançar"* com app aberto | Alerta exibido pedindo permissão; ao aceitar, fecha o processo `ReGraphik.exe` via `taskkill` e prossegue. | — | ⏳ Pendente |
+| **CT029** | Desinstalação | Removendo a aplicação via Opção de Manutenção ou Painel do Windows | Selecionar *"Desinstalar"* | Processo `/SILENT` executado, removendo atalhos e pasta da aplicação da máquina. | — | ⏳ Pendente |
+
+---
+
+### 7.7. Resiliência e Conectividade
+
+| ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **CT030** | Tratamento de Rede | Perda de conexão com a Internet durante a navegação no App | Desconectar cabo de rede/Wi-Fi | A interface exibe o status *"Modo Offline / Sem Conexão"* no rodapé e desabilita requisições pendentes sem travar a UI (evita Crash). | — | ⏳ Pendente |
+
+### 7.8 Validação de Teste
 
 - **CT001:**
 
