@@ -128,15 +128,15 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **CT004** | Cadastro / Convite | Registro de novo usuário com Token Invalidador/Expirado | E-mail: `novo@gmail.com`, Token: `000000` | Mensagem de erro *"Token de convite inválido ou já utilizado"* e bloqueio do cadastro. | — | | ⏳ Pendente |
 | **CT005** | Perfil do Usuário | Upload e alteração de foto de perfil via Imgur API | Selecionar imagem `avatar.png` (PNG < 2MB) | Upload concluído, URL gerada no Imgur v5 e atualizada na interface WPF. | — |  |⏳ Pendente |
 
-- **CT001:** 
+## CT001 
 
-- **CT002:** 
+## CT002
 
-- **CT003:** 
+## CT003 
 
-- **CT004:** 
+## CT004
 
-- **CT005:** 
+## CT005
 
 ---
 
@@ -152,19 +152,19 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **CT011** | Alteração de Status | Finalização do ciclo de vida para "Descartado/Reaproveitado" | Clicar em *"Dar Baixa / Concluir"* | Resíduo movido para a lista de concluídos e contabilizado na métrica da Dashboard ESG. | — |  | ⏳ Pendente |
 | **CT012** | Exclusão de Resíduo | Remoção de item do estoque por perfil Usuário vs Administrador | Perfil: `Usuário` clicando em Excluir | Opção desabilitada ou com mensagem *"Ação restrita a Administradores"*. | — |  | ⏳ Pendente |
 
-- **CT006:** 
+## CT006
 
-- **CT007:** 
+## CT007 
 
-- **CT008:** 
+## CT008
 
-- **CT009:** 
+## CT009 
 
-- **CT010:** 
+## CT010 
 
-- **CT011:**
+## CT011
 
-- **CT0012:**
+## CT012
   
 ---
 
@@ -177,13 +177,13 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **CT015** | Interatividade do Mapa | Clique no Pin do Ponto de Coleta | Clicar no marcador no mapa | Janela (popup) é aberta contendo endereço, telefone de contato e tipos de materiais aceitos. | — | ⏳ Pendente |
 | **CT016** | Fallback do Mapa | Execução sem conexão com a internet ou API fora do ar | Desconectar internet / Buscar mapa | Tratamento de exceção exibindo *"Serviço de mapa indisponível. Verifique sua conexão"*. | — | ⏳ Pendente |
 
-- **CT013:** 
+## CT013 
 
-- **CT014:** 
+## CT014
 
-- **CT015:** 
+## CT015
 
-- **CT016:** 
+## CT016
 
 ---
 
@@ -195,11 +195,11 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **CT018** | Chat Tempo Real | Tentativa de envio de mensagem vazia | Texto: `""` (vazio/espaços) | O botão de envio permanece inativo ou ignora a ação. | — | ⏳ Pendente |
 | **CT019** | Notificação de Chat | Recebimento de mensagem com a janela do chat minitimizada | Envio de mensagem externa | Indicador visual de alerta de "Nova Mensagem" exibido na barra superior da aplicação. | — | ⏳ Pendente |
 
-- **CT017:** 
+## CT017 
 
-- **CT018:** 
+## CT018
 
-- **CT019:** 
+## CT019
 
 ---
 
@@ -211,11 +211,11 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **CT021** | Relatórios ESG | Exportação do Relatório Consolidado em PDF | Clicar no botão *"Exportar PDF"* | O QuestPDF compila a estrutura, gera o arquivo `.pdf` com formatação e salva no diretório escolhido. | — | ⏳ Pendente |
 | **CT022** | Relatórios ESG | Exportação de relatório em período sem dados registrados | Filtrar Período: `Data sem registros` | Arquivo PDF gerado exibindo o cabeçalho oficial e a mensagem *"Nenhum resíduo movimentado neste período"*. | — | ⏳ Pendente |
 
-- **CT020:** 
+## CT020
 
-- **CT021:** 
+## CT021 
 
-- **CT022:** 
+## CT022
 
 ---
 
@@ -223,24 +223,90 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 
 | ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **CT023** | Instalador | Instalação limpa em um computador sem o ReGraphik | Executar `ReGraphik_Setup.exe` | Arquivos copiados para `Program Files`, registro criado e atalhos adicionados à Área de Trabalho. | — | ⏳ Pendente |
-| **CT024** | Instalador (Manutenção) | Reexecutar instalador com a mesma versão já instalada no sistema | Selecionar nenhuma opção e clicar em *"Avançar"* | **Bloqueio ativado:** Exibe alerta exigindo a seleção de uma das opções de manutenção (Atualizar, Reparar ou Desinstalar). | — | ⏳ Pendente |
-| **CT025** | Instalador (Seleção) | Teste de exclusividade das CheckBoxes de Manutenção | Marcar *"Atualizar"* e depois *"Desinstalar"* | Comportamento de radio-button: A marcação de "Atualizar" é removida automaticamente ao clicar na outra. | — | ⏳ Pendente |
-| **CT026** | Instalador (Atualização) | Execução do setup em sistema que já possui versão antiga instalada | Selecionar *"Atualizar (Versão mais recente)"* | O instalador sobrepõe os binários mantendo as configurações do usuário e atualiza a versão no Registro. | — | ⏳ Pendente |
-| **CT027** | Instalador (Execução) | Tentar instalar/atualizar com a aplicação ReGraphik aberta | Clicar em *"Avançar"* com app aberto | Alerta exibido pedindo permissão; ao aceitar, fecha o processo `ReGraphik.exe` via `taskkill` e prossegue. | — | ⏳ Pendente |
-| **CT028** | Desinstalação | Removendo a aplicação via Opção de Manutenção ou Painel do Windows | Selecionar *"Desinstalar"* | Processo `/SILENT` executado, removendo atalhos e pasta da aplicação da máquina. | — | ⏳ Pendente |
+| **CT023** | Instalador | Instalação limpa em um computador sem o ReGraphik | Executar `ReGraphik_Setup.exe` | Arquivos copiados para `Program Files`, registro criado e atalhos adicionados à Área de Trabalho. | A instalação ocorreu tranquila e tudo foi instalado com sucesso | Concluído |
+| **CT024** | Instalador (Manutenção) | Reexecutar instalador com a mesma versão já instalada no sistema | Selecionar nenhuma opção e clicar em *"Avançar"* | **Bloqueio ativado:** Exibe alerta exigindo a seleção de uma das opções de manutenção (Atualizar, Reparar ou Desinstalar). | O bloqueio é efetuado corretamente e o usuário não consegui progredir sem escolher uma opção | Concluído |
+| **CT025** | Instalador (Seleção) | Teste de exclusividade das CheckBoxes de Manutenção | Marcar *"Atualizar"* e depois *"Desinstalar"* | Comportamento de radio-button: A marcação de "Atualizar" é removida automaticamente ao clicar na outra. | O executável não permite a marcação de duas ou mais CheckBoxes, caso uma seja marcada a outro e desmarcada automaticamente | Concluído |
+| **CT026** | Instalador (Atualização) | Execução do setup em sistema que já possui versão antiga instalada | Selecionar *"Atualizar (Versão mais recente)"* | O instalador sobrepõe os binários mantendo as configurações do usuário e atualiza a versão no Registro. | Como o sistema não possui ainda uma versão atualizada ele apenas alerta o usuário com uma mensagem | Concluído |
+| **CT027** | Instalador (Execução) | Tentar instalar/atualizar com a aplicação ReGraphik aberta | Clicar em *"Avançar"* com app aberto | Alerta exibido pedindo permissão; ao aceitar, fecha o processo `ReGraphik.exe` via `taskkill` e prossegue. | Uma mensagem avisando que o sistema está aberto aparece na tela para que o usuário possa fechar o aplicativo antes de prosseguir | Concluído |
+| **CT028** | Desinstalação | Removendo a aplicação via Opção de Manutenção ou Painel do Windows | Selecionar *"Desinstalar"* | Processo `/SILENT` executado, removendo atalhos e pasta da aplicação da máquina. | O aplicativo e desinstalado com sucesso da máquina | Concluído |
 
-- **CT023:** 
+## CT023
 
-- **CT024:** 
+- Primeiro teste de instalação em um notebook que não possuia o Visaul Studio e sem o aplicativo da Regraphik baixado.
 
-- **CT025:** 
+<img width="1455" height="740" alt="InnoSetup_Imagem14" src="https://github.com/user-attachments/assets/68598604-5c27-49aa-9b10-34a7a97e9099" />
+  
 
-- **CT026:** 
+- Foi instalado o executável na pasta do sistema.
 
-- **CT027:** 
+<img width="965" height="76" alt="InnoSetup_Imagem15" src="https://github.com/user-attachments/assets/f9ce1147-43d9-4681-8141-eb311a15afe7" />
+  
 
-- **CT028:**
+- A linguagem foi escolhida e os termos de uso foram lidos e aceitos.
+
+<img width="532" height="278" alt="InnoSetup_Imagem16" src="https://github.com/user-attachments/assets/a135b25d-d2cf-4c76-8b7f-b1567a9862d0" />
+
+<img width="842" height="652" alt="InnoSetup_Imagem17" src="https://github.com/user-attachments/assets/cd3c70fb-bb7b-4d5f-abc5-106ed9079500" />
+  
+
+- Assim como o esperado os arquivos foram copiados e enviados para a pasta `Program Files` e foi criado um atalho na tela do usuário.
+
+<img width="851" height="660" alt="InnoSetup_Imagem18" src="https://github.com/user-attachments/assets/b7906657-51a5-4929-abfe-3936f32ad9a4" />
+
+<img width="832" height="652" alt="InnpSetup_Imagem1" src="https://github.com/user-attachments/assets/a34b5666-5eea-4182-8f17-be85183077fa" />
+
+<img width="827" height="647" alt="InnoSetup_Imagem3" src="https://github.com/user-attachments/assets/42a5bd28-4fed-43f3-8112-0ff052efd110" />
+
+<img width="840" height="653" alt="InnoSetup_Imagem4" src="https://github.com/user-attachments/assets/1052c2b2-5b97-48de-bbbe-fe7640deeb9c" />
+
+<img width="851" height="656" alt="InnoSetup_Imagem19" src="https://github.com/user-attachments/assets/932284f5-0311-46b4-a31a-18e55d533be9" />
+
+<img width="1366" height="988" alt="InnoSetup_Imagem20" src="https://github.com/user-attachments/assets/fe09baef-d1f4-4703-bbb2-5c0862b9169c" />
+  
+
+## CT024
+
+- Caso uma versão já exista na máquina, o executável fornecerá opção para o aplicativo já baixado
+
+<img width="1391" height="978" alt="InnoSetup_Imagem21" src="https://github.com/user-attachments/assets/d754023a-a5f2-4ee9-aafc-da50a99e56e3" />
+
+
+- Se o usuário tenta avançar sem escolher uma opção, uma mensagem de alerta aparece e ele não consegue prosseguir se uma opção não for escolhida.
+
+<img width="822" height="647" alt="InnoSetup_Imagem5" src="https://github.com/user-attachments/assets/13b433e9-e9ad-49a5-96a6-867ac217a59d" />
+
+
+## CT025
+
+- O usuário marca a opção de atualização e logo tenta marcar a opção de desinstalar sem desmarcar a outra antes, o sistema não permite que mais de uma seja marcada então a outra e automaticamente desmarcada.
+
+<img width="831" height="646" alt="InnoSetup_Imagem6" src="https://github.com/user-attachments/assets/aac11c3f-6a5d-4e0b-8709-35434bf0c786" />
+
+<img width="842" height="647" alt="InnoSetup_Imagem7" src="https://github.com/user-attachments/assets/65b66c53-1026-4434-ab33-4b3e90f937cf" />
+
+
+## CT026 
+
+- O usuário escolhe a opção de atualizar, mas como o sistema não possui uma versão superior, ele apenas alerta o usuário sobre isso.
+
+<img width="840" height="651" alt="InnoSetup_Imagem8" src="https://github.com/user-attachments/assets/1c0c40a8-1c8c-4e6f-8e11-bb6d33f01c5f" />
+
+
+## CT027 
+
+- O usuário tenta usar a opção de restaurar o aplicativo quando ele ainda está aberto, e uma mensagem avisando que o sistema está aberto é enviada para que ele aceite fechar o aplicativo aberto antes de restaurar ele.
+
+<img width="1600" height="844" alt="InnoSetup_Imagem10" src="https://github.com/user-attachments/assets/2d5e411d-a69f-46fc-b767-6e6213178107" />
+
+
+## CT028
+
+- O usuário escolher desinstalar o aplicativo e o instalador desinstala ele com sucesso.
+
+<img width="842" height="647" alt="InnoSetup_Imagem7" src="https://github.com/user-attachments/assets/f085cf0a-8fde-4c67-a8a1-c632e9786aa7" />
+
+<img width="1390" height="983" alt="InnoSetup_Imagem11" src="https://github.com/user-attachments/assets/84c36153-5104-4030-957e-0b7c40061b78" />
+
 
 ---
 
@@ -251,9 +317,9 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **CT029** | Tratamento de Rede | Perda de conexão com a Internet durante a navegação no App | Desconectar cabo de rede/Wi-Fi | A interface exibe o status *"Modo Offline / Sem Conexão"* no rodapé e desabilita requisições pendentes sem travar a UI (evita Crash). | — | ⏳ Pendente |
 | **CT030** | Usabilidade em diferentes resoluções | Verifica se a interface WPF não quebra layout em HD (1366x768) e Full HD (1920x1080) | Rodar o mesmo fluxo (ex: Cadastrar Resíduo) nas duas resoluções | Checar se botões, campos e o WebView2 do mapa continuam visíveis e clicáveis | — | ⏳ Pendente |
 
-- **CT029:** 
+## CT029
 
-- **CT030:** 
+## CT030
 
 ---
 
