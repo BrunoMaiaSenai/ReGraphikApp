@@ -129,6 +129,25 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **CT005** | Perfil do Usuário | Upload e alteração de foto de perfil via Imgur API | Selecionar imagem `avatar.png` (PNG < 2MB) | Upload concluído, URL gerada no Imgur v5 e atualizada na interface WPF. | — |  |⏳ Pendente |
 
 ## CT001 
+1.             Funcionalidade
+CT001  - Login
+2.             Cenário / Condição
+Autenticação com credenciais válidas.
+3.             Entrada
+Entrada: Login: LunnaB
+4.             Resultado Esperado
+Acesso liberado, Token JWT/Firebase gerado e redirecionamento para a Dashboard
+5.             Resultado Obtido
+ 
+Login foi realizado para adentrar no sistema ReGraphik e tela principal de DashBoard carregada.
+<img width="484" height="283" alt="01" src="https://github.com/user-attachments/assets/e6b30079-1a42-4994-b180-55bfbf934a3d" />
+<img width="489" height="282" alt="02" src="https://github.com/user-attachments/assets/d8656c46-c9ee-43cf-b909-5e13fdbeaf95" />
+
+6.             Evidência do Teste
+
+Foi avaliado e homologado conforme evidenciado no resultado obtido, o cliente realiza o login, adicionando login e senha, e é direcionado para a tela da Dashboard.
+7.             Status
+Concluído. 
 
 ## CT002
 
@@ -137,6 +156,43 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 ## CT004
 
 ## CT005
+1. Funcionalidade
+CT005 - Cadastro / Convite 
+2.             Cenário / Condição
+Registro de novo usuário com Token Invalidador/Expirado 
+3.             Entrada
+E-mail: novo@gmail.com, Token: 000000 
+4.             Resultado Esperado
+Mensagem de erro "Token de convite inválido ou já utilizado" e bloqueio do cadastro. 
+5.             Resultado Obtido
+
+Cadastro do usuário realizado e token válido enviado com sucesso!
+
+<img width="479" height="277" alt="03" src="https://github.com/user-attachments/assets/422bcec1-8787-469a-9301-7319986f5b1a" />
+
+
+	Ao inserir um token inválido no credenciamento do usuário, o sistema não retornou uma mensagem de “Token de convite inválido ou já utilizado" .
+ 
+
+6.  Evidência do Teste
+
+** Foi identificado a causa raiz do problema, que era a falta de uma mensagem de erro do token, para identificar que o token está invalido.
+
+<img width="491" height="230" alt="05" src="https://github.com/user-attachments/assets/ff2f524a-7fe1-4e25-bd40-2ba2a9f84d67" />
+
+<img width="491" height="184" alt="04" src="https://github.com/user-attachments/assets/68ef529e-29d6-4c6c-851d-9b7c23779182" />
+	
+** Após a correção, a rotina foi replicada novamente e a mensagem foi exibida corretamente.
+
+<img width="491" height="241" alt="07" src="https://github.com/user-attachments/assets/1c050662-581b-465b-bf11-3cc1741b48a8" />
+
+<img width="493" height="157" alt="06" src="https://github.com/user-attachments/assets/18b0669c-d87c-4bf1-8ced-3fc8a7974883" />
+
+
+
+7.  Status
+Concluído.
+
 
 ---
 
