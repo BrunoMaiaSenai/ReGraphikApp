@@ -208,6 +208,23 @@ namespace ReGraphik.ViewModels
                         {
                             PontosAtuais.Add(p);
                         }
+
+                        if (filtrados.Count == 0)
+                        {
+                            Window windowDona = Application.Current.Windows
+                                .OfType<Window>()
+                                .FirstOrDefault(w => w.IsActive)
+                                ?? Application.Current.MainWindow;
+
+                            MessageBox.Show(
+                                windowDona,
+                                "Nenhum ponto de coleta localizado nesta região",
+                                "Aviso",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Information
+                            );
+                        }
+
                         CarregarMapaInicial(filtrados);
                         IsCarregando = false;
                     });

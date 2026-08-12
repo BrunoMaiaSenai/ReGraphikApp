@@ -1,5 +1,7 @@
 ﻿using Firebase.Database;
 using ReGraphik.Models;
+using ReGraphik.Services;
+using ReGraphik.Services.Interface;
 using ReGraphik.Views;
 using ReGraphik.Views.Controls;
 using System;
@@ -24,6 +26,7 @@ namespace ReGraphik.ViewModels
     {
         private static readonly HttpClient _http = new();
         private readonly ObservableCollection<Residuo> _todosResiduos = new();
+        private readonly IResiduoService _residuoService = new ResiduoService();
 
         /// <summary>
         /// View filtrada vinculada ao DataGrid. O filtro é aplicado sobre esta coleção.
@@ -84,6 +87,18 @@ namespace ReGraphik.ViewModels
         public ICommand AbrirDetalhesCommand { get; }
 
         /// <summary>
+        /// Comandos usados pelo menu de status do card: o primeiro marca qual resíduo teve o
+        /// selo clicado e o segundo grava o status escolhido no menu.
+        /// </summary>
+        public ICommand SelecionarResiduoStatusCommand { get; }
+        public ICommand AlterarStatusCommand { get; }
+
+        /// <summary>
+        /// Resíduo cujo selo de status foi clicado. Definido antes do menu de opções abrir.
+        /// </summary>
+        private Residuo? _residuoStatusSelecionado;
+
+        /// <summary>
         /// Inicializa uma nova instância do ViewModel, configurando a coleção filtrada e os comandos.
         /// </summary>
         public EstoqueReversoViewModel()
@@ -109,6 +124,65 @@ namespace ReGraphik.ViewModels
             _ = CarregarEstoqueDoBancoAsync();
 
             AbrirDetalhesCommand = new RelayCommand((param) => AbrirDetalhes(param as Residuo));
+
+            SelecionarResiduoStatusCommand = new RelayCommand((param) => _residuoStatusSelecionado = param as Residuo);
+            AlterarStatusCommand = new RelayCommand(async (param) => await AlterarStatusAsync(param as string));
+        }
+
+        /// <summary>
+        /// Grava o novo status do resíduo selecionado no selo do card, encerrando ou reabrindo
+        /// o ciclo de vida do material (Disponível, Descartado ou Reaproveitado).
+        /// </summary>
+        /// <param name="novoStatus">Status escolhido no menu do selo.</param>
+        private async Task AlterarStatusAsync(string? novoStatus)
+        {
+            var residuo = _residuoStatusSelecionado;
+
+            if (residuo == null || string.IsNullOrWhiteSpace(novoStatus))
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    MensagemWindow.Exibir("Aviso", "Não foi possível identificar o resíduo selecionado.", MensagemWindow.TipoMensagem.Aviso);
+                });
+                return;
+            }
+
+            /// Evita uma ida ao servidor quando o usuário escolhe o status que já está no card.
+            if (string.Equals(residuo.Status, novoStatus, StringComparison.OrdinalIgnoreCase))
+                return;
+
+            try
+            {
+                await _residuoService.AtualizarStatusAsync(residuo, novoStatus);
+
+                /// Reflete a mudança na hora nos cards; o retorno do Firebase confirma o valor em seguida.
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    residuo.Status = novoStatus;
+
+                    if (!ListaStatus.Contains(novoStatus))
+                        ListaStatus.Add(novoStatus);
+
+                    ResiduosFiltrados.Refresh();
+
+                    MensagemWindow.Exibir(
+                        "Sucesso!",
+                        $"O status do resíduo {residuo.IdCard} foi alterado para \"{novoStatus}\".",
+                        MensagemWindow.TipoMensagem.Sucesso);
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro ao alterar status: {ex.Message}");
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    MensagemWindow.Exibir(
+                        "Erro",
+                        "Não foi possível alterar o status do resíduo. Verifique a conexão e tente novamente.",
+                        MensagemWindow.TipoMensagem.Erro);
+                });
+            }
         }
 
         /// <summary>
@@ -235,12 +309,14 @@ namespace ReGraphik.ViewModels
                         if (subsecao.EventType == Firebase.Database.Streaming.FirebaseEventType.InsertOrUpdate)
                         {
                             var itemExistente = _todosResiduos.FirstOrDefault(r => r.Id == residuoDoFirebase.Id);
-                            if (itemExistente != null)
-                            {
-                                _todosResiduos.Remove(itemExistente);
-                            }
+                            int indiceExistente = itemExistente != null ? _todosResiduos.IndexOf(itemExistente) : -1;
 
-                            _todosResiduos.Add(residuoDoFirebase);
+                            /// Substitui no mesmo lugar da lista para que o card atualizado (ex: troca de status)
+                            /// não mude de posição na tela. Itens novos entram no fim.
+                            if (indiceExistente >= 0)
+                                _todosResiduos[indiceExistente] = residuoDoFirebase;
+                            else
+                                _todosResiduos.Add(residuoDoFirebase);
 
                             if (!string.IsNullOrWhiteSpace(residuoDoFirebase.TipoResiduo) && !ListaTipos.Contains(residuoDoFirebase.TipoResiduo))
                                 ListaTipos.Add(residuoDoFirebase.TipoResiduo);

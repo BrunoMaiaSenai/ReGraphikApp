@@ -13,6 +13,92 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:StatusToColorConverter x:Key="StatusToColorConverter"/>
+
+            <!-- Selo de status do card: mantém o visual do badge e vira um botão clicável -->
+            <Style x:Key="SeloStatusButtonStyle" TargetType="Button">
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="8,3"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="Selo"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="12"
+                                    Padding="{TemplateBinding Padding}"
+                                    SnapsToDevicePixels="True">
+                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Selo" Property="Opacity" Value="0.85"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Menu aberto ao clicar no selo, com as opções de mudança de status -->
+            <Style x:Key="SeloStatusMenuStyle" TargetType="ContextMenu">
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="BorderBrush" Value="#E2E8F0"/>
+                <Setter Property="MinWidth" Value="200"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ContextMenu">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="10"
+                                    Padding="6"
+                                    SnapsToDevicePixels="True">
+                                <Border.Effect>
+                                    <DropShadowEffect ShadowDepth="2" BlurRadius="12" Opacity="0.12" Color="Black"/>
+                                </Border.Effect>
+                                <StackPanel>
+                                    <TextBlock Text="ALTERAR STATUS"
+                                               FontSize="9"
+                                               FontWeight="Bold"
+                                               Foreground="#94A3B8"
+                                               Margin="10,4,10,6"/>
+                                    <ItemsPresenter/>
+                                </StackPanel>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="SeloStatusMenuItemStyle" TargetType="MenuItem">
+                <Setter Property="Height" Value="34"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+                <Setter Property="Foreground" Value="#334155"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="MenuItem">
+                            <Border x:Name="Fundo" Background="Transparent" CornerRadius="8" Padding="10,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <ContentPresenter Grid.Column="0" ContentSource="Icon" VerticalAlignment="Center"/>
+                                    <ContentPresenter Grid.Column="1" ContentSource="Header" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsHighlighted" Value="True">
+                                    <Setter TargetName="Fundo" Property="Background" Value="#F1F5F9"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -248,12 +334,59 @@
                                         <TextBlock Text="{Binding IdCard}" Foreground="White" FontWeight="Bold" FontSize="11"/>
                                     </Border>
 
-                                    <Border Background="{Binding Status, Converter={StaticResource StatusToColorConverter}}"
-                                            CornerRadius="12" Padding="8,3" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="12">
-                                        <TextBlock Text="{Binding Status}" 
-                                                   Foreground="{Binding Status, Converter={StaticResource StatusToColorConverter}, ConverterParameter=Foreground}"
-                                                   FontSize="10" FontWeight="SemiBold"/>
-                                    </Border>
+                                    <!-- Selo de status clicável: abre o menu de alteração de status do resíduo -->
+                                    <Button Style="{StaticResource SeloStatusButtonStyle}"
+                                            Background="{Binding Status, Converter={StaticResource StatusToColorConverter}}"
+                                            HorizontalAlignment="Right" VerticalAlignment="Top" Margin="12"
+                                            ToolTip="Clique para alterar o status deste resíduo"
+                                            Click="BtnStatus_Click"
+                                            Command="{Binding DataContext.SelecionarResiduoStatusCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Tag="{Binding DataContext.AlterarStatusCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Status}"
+                                                       Foreground="{Binding Status, Converter={StaticResource StatusToColorConverter}, ConverterParameter=Foreground}"
+                                                       FontSize="10" FontWeight="SemiBold"
+                                                       VerticalAlignment="Center"/>
+
+                                            <Path Data="M7,10L12,15L17,10H7Z"
+                                                  Fill="{Binding Status, Converter={StaticResource StatusToColorConverter}, ConverterParameter=Foreground}"
+                                                  Width="9" Height="9" Stretch="Uniform"
+                                                  Margin="6,1,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+
+                                        <Button.ContextMenu>
+                                            <ContextMenu Style="{StaticResource SeloStatusMenuStyle}">
+                                                <MenuItem Header="Disponível"
+                                                          Style="{StaticResource SeloStatusMenuItemStyle}"
+                                                          Command="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                          CommandParameter="Disponível">
+                                                    <MenuItem.Icon>
+                                                        <Ellipse Width="8" Height="8" Fill="#64748B"/>
+                                                    </MenuItem.Icon>
+                                                </MenuItem>
+
+                                                <MenuItem Header="Descartado"
+                                                          Style="{StaticResource SeloStatusMenuItemStyle}"
+                                                          Command="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                          CommandParameter="Descartado">
+                                                    <MenuItem.Icon>
+                                                        <Ellipse Width="8" Height="8" Fill="#B91C1C"/>
+                                                    </MenuItem.Icon>
+                                                </MenuItem>
+
+                                                <MenuItem Header="Reaproveitado"
+                                                          Style="{StaticResource SeloStatusMenuItemStyle}"
+                                                          Command="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                          CommandParameter="Reaproveitado">
+                                                    <MenuItem.Icon>
+                                                        <Ellipse Width="8" Height="8" Fill="#137333"/>
+                                                    </MenuItem.Icon>
+                                                </MenuItem>
+                                            </ContextMenu>
+                                        </Button.ContextMenu>
+                                    </Button>
                                 </Grid>
 
                                 <Border Grid.Row="1" Padding="16,16,16,16">
