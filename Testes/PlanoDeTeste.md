@@ -128,6 +128,16 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **CT004** | Cadastro / Convite | Registro de novo usuário com Token Invalidador/Expirado | E-mail: `novo@gmail.com`, Token: `000000` | Mensagem de erro *"Token de convite inválido ou já utilizado"* e bloqueio do cadastro. | — | | ⏳ Pendente |
 | **CT005** | Perfil do Usuário | Upload e alteração de foto de perfil via Imgur API | Selecionar imagem `avatar.png` (PNG < 2MB) | Upload concluído, URL gerada no Imgur v5 e atualizada na interface WPF. | — |  |⏳ Pendente |
 
+- **CT001:** 
+
+- **CT002:** 
+
+- **CT003:** 
+
+- **CT004:** 
+
+- **CT005:** 
+
 ---
 
 ### 7.2. Gestão do Estoque Reverso e Resíduos
@@ -142,6 +152,20 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **CT011** | Alteração de Status | Finalização do ciclo de vida para "Descartado/Reaproveitado" | Clicar em *"Dar Baixa / Concluir"* | Resíduo movido para a lista de concluídos e contabilizado na métrica da Dashboard ESG. | — |  | ⏳ Pendente |
 | **CT012** | Exclusão de Resíduo | Remoção de item do estoque por perfil Usuário vs Administrador | Perfil: `Usuário` clicando em Excluir | Opção desabilitada ou com mensagem *"Ação restrita a Administradores"*. | — |  | ⏳ Pendente |
 
+- **CT006:** 
+
+- **CT007:** 
+
+- **CT008:** 
+
+- **CT009:** 
+
+- **CT010:** 
+
+- **CT011:**
+
+- **CT0012:**
+  
 ---
 
 ### 7.3. Módulo de Geolocalização e Pontos de Coleta
@@ -153,6 +177,14 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **CT015** | Interatividade do Mapa | Clique no Pin do Ponto de Coleta | Clicar no marcador no mapa | Janela (popup) é aberta contendo endereço, telefone de contato e tipos de materiais aceitos. | — | ⏳ Pendente |
 | **CT016** | Fallback do Mapa | Execução sem conexão com a internet ou API fora do ar | Desconectar internet / Buscar mapa | Tratamento de exceção exibindo *"Serviço de mapa indisponível. Verifique sua conexão"*. | — | ⏳ Pendente |
 
+- **CT013:** 
+
+- **CT014:** 
+
+- **CT015:** 
+
+- **CT016:** 
+
 ---
 
 ### 7.4. Comunicação Corporativa (Chat em Tempo Real)
@@ -163,6 +195,12 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **CT018** | Chat Tempo Real | Tentativa de envio de mensagem vazia | Texto: `""` (vazio/espaços) | O botão de envio permanece inativo ou ignora a ação. | — | ⏳ Pendente |
 | **CT019** | Notificação de Chat | Recebimento de mensagem com a janela do chat minitimizada | Envio de mensagem externa | Indicador visual de alerta de "Nova Mensagem" exibido na barra superior da aplicação. | — | ⏳ Pendente |
 
+- **CT017:** 
+
+- **CT018:** 
+
+- **CT019:** 
+
 ---
 
 ### 7.5. Indicadores, Dashboard e Relatórios ESG
@@ -172,6 +210,12 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **CT020** | Dashboard | Atualização automática dos cards de métricas (Kg Reaproveitados) | Inserir baixa de 100Kg de Papel | Total acumulado de kg reaproveitados atualiza automaticamente sem necessidade de reiniciar o app. | — | ⏳ Pendente |
 | **CT021** | Relatórios ESG | Exportação do Relatório Consolidado em PDF | Clicar no botão *"Exportar PDF"* | O QuestPDF compila a estrutura, gera o arquivo `.pdf` com formatação e salva no diretório escolhido. | — | ⏳ Pendente |
 | **CT022** | Relatórios ESG | Exportação de relatório em período sem dados registrados | Filtrar Período: `Data sem registros` | Arquivo PDF gerado exibindo o cabeçalho oficial e a mensagem *"Nenhum resíduo movimentado neste período"*. | — | ⏳ Pendente |
+
+- **CT020:** 
+
+- **CT021:** 
+
+- **CT022:** 
 
 ---
 
@@ -186,6 +230,18 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **CT027** | Instalador (Execução) | Tentar instalar/atualizar com a aplicação ReGraphik aberta | Clicar em *"Avançar"* com app aberto | Alerta exibido pedindo permissão; ao aceitar, fecha o processo `ReGraphik.exe` via `taskkill` e prossegue. | — | ⏳ Pendente |
 | **CT028** | Desinstalação | Removendo a aplicação via Opção de Manutenção ou Painel do Windows | Selecionar *"Desinstalar"* | Processo `/SILENT` executado, removendo atalhos e pasta da aplicação da máquina. | — | ⏳ Pendente |
 
+- **CT023:** 
+
+- **CT024:** 
+
+- **CT025:** 
+
+- **CT026:** 
+
+- **CT027:** 
+
+- **CT028:**
+
 ---
 
 ### 7.7. Resiliência e Conectividade
@@ -195,29 +251,9 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **CT029** | Tratamento de Rede | Perda de conexão com a Internet durante a navegação no App | Desconectar cabo de rede/Wi-Fi | A interface exibe o status *"Modo Offline / Sem Conexão"* no rodapé e desabilita requisições pendentes sem travar a UI (evita Crash). | — | ⏳ Pendente |
 | **CT030** | Usabilidade em diferentes resoluções | Verifica se a interface WPF não quebra layout em HD (1366x768) e Full HD (1920x1080) | Rodar o mesmo fluxo (ex: Cadastrar Resíduo) nas duas resoluções | Checar se botões, campos e o WebView2 do mapa continuam visíveis e clicáveis | — | ⏳ Pendente |
 
-### 7.8 Validação de Teste
+- **CT029:** 
 
-- **CT001:** 
-
-- **CT002:** 
-
-- **CT003:** 
-
-- **CT004:** 
-
-- **CT005:** 
-
-- **CT006:** 
-
-- **CT007:** 
-
-- **CT008:** 
-
-- **CT009:** 
-
-- **CT0010:** 
-
-- **CT0011:** 
+- **CT030:** 
 
 ---
 
