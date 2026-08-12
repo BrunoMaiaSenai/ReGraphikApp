@@ -193,7 +193,6 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **CT029** | Tratamento de Rede | Perda de conexão com a Internet durante a navegação no App | Desconectar cabo de rede/Wi-Fi | A interface exibe o status *"Modo Offline / Sem Conexão"* no rodapé e desabilita requisições pendentes sem travar a UI (evita Crash). | — | ⏳ Pendente |
-
 | **CT030** | Usabilidade em diferentes resoluções | Verifica se a interface WPF não quebra layout em HD (1366x768) e Full HD (1920x1080) | Rodar o mesmo fluxo (ex: Cadastrar Resíduo) nas duas resoluções | Checar se botões, campos e o WebView2 do mapa continuam visíveis e clicáveis | — | ⏳ Pendente |
 
 ### 7.8 Validação de Teste
