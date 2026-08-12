@@ -34,6 +34,8 @@ namespace ReGraphik.Converters
                 "Em Análise" => "#1649a2",     /// AzulMedioColor
                 "Coletado" => "#0d2a56",       /// AzulEscuroColor
                 "Indisponível" => "#475569",   /// CinzaEscuroColor
+                "Reaproveitado" => "#137333",  /// VerdeEsgColor (ciclo encerrado com reaproveitamento)
+                "Descartado" => "#B91C1C",     /// Vermelho escuro (ciclo encerrado com descarte)
                 _ => "#64748B"                 /// CinzaColor (Padrão)
             };
 
@@ -42,7 +44,8 @@ namespace ReGraphik.Converters
             {
                 /// Retorna Branco para status com fundos mais escuros (Azuis e Cinza Escuro) 
                 /// para garantir a legibilidade (Contraste Acessível)
-                return (status == "Reservado" || status == "Em Análise" || status == "Coletado" || status == "Indisponível" || status == "Disponível")
+                return (status == "Reservado" || status == "Em Análise" || status == "Coletado" || status == "Indisponível" || status == "Disponível"
+                        || status == "Reaproveitado" || status == "Descartado")
                     ? Brushes.White
                     : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E293B"));
             }

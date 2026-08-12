@@ -13,5 +13,10 @@ namespace ReGraphik.Services.Interface
     internal interface IResiduoService
     {
         Task<List<Residuo>> ObterTodosResiduosAsync();
+
+        /// <summary>
+        /// Altera somente o status de um resíduo já cadastrado.
+        /// </summary>
+        Task AtualizarStatusAsync(Residuo residuo, string novoStatus);
     }
 }
