@@ -210,19 +210,6 @@ Concluído.
 | **CT011** | Alteração de Status | Finalização do ciclo de vida para "Descartado/Reaproveitado" | Clicar em *"Dar Baixa / Concluir"* | Resíduo movido para a lista de concluídos e contabilizado na métrica da Dashboard ESG. | — |  | ⏳ Pendente |
 | **CT012** | Exclusão de Resíduo | Remoção de item do estoque por perfil Usuário vs Administrador | Perfil: `Usuário` clicando em Excluir | Opção desabilitada ou com mensagem *"Ação restrita a Administradores"*. | — |  | ⏳ Pendente |
 
-## CT006
-
-## CT007 
-
-## CT008
-
-## CT009 
-
-## CT010 
-
-## CT011
-
-## CT012
   
 ---
 
@@ -235,13 +222,6 @@ Concluído.
 | **CT015** | Interatividade do Mapa | Clique no Pin do Ponto de Coleta | Clicar no marcador no mapa | Janela (popup) é aberta contendo endereço, telefone de contato e tipos de materiais aceitos. | — | ⏳ Pendente |
 | **CT016** | Fallback do Mapa | Execução sem conexão com a internet ou API fora do ar | Desconectar internet / Buscar mapa | Tratamento de exceção exibindo *"Serviço de mapa indisponível. Verifique sua conexão"*. | — | ⏳ Pendente |
 
-## CT013 
-
-## CT014
-
-## CT015
-
-## CT016
 
 ---
 
@@ -253,12 +233,6 @@ Concluído.
 | **CT018** | Chat Tempo Real | Tentativa de envio de mensagem vazia | Texto: `""` (vazio/espaços) | O botão de envio permanece inativo ou ignora a ação. | — | ⏳ Pendente |
 | **CT019** | Notificação de Chat | Recebimento de mensagem com a janela do chat minitimizada | Envio de mensagem externa | Indicador visual de alerta de "Nova Mensagem" exibido na barra superior da aplicação. | — | ⏳ Pendente |
 
-## CT017 
-
-## CT018
-
-## CT019
-
 ---
 
 ### 7.5. Indicadores, Dashboard e Relatórios ESG
@@ -269,11 +243,6 @@ Concluído.
 | **CT021** | Relatórios ESG | Exportação do Relatório Consolidado em PDF | Clicar no botão *"Exportar PDF"* | O QuestPDF compila a estrutura, gera o arquivo `.pdf` com formatação e salva no diretório escolhido. | — | ⏳ Pendente |
 | **CT022** | Relatórios ESG | Exportação de relatório em período sem dados registrados | Filtrar Período: `Data sem registros` | Arquivo PDF gerado exibindo o cabeçalho oficial e a mensagem *"Nenhum resíduo movimentado neste período"*. | — | ⏳ Pendente |
 
-## CT020
-
-## CT021 
-
-## CT022
 
 ---
 
@@ -375,7 +344,6 @@ Concluído.
 | **CT029** | Tratamento de Rede | Perda de conexão com a Internet durante a navegação no App | Desconectar cabo de rede/Wi-Fi | A interface exibe o status *"Modo Offline / Sem Conexão"* no rodapé e desabilita requisições pendentes sem travar a UI (evita Crash). | — | ⏳ Pendente |
 | **CT030** | Usabilidade em diferentes resoluções | Verifica se a interface WPF não quebra layout em HD (1366x768) e Full HD (1920x1080) | Rodar o mesmo fluxo (ex: Cadastrar Resíduo) nas duas resoluções | Checar se botões, campos e o WebView2 do mapa continuam visíveis e clicáveis | — | ⏳ Pendente |
 
-## CT029
 
 ## CT030
 1.             Funcionalidade
