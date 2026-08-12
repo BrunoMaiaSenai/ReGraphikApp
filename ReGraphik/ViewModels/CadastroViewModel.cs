@@ -270,7 +270,7 @@ namespace ReGraphik.ViewModels
                 }
                 else
                 {
-                    MensagemErroToken = "Token inválido, expirado ou já utilizado. Solicite um novo convite ao Administrador.";
+                    MensagemErroToken = "Token de convite inválido ou já utilizado";
                 }
             }
             catch
