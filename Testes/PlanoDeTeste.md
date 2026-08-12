@@ -125,8 +125,8 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | **CT001** | Login | Autenticação com credenciais válidas | Login: `LunnaB@gmail.com`, Senha: `Luna123` | Acesso liberado, Token de sessão salvo no Firebase Auth e redirecionamento para a Dashboard. | Login foi realizado para adentrar no sistema ReGraphik e tela principal de DashBoard carregada. |   | concluído |
 | **CT002** | Login | Tentativa de login com senha incorreta | Login: `operador@gmail.com`, Senha: `errada` | Mensagem de erro *"Usuário ou senha inválidos"* e acesso bloqueado. | — |  |⏳ Pendente |
 | **CT003** | Cadastro / Convite | Registro de novo usuário com Token de Convite Válido | E-mail: `novo@gmail.com`, Token: `849201` | Conta ativada com sucesso no Firebase e permissão concedida. | — |  |⏳ Pendente |
-| **CT004** | Cadastro / Convite | Registro de novo usuário com Token Invalidador/Expirado | E-mail: `novo@gmail.com`, Token: `000000` | Mensagem de erro *"Token de convite inválido ou já utilizado"* e bloqueio do cadastro. | — | | ⏳ Pendente |
-| **CT005** | Perfil do Usuário | Upload e alteração de foto de perfil via Imgur API | Selecionar imagem `avatar.png` (PNG < 2MB) | Upload concluído, URL gerada no Imgur v5 e atualizada na interface WPF. | — |  | concluído |
+| **CT004** | Cadastro / Convite | Registro de novo usuário com Token Invalidador/Expirado | E-mail: `novo@gmail.com`, Token: `000000` | Mensagem de erro *"Token de convite inválido ou já utilizado"* e bloqueio do cadastro. | — | | concluído |
+| **CT005** | Perfil do Usuário | Upload e alteração de foto de perfil via Imgur API | Selecionar imagem `avatar.png` (PNG < 2MB) | Upload concluído, URL gerada no Imgur v5 e atualizada na interface WPF. | — |  | ⏳ Pendente |
 
 ## CT001 
 1.  Funcionalidade
@@ -153,13 +153,9 @@ Foi avaliado e homologado conforme evidenciado no resultado obtido, o cliente re
 7.             Status
 Concluído. 
 
-## CT002
-
-## CT003 
 
 ## CT004
 
-## CT005
 1. Funcionalidade
 CT005 - Cadastro / Convite 
 2.             Cenário / Condição
