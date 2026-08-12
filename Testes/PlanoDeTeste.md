@@ -232,7 +232,7 @@ Concluído.
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **CT013** | Pontos de Coleta | Busca de pontos de reciclagem por cidade válida | Cidade: `Nova Lima` | Consulta enviada à Google Places API e marcadores (pins) desenhados no Leaflet/WebView2. | — | ⏳ Pendente |
 | **CT014** | Pontos de Coleta | Pesquisa por cidade sem retorno ou inexistente | Cidade: `CityX99` | Retorno limpo e exibição da mensagem *"Nenhum ponto de coleta localizado nesta região"*. | — | ⏳ Pendente |
-| **CT015** | Interatividade do Mapa | Clique no Pin do Ponto de Coleta | Clicar no marcador no mapa | Janela (popup) é aberta contendo endereço, telefone de contato e tipos de materiais aceitos. | — | ⏳ Pendente |
+| **CT015** | Interatividade do Mapa | Clique no Pin do Ponto de Coleta | Clicar no marcador no mapa | Janela (popup) é aberta contendo endereço, telefone de contato e tipos de materiais aceitos. | — | Concluído |
 | **CT016** | Fallback do Mapa | Execução sem conexão com a internet ou API fora do ar | Desconectar internet / Buscar mapa | Tratamento de exceção exibindo *"Serviço de mapa indisponível. Verifique sua conexão"*. | — | ⏳ Pendente |
 
 ## CT013 
