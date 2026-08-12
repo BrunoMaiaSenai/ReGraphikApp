@@ -144,7 +144,9 @@ Acesso liberado, Token JWT/Firebase gerado e redirecionamento para a Dashboard
 6. Resultado Obtido
  
 Login foi realizado para adentrar no sistema ReGraphik e tela principal de DashBoard carregada.
+
 <img width="484" height="283" alt="01" src="https://github.com/user-attachments/assets/e6b30079-1a42-4994-b180-55bfbf934a3d" />
+
 <img width="489" height="282" alt="02" src="https://github.com/user-attachments/assets/d8656c46-c9ee-43cf-b909-5e13fdbeaf95" />
 
 6. Evidência do Teste
