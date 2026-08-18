@@ -259,31 +259,31 @@ Após a correção, a rotina foi replicada novamente e a mensagem foi exibida co
 
 * Primeiro teste de instalação em um notebook que não possuía o Visual Studio e sem o aplicativo da ReGraphik baixado.
 
-<img width="1455" height="740" alt="InnoSetup_Imagem14" src="https://github.com/user-attachments/assets/68598604-5c27-49aa-9b10-34a7a97e9099" />
+<img width="1455" height="740" alt="InnoSetup_Imagem14" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem14.jpeg" />
 
 * Foi instalado o executável na pasta do sistema.
 
-<img width="965" height="76" alt="InnoSetup_Imagem15" src="https://github.com/user-attachments/assets/f9ce1147-43d9-4681-8141-eb311a15afe7" />
+<img width="965" height="76" alt="InnoSetup_Imagem15" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem15.jpeg" />
 
 * A linguagem foi escolhida e os termos de uso foram lidos e aceitos.
 
-<img width="532" height="278" alt="InnoSetup_Imagem16" src="https://github.com/user-attachments/assets/a135b25d-d2cf-4c76-8b7f-b1567a9862d0" />
+<img width="532" height="278" alt="InnoSetup_Imagem16" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem16.jpeg" />
 
-<img width="842" height="652" alt="InnoSetup_Imagem17" src="https://github.com/user-attachments/assets/cd3c70fb-bb7b-4d5f-abc5-106ed9079500" />
+<img width="842" height="652" alt="InnoSetup_Imagem17" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem17.jpeg" />
 
 * Assim como o esperado os arquivos foram copiados e enviados para a pasta `Program Files` e foi criado um atalho na tela do usuário.
 
-<img width="851" height="660" alt="InnoSetup_Imagem18" src="https://github.com/user-attachments/assets/b7906657-51a5-4929-abfe-3936f32ad9a4" />
+<img width="851" height="660" alt="InnoSetup_Imagem18" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem18.jpeg" />
 
-<img width="832" height="652" alt="InnpSetup_Imagem1" src="https://github.com/user-attachments/assets/a34b5666-5eea-4182-8f17-be85183077fa" />
+<img width="832" height="652" alt="InnpSetup_Imagem1" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem1.jpeg" />
 
-<img width="827" height="647" alt="InnoSetup_Imagem3" src="https://github.com/user-attachments/assets/42a5bd28-4fed-43f3-8112-0ff052efd110" />
+<img width="827" height="647" alt="InnoSetup_Imagem3" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem3.jpeg" />
 
-<img width="840" height="653" alt="InnoSetup_Imagem4" src="https://github.com/user-attachments/assets/1052c2b2-5b97-48de-bbbe-fe7640deeb9c" />
+<img width="840" height="653" alt="InnoSetup_Imagem4" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem4.jpeg" />
 
-<img width="851" height="656" alt="InnoSetup_Imagem19" src="https://github.com/user-attachments/assets/932284f5-0311-46b4-a31a-18e55d533be9" />
+<img width="851" height="656" alt="InnoSetup_Imagem19" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem19.jpeg" />
 
-<img width="1366" height="988" alt="InnoSetup_Imagem20" src="https://github.com/user-attachments/assets/fe09baef-d1f4-4703-bbb2-5c0862b9169c" />
+<img width="1366" height="988" alt="InnoSetup_Imagem20" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem20.jpeg" />
 
 ---
 
@@ -292,11 +292,11 @@ Após a correção, a rotina foi replicada novamente e a mensagem foi exibida co
 
 * Caso uma versão já exista na máquina, o executável fornecerá opção para o aplicativo já baixado.
 
-<img width="1391" height="978" alt="InnoSetup_Imagem21" src="https://github.com/user-attachments/assets/d754023a-a5f2-4ee9-aafc-da50a99e56e3" />
+<img width="1391" height="978" alt="InnoSetup_Imagem21" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem21.jpeg" />
 
 * Se o usuário tenta avançar sem escolher uma opção, uma mensagem de alerta aparece e ele não consegue prosseguir se uma opção não for escolhida.
 
-<img width="822" height="647" alt="InnoSetup_Imagem5" src="https://github.com/user-attachments/assets/13b433e9-e9ad-49a5-96a6-867ac217a59d" />
+<img width="822" height="647" alt="InnoSetup_Imagem5" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem5.jpeg" />
 
 ---
 
@@ -305,9 +305,9 @@ Após a correção, a rotina foi replicada novamente e a mensagem foi exibida co
 
 * O usuário marca a opção de atualização e logo tenta marcar a opção de desinstalar sem desmarcar a outra antes, o sistema não permite que mais de uma seja marcada então a outra é automaticamente desmarcada.
 
-<img width="831" height="646" alt="InnoSetup_Imagem6" src="https://github.com/user-attachments/assets/aac11c3f-6a5d-4e0b-8709-35434bf0c786" />
+<img width="831" height="646" alt="InnoSetup_Imagem6" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem6.jpeg" />
 
-<img width="842" height="647" alt="InnoSetup_Imagem7" src="https://github.com/user-attachments/assets/65b66c53-1026-4434-ab33-4b3e90f937cf" />
+<img width="842" height="647" alt="InnoSetup_Imagem7" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem7.jpeg" />
 
 ---
 
@@ -316,7 +316,7 @@ Após a correção, a rotina foi replicada novamente e a mensagem foi exibida co
 
 * O usuário escolhe a opção de atualizar, mas como o sistema não possui uma versão superior, ele apenas alerta o usuário sobre isso.
 
-<img width="840" height="651" alt="InnoSetup_Imagem8" src="https://github.com/user-attachments/assets/1c0c40a8-1c8c-4e6f-8e11-bb6d33f01c5f" />
+<img width="840" height="651" alt="InnoSetup_Imagem8" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem8.jpeg" />
 
 ---
 
@@ -325,7 +325,7 @@ Após a correção, a rotina foi replicada novamente e a mensagem foi exibida co
 
 * O usuário tenta usar a opção de restaurar o aplicativo quando ele ainda está aberto, e uma mensagem avisando que o sistema está aberto é enviada para que ele aceite fechar o aplicativo aberto antes de restaurar ele.
 
-<img width="1600" height="844" alt="InnoSetup_Imagem10" src="https://github.com/user-attachments/assets/2d5e411d-a69f-46fc-b767-6e6213178107" />
+<img width="1600" height="844" alt="InnoSetup_Imagem10" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem10.jpeg" />
 
 ---
 
@@ -334,9 +334,9 @@ Após a correção, a rotina foi replicada novamente e a mensagem foi exibida co
 
 * O usuário escolhe desinstalar o aplicativo e o instalador desinstala ele com sucesso.
 
-<img width="842" height="647" alt="InnoSetup_Imagem7" src="https://github.com/user-attachments/assets/65b66c53-1026-4434-ab33-4b3e90f937cf" />
+<img width="842" height="647" alt="InnoSetup_Imagem7" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem7.jpeg" />
 
-<img width="1390" height="983" alt="InnoSetup_Imagem11" src="https://github.com/user-attachments/assets/84c36153-5104-4030-957e-0b7c40061b78" />
+<img width="1390" height="983" alt="InnoSetup_Imagem11" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem11.jpeg" />
 
 ---
 
