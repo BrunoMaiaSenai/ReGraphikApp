@@ -122,10 +122,10 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 
 | ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Evidência do Teste | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **CT001** | Login | Autenticação com credenciais válidas | Login: `[E-MAIL_OCULTO]`<br>Senha: `[SENHA_OCULTA]` | Acesso liberado, Token de sessão salvo no Firebase Auth e redirecionamento para a Dashboard. | Login foi realizado para adentrar no sistema ReGraphik e tela principal de DashBoard carregada. | [Evidência CT001](#detalhamento-ct001) | ✅ Concluído |
-| **CT002** | Login | Tentativa de login com senha incorreta | Login: `[E-MAIL_OCULTO]`<br>Senha: `[SENHA_INCORRETA]` | Mensagem de erro *"Usuário ou senha inválidos"* e acesso bloqueado. | — | — | ⏳ Pendente |
-| **CT003** | Cadastro / Convite | Registro de novo usuário com Token de Convite Válido | E-mail: `[E-MAIL_OCULTO]`<br>Token: `[TOKEN_VALIDO_OCULTO]` | Conta ativada com sucesso no Firebase e permissão concedida. | — | — | ⏳ Pendente |
-| **CT004** | Cadastro / Convite | Registro de novo usuário com Token Inválido/Expirado | E-mail: `[E-MAIL_OCULTO]`<br>Token: `[TOKEN_INVALIDO_OCULTO]` | Mensagem de erro *"Token de convite inválido ou já utilizado"* e bloqueio do cadastro. | Inicialmente aceitou o token inválido sem validar. Após correção, a mensagem de erro foi exibida corretamente. | [Evidência CT004](#detalhamento-ct004) | ✅ Concluído |
+| **CT001** | Login | Autenticação com credenciais válidas | Login: `[E-mail Válido]`<br>Senha: `[Senha Válida]` | Acesso liberado, Token de sessão salvo no Firebase Auth e redirecionamento para a Dashboard. | Login foi realizado para adentrar no sistema ReGraphik e tela principal de DashBoard carregada. | [Evidência CT001](#detalhamento-ct001) | ✅ Concluído |
+| **CT002** | Login | Tentativa de login com senha incorreta | Login: `[E-mail Válido]`<br>Senha: `[Senha Incorreta]` | Mensagem de erro *"Usuário ou senha inválidos"* e acesso bloqueado. | — | — | ⏳ Pendente |
+| **CT003** | Cadastro / Convite | Registro de novo usuário com Token de Convite Válido | E-mail: `[E-mail Válido]`<br>Token: `[Token Válido]` | Conta ativada com sucesso no Firebase e permissão concedida. | — | — | ⏳ Pendente |
+| **CT004** | Cadastro / Convite | Registro de novo usuário com Token Inválido/Expirado | E-mail: `[E-mail Válido]`<br>Token: `[Token Inválido]` | Mensagem de erro *"Token de convite inválido ou já utilizado"* e bloqueio do cadastro. | Ao inserir um token inválido, o sistema não retornou a mensagem de erro. Após a correção da causa raiz, a mensagem passou a ser exibida corretamente. | [Evidência CT004](#detalhamento-ct004) | ✅ Concluído |
 | **CT005** | Perfil do Usuário | Upload e alteração de foto de perfil via Imgur API | Selecionar imagem `avatar.png` (PNG < 2MB) | Upload concluído, URL gerada no Imgur v5 e atualizada na interface WPF. | — | — | ⏳ Pendente |
 
 ---
@@ -134,29 +134,48 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 
 <a id="detalhamento-ct001"></a>
 #### CT001 - Login com Credenciais Válidas
-* **1. Funcionalidade:** CT001 - Login
-* **2. Cenário / Condição:** Autenticação com credenciais válidas.
-* **3. Entrada:** Login: `[E-MAIL_OCULTO]`, Senha: `[SENHA_OCULTA]`
-* **4. Resultado Esperado:** Acesso liberado, Token JWT/Firebase gerado e redirecionamento para a Dashboard.
-* **5. Resultado Obtido:** Login foi realizado para adentrar no sistema ReGraphik e a tela principal de Dashboard foi carregada.
-* **6. Evidência do Teste:**
-  * Foi avaliado e homologado conforme evidenciado no resultado obtido: o cliente realiza o login informando credenciais válidas e é direcionado com sucesso para a tela da Dashboard.
-  * *Imagens anexadas:* `01.png`, `02.png`
-* **7. Status:** ✅ Concluído
+
+1. **Funcionalidade:** CT001 - Login
+2. **Cenário / Condição:** Autenticação com credenciais válidas.
+3. **Entrada:** Login: `[E-mail Válido]`, Senha: `[Senha Válida]`
+4. **Resultado Esperado:** Acesso liberado, Token JWT/Firebase gerado e redirecionamento para a Dashboard.
+5. **Resultado Obtido:** Login foi realizado para adentrar no sistema ReGraphik e tela principal de DashBoard carregada.
+
+<img width="484" height="283" alt="01" src="https://github.com/user-attachments/assets/e6b30079-1a42-4994-b180-55bfbf934a3d" />
+
+<img width="489" height="282" alt="02" src="https://github.com/user-attachments/assets/d8656c46-c9ee-43cf-b909-5e13fdbeaf95" />
+
+6. **Evidência do Teste:** Foi avaliado e homologado conforme evidenciado no resultado obtido, o cliente realiza o login, adicionando login e senha válidos, e é direcionado para a tela da Dashboard.
+7. **Status:** ✅ Concluído
+
+---
 
 <a id="detalhamento-ct004"></a>
 #### CT004 - Registro de Novo Usuário com Token Inválido/Expirado
-* **1. Funcionalidade:** CT004 - Cadastro / Convite
-* **2. Cenário / Condição:** Registro de novo usuário com Token Inválido ou Expirado.
-* **3. Entrada:** E-mail: `[E-MAIL_OCULTO]`, Token: `[TOKEN_INVALIDO_OCULTO]`
-* **4. Resultado Esperado:** Mensagem de erro *"Token de convite inválido ou já utilizado"* e bloqueio do cadastro.
-* **5. Resultado Obtido:**
-  * *Análise Inicial:* Ao inserir um token inválido no credenciamento, o sistema liberou o cadastro sem exibir a mensagem de erro esperada.
-  * *Correção:* Foi identificada a causa raiz (ausência da camada de validação e mensagem de erro do token na interface).
-  * *Re-teste:* Após a correção do código, a rotina foi retestada e a mensagem de erro foi exibida corretamente impedindo o cadastro.
-* **6. Evidência do Teste:**
-  * *Imagens anexadas:* `03.png`, `04.png`, `05.png`, `06.png`, `07.png`
-* **7. Status:** ✅ Concluído
+
+1. **Funcionalidade:** CT004 - Cadastro / Convite
+2. **Cenário / Condição:** Registro de novo usuário com Token Inválido ou Expirado
+3. **Entrada:** E-mail: `[E-mail Válido]`, Token: `[Token Inválido]`
+4. **Resultado Esperado:** Mensagem de erro *"Token de convite inválido ou já utilizado"* e bloqueio do cadastro.
+5. **Resultado Obtido:** Cadastro do usuário realizado e token válido enviado com sucesso!
+
+<img width="479" height="277" alt="03" src="https://github.com/user-attachments/assets/422bcec1-8787-469a-9301-7319986f5b1a" />
+
+Ao inserir um token inválido no credenciamento do usuário, o sistema não retornou uma mensagem de “Token de convite inválido ou já utilizado”.
+
+6. **Evidência do Teste:** Foi identificada a causa raiz do problema, que era a falta de uma mensagem de erro do token, para identificar que o token está inválido.
+
+<img width="491" height="230" alt="05" src="https://github.com/user-attachments/assets/ff2f524a-7fe1-4e25-bd40-2ba2a9f84d67" />
+
+<img width="491" height="184" alt="04" src="https://github.com/user-attachments/assets/68ef529e-29d6-4c6c-851d-9b7c23779182" />
+
+Após a correção, a rotina foi replicada novamente e a mensagem foi exibida corretamente.
+
+<img width="491" height="241" alt="07" src="https://github.com/user-attachments/assets/1c050662-581b-465b-bf11-3cc1741b48a8" />
+
+<img width="493" height="157" alt="06" src="https://github.com/user-attachments/assets/18b0669c-d87c-4bf1-8ced-3fc8a7974883" />
+
+7. **Status:** ✅ Concluído
 
 ---
 
@@ -179,9 +198,24 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Evidência do Teste | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **CT013** | Pontos de Coleta | Busca de pontos de reciclagem por cidade válida | Cidade: `Nova Lima` | Consulta enviada à Google Places API e marcadores (pins) desenhados no Leaflet/WebView2. | — | — | ⏳ Pendente |
-| **CT014** | Pontos de Coleta | Pesquisa por cidade sem retorno ou inexistente | Cidade: `CityX99` | Retorno limpo e exibição da mensagem *"Nenhum ponto de coleta localizado nesta região"*. | — | — | ⏳ Pendente |
-| **CT015** | Interatividade do Mapa | Clique no Pin do Ponto de Coleta | Clicar no marcador no mapa | Janela (popup) é aberta contendo endereço, telefone de contato e tipos de materiais aceitos. | Popup interativo renderizado no WebView2 com sucesso exibindo os detalhes do ponto. | Homologado | ✅ Concluído |
+| **CT014** | Pontos de Coleta | Pesquisa por cidade sem retorno ou inexistente | Cidade: `Igarapé` | Retorno limpo e exibição da mensagem *"Nenhum ponto de coleta localizado nesta região"*. | Inicialmente não retornou aviso. Após validação adicionada ao `MapaViewModel`, a mensagem passou a ser exibida corretamente. | [Evidência CT014](#detalhamento-ct014) | ✅ Concluído |
+| **CT015** | Interatividade do Mapa | Clique no Pin do Ponto de Coleta | Clicar no marcador no mapa | Janela (popup) é aberta contendo endereço, telefone de contato e tipos de materiais aceitos. | Popup interativo renderizado no WebView2 com sucesso. | Homologado | ✅ Concluído |
 | **CT016** | Fallback do Mapa | Execução sem conexão com a internet ou API fora do ar | Desconectar internet / Buscar mapa | Tratamento de exceção exibindo *"Serviço de mapa indisponível. Verifique sua conexão"*. | — | — | ⏳ Pendente |
+
+---
+
+#### Detalhamento de Execução dos Testes (Grupo 7.3)
+
+<a id="detalhamento-ct014"></a>
+#### CT014 - Pesquisa por Cidade sem Retorno ou Inexistente
+
+1. **Funcionalidade:** CT015 - Pontos de Coleta / Pesquisa por cidade sem retorno ou inexistente.
+2. **Cenário / Condição:** Pesquisar o nome de uma cidade que não possui nenhum ponto de coleta.
+3. **Entrada:** Login: `[Usuário Válido]`, Senha: `[Senha Válida]`
+4. **Resultado Esperado:** Retorno limpo e exibição da mensagem *"Nenhum ponto de coleta localizado nesta região"*.
+5. **Resultado Obtido:** Pesquisei pela cidade de Igarapé e o sistema não retornou nenhum ponto de coleta e nenhuma mensagem de aviso. Pesquisei pontos de coleta na cidade de Igarapé após a correção, e o sistema retornou a mensagem *"Nenhum ponto de coleta localizado nesta região"*.
+6. **Evidência do Teste:** Foi adicionada uma validação no `MapaViewModel` para verificar se a busca pela cidade retornou algum ponto de coleta. Quando nenhum resultado é encontrado, o sistema exibe a mensagem *"Nenhum ponto de coleta localizado nesta região"*, sem alterar o funcionamento das demais funcionalidades do mapa.
+7. **Status:** ✅ Concluído
 
 ---
 
@@ -209,11 +243,11 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 
 | ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Evidência do Teste | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **CT023** | Instalador | Instalação limpa em um computador sem o ReGraphik | Executar `ReGraphik_Setup.exe` | Arquivos copiados para `Program Files`, registro criado e atalhos adicionados à Área de Trabalho. | A instalação ocorreu tranquila e todos os arquivos foram instalados com sucesso. | [Evidência CT023](#detalhamento-ct023) | ✅ Concluído |
-| **CT024** | Instalador (Manutenção) | Reexecutar instalador com a mesma versão já instalada no sistema | Selecionar nenhuma opção e clicar em *"Avançar"* | **Bloqueio ativado:** Exibe alerta exigindo a seleção de uma das opções de manutenção (Atualizar, Reparar ou Desinstalar). | O bloqueio é efetuado corretamente e o usuário não consegue progredir sem escolher uma opção. | [Evidência CT024](#detalhamento-ct024) | ✅ Concluído |
-| **CT025** | Instalador (Seleção) | Teste de exclusividade das CheckBoxes de Manutenção | Marcar *"Atualizar"* e depois *"Desinstalar"* | Comportamento de RadioButton: A marcação de "Atualizar" é removida automaticamente ao clicar na outra. | O executável não permite a marcação de duas ou mais CheckBoxes; caso uma seja marcada, a outra é desmarcada automaticamente. | [Evidência CT025](#detalhamento-ct025) | ✅ Concluído |
-| **CT026** | Instalador (Atualização) | Execução do setup em sistema que já possui versão antiga instalada | Selecionar *"Atualizar (Versão mais recente)"* | O instalador sobrepõe os binários mantendo as configurações do usuário e atualiza a versão no Registro. | Como o sistema ainda não possui uma versão mais recente, ele exibe um alerta apropriado ao usuário. | [Evidência CT026](#detalhamento-ct026) | ✅ Concluído |
-| **CT027** | Instalador (Execução) | Tentar instalar/atualizar com a aplicação ReGraphik aberta | Clicar em *"Avançar"* com app aberto | Alerta exibido pedindo permissão; ao aceitar, fecha o processo `ReGraphik.exe` via `taskkill` e prossegue. | Uma mensagem avisando que o sistema está aberto aparece na tela para que o usuário possa fechar a aplicação antes de prosseguir. | [Evidência CT027](#detalhamento-ct027) | ✅ Concluído |
+| **CT023** | Instalador | Instalação limpa em um computador sem o ReGraphik | Executar `ReGraphik_Setup.exe` | Arquivos copiados para `Program Files`, registro criado e atalhos adicionados à Área de Trabalho. | A instalação ocorreu tranquila e tudo foi instalado com sucesso. | [Evidência CT023](#detalhamento-ct023) | ✅ Concluído |
+| **CT024** | Instalador (Manutenção) | Reexecutar instalador com a mesma versão já instalada no sistema | Selecionar nenhuma opção e clicar em *"Avançar"* | **Bloqueio ativado:** Exibe alerta exigindo a seleção de uma das opções de manutenção (Atualizar, Reparar ou Desinstalar). | O bloqueio é efetuado corretamente e o usuário não conseguiu progredir sem escolher uma opção. | [Evidência CT024](#detalhamento-ct024) | ✅ Concluído |
+| **CT025** | Instalador (Seleção) | Teste de exclusividade das CheckBoxes de Manutenção | Marcar *"Atualizar"* e depois *"Desinstalar"* | Comportamento de radio-button: A marcação de "Atualizar" é removida automaticamente ao clicar na outra. | O executável não permite a marcação de duas ou mais CheckBoxes, caso uma seja marcada a outra é desmarcada automaticamente. | [Evidência CT025](#detalhamento-ct025) | ✅ Concluído |
+| **CT026** | Instalador (Atualização) | Execução do setup em sistema que já possui versão antiga instalada | Selecionar *"Atualizar (Versão mais recente)"* | O instalador sobrepõe os binários mantendo as configurações do usuário e atualiza a versão no Registro. | Como o sistema não possui ainda uma versão atualizada ele apenas alerta o usuário com uma mensagem. | [Evidência CT026](#detalhamento-ct026) | ✅ Concluído |
+| **CT027** | Instalador (Execução) | Tentar instalar/atualizar com a aplicação ReGraphik aberta | Clicar em *"Avançar"* com app aberto | Alerta exibido pedindo permissão; ao aceitar, fecha o processo `ReGraphik.exe` via `taskkill` e prossegue. | Uma mensagem avisando que o sistema está aberto aparece na tela para que o usuário possa fechar o aplicativo antes de prosseguir. | [Evidência CT027](#detalhamento-ct027) | ✅ Concluído |
 | **CT028** | Desinstalação | Removendo a aplicação via Opção de Manutenção ou Painel do Windows | Selecionar *"Desinstalar"* | Processo `/SILENT` executado, removendo atalhos e pasta da aplicação da máquina. | O aplicativo é desinstalado com sucesso da máquina. | [Evidência CT028](#detalhamento-ct028) | ✅ Concluído |
 
 ---
@@ -222,47 +256,87 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 
 <a id="detalhamento-ct023"></a>
 #### CT023 - Instalação Limpa do Sistema
-* **Fluxo de Teste:**
-  1. Primeiro teste de instalação em um notebook que não possuía o Visual Studio nem o aplicativo da ReGraphik baixado (`InnoSetup_Imagem14`).
-  2. O executável `ReGraphik_Setup.exe` foi copiado e executado no sistema (`InnoSetup_Imagem15`).
-  3. A linguagem de instalação foi selecionada e os Termos de Uso foram lidos e aceitos (`InnoSetup_Imagem16`, `InnoSetup_Imagem17`).
-  4. Conforme o esperado, os arquivos foram copiados e extraídos para a pasta `Program Files` e o atalho na Área de Trabalho foi gerado (`InnoSetup_Imagem18`, `InnoSetup_Imagem19`, `InnoSetup_Imagem20`).
-* **Status:** ✅ Concluído
+
+* Primeiro teste de instalação em um notebook que não possuía o Visual Studio e sem o aplicativo da ReGraphik baixado.
+
+<img width="1455" height="740" alt="InnoSetup_Imagem14" src="https://github.com/user-attachments/assets/68598604-5c27-49aa-9b10-34a7a97e9099" />
+
+* Foi instalado o executável na pasta do sistema.
+
+<img width="965" height="76" alt="InnoSetup_Imagem15" src="https://github.com/user-attachments/assets/f9ce1147-43d9-4681-8141-eb311a15afe7" />
+
+* A linguagem foi escolhida e os termos de uso foram lidos e aceitos.
+
+<img width="532" height="278" alt="InnoSetup_Imagem16" src="https://github.com/user-attachments/assets/a135b25d-d2cf-4c76-8b7f-b1567a9862d0" />
+
+<img width="842" height="652" alt="InnoSetup_Imagem17" src="https://github.com/user-attachments/assets/cd3c70fb-bb7b-4d5f-abc5-106ed9079500" />
+
+* Assim como o esperado os arquivos foram copiados e enviados para a pasta `Program Files` e foi criado um atalho na tela do usuário.
+
+<img width="851" height="660" alt="InnoSetup_Imagem18" src="https://github.com/user-attachments/assets/b7906657-51a5-4929-abfe-3936f32ad9a4" />
+
+<img width="832" height="652" alt="InnpSetup_Imagem1" src="https://github.com/user-attachments/assets/a34b5666-5eea-4182-8f17-be85183077fa" />
+
+<img width="827" height="647" alt="InnoSetup_Imagem3" src="https://github.com/user-attachments/assets/42a5bd28-4fed-43f3-8112-0ff052efd110" />
+
+<img width="840" height="653" alt="InnoSetup_Imagem4" src="https://github.com/user-attachments/assets/1052c2b2-5b97-48de-bbbe-fe7640deeb9c" />
+
+<img width="851" height="656" alt="InnoSetup_Imagem19" src="https://github.com/user-attachments/assets/932284f5-0311-46b4-a31a-18e55d533be9" />
+
+<img width="1366" height="988" alt="InnoSetup_Imagem20" src="https://github.com/user-attachments/assets/fe09baef-d1f4-4703-bbb2-5c0862b9169c" />
+
+---
 
 <a id="detalhamento-ct024"></a>
 #### CT024 - Manutenção / Exigência de Seleção
-* **Fluxo de Teste:**
-  1. Ao executar o instalador em uma máquina que já possui o sistema, o assistente apresenta as opções de manutenção (`InnoSetup_Imagem21`).
-  2. Ao tentar clicar em *"Avançar"* sem selecionar nenhuma opção, um alerta impede a continuidade até que uma opção seja escolhida (`InnoSetup_Imagem5`).
-* **Status:** ✅ Concluído
+
+* Caso uma versão já exista na máquina, o executável fornecerá opção para o aplicativo já baixado.
+
+<img width="1391" height="978" alt="InnoSetup_Imagem21" src="https://github.com/user-attachments/assets/d754023a-a5f2-4ee9-aafc-da50a99e56e3" />
+
+* Se o usuário tenta avançar sem escolher uma opção, uma mensagem de alerta aparece e ele não consegue prosseguir se uma opção não for escolhida.
+
+<img width="822" height="647" alt="InnoSetup_Imagem5" src="https://github.com/user-attachments/assets/13b433e9-e9ad-49a5-96a6-867ac217a59d" />
+
+---
 
 <a id="detalhamento-ct025"></a>
 #### CT025 - Exclusividade de Seleção (Checkboxes)
-* **Fluxo de Teste:**
-  1. O usuário marca a opção de "Atualizar" e, em seguida, tenta marcar a opção "Desinstalar" sem desmarcar a primeira.
-  2. O assistente desmarca a opção anterior automaticamente, garantindo o comportamento exclusivo (`InnoSetup_Imagem6`, `InnoSetup_Imagem7`).
-* **Status:** ✅ Concluído
+
+* O usuário marca a opção de atualização e logo tenta marcar a opção de desinstalar sem desmarcar a outra antes, o sistema não permite que mais de uma seja marcada então a outra é automaticamente desmarcada.
+
+<img width="831" height="646" alt="InnoSetup_Imagem6" src="https://github.com/user-attachments/assets/aac11c3f-6a5d-4e0b-8709-35434bf0c786" />
+
+<img width="842" height="647" alt="InnoSetup_Imagem7" src="https://github.com/user-attachments/assets/65b66c53-1026-4434-ab33-4b3e90f937cf" />
+
+---
 
 <a id="detalhamento-ct026"></a>
 #### CT026 - Atualização de Versão
-* **Fluxo de Teste:**
-  1. O usuário seleciona a opção de atualizar.
-  2. Como o sistema identifica que não há uma versão superior disponível no momento, exibe um alerta notificando o usuário (`InnoSetup_Imagem8`).
-* **Status:** ✅ Concluído
+
+* O usuário escolhe a opção de atualizar, mas como o sistema não possui uma versão superior, ele apenas alerta o usuário sobre isso.
+
+<img width="840" height="651" alt="InnoSetup_Imagem8" src="https://github.com/user-attachments/assets/1c0c40a8-1c8c-4e6f-8e11-bb6d33f01c5f" />
+
+---
 
 <a id="detalhamento-ct027"></a>
 #### CT027 - Validação de Aplicação em Execução
-* **Fluxo de Teste:**
-  1. O usuário tenta executar a rotina do instalador/restaurador enquanto o `ReGraphik.exe` está aberto.
-  2. O instalador intercepta o processo ativo e exibe uma mensagem orientando o fechamento do aplicativo antes de prosseguir (`InnoSetup_Imagem10`).
-* **Status:** ✅ Concluído
+
+* O usuário tenta usar a opção de restaurar o aplicativo quando ele ainda está aberto, e uma mensagem avisando que o sistema está aberto é enviada para que ele aceite fechar o aplicativo aberto antes de restaurar ele.
+
+<img width="1600" height="844" alt="InnoSetup_Imagem10" src="https://github.com/user-attachments/assets/2d5e411d-a69f-46fc-b767-6e6213178107" />
+
+---
 
 <a id="detalhamento-ct028"></a>
 #### CT028 - Desinstalação da Aplicação
-* **Fluxo de Teste:**
-  1. O usuário seleciona a opção *"Desinstalar"*.
-  2. O assistente executa o processo de remoção, limpando os arquivos do diretório e atalhos com sucesso (`InnoSetup_Imagem11`).
-* **Status:** ✅ Concluído
+
+* O usuário escolhe desinstalar o aplicativo e o instalador desinstala ele com sucesso.
+
+<img width="842" height="647" alt="InnoSetup_Imagem7" src="https://github.com/user-attachments/assets/65b66c53-1026-4434-ab33-4b3e90f937cf" />
+
+<img width="1390" height="983" alt="InnoSetup_Imagem11" src="https://github.com/user-attachments/assets/84c36153-5104-4030-957e-0b7c40061b78" />
 
 ---
 
@@ -271,7 +345,7 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 | ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Evidência do Teste | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **CT029** | Tratamento de Rede | Perda de conexão com a Internet durante a navegação no App | Desconectar cabo de rede/Wi-Fi | A interface exibe o status *"Modo Offline / Sem Conexão"* no rodapé e desabilita requisições pendentes sem travar a UI (evita Crash). | — | — | ⏳ Pendente |
-| **CT030** | Usabilidade em diferentes resoluções | Verifica se a interface WPF não quebra layout em HD (1366x768) e Full HD (1920x1080) | Rodar o mesmo fluxo (ex: Cadastrar Resíduo) nas duas resoluções | Checar se botões, campos e o WebView2 do mapa continuam visíveis e clicáveis. | Interface testada e approved nas resoluções HD e Full HD sem quebras de layout. | [Evidência CT030](#detalhamento-ct030) | ✅ Concluído |
+| **CT030** | Usabilidade em diferentes resoluções | Verifica se a interface WPF não quebra layout em HD (1366x768) e Full HD (1920x1080) | Rodar o mesmo fluxo (ex: Cadastrar Resíduo) nas duas resoluções | Checar se botões, campos e o WebView2 do mapa continuam visíveis e clicáveis | Teste em conformidade. | [Evidência CT030](#detalhamento-ct030) | ✅ Concluído |
 
 ---
 
@@ -279,14 +353,22 @@ Artefatos e especificações técnicas utilizados para desenhar e executar os ce
 
 <a id="detalhamento-ct030"></a>
 #### CT030 - Usabilidade em Diferentes Resoluções
-* **1. Funcionalidade:** Usabilidade em diferentes resoluções
-* **2. Cenário / Condição:** Verifica se a interface WPF não quebra layout em HD (1366x768) e Full HD (1920x1080).
-* **3. Entrada:** Rodar o mesmo fluxo (ex: Cadastrar Resíduo) nas duas resoluções.
-* **4. Resultado Esperado:** Checar se botões, campos e o WebView2 do mapa continuam visíveis e clicáveis.
-* **5. Resultado Obtido:** Teste executado com sucesso nas resoluções HD e Full HD. Os componentes visuais se redimensionaram corretamente sem ocultar botões ou quebrar elementos do layout.
-* **6. Evidência do Teste:**
-  * *Imagens anexadas:* `10.png`, `11.png`, `12.png`
-* **7. Status:** ✅ Concluído
+
+1. **Funcionalidade:** Usabilidade em diferentes resoluções
+2. **Cenário / Condição:** Verifica se a interface WPF não quebra layout em HD (1366x768) e Full HD (1920x1080)
+3. **Entrada:** Rodar o mesmo fluxo (ex: Cadastrar Resíduo) nas duas resoluções
+4. **Resultado Esperado:** Checar se botões, campos e o WebView2 do mapa continuam visíveis e clicáveis
+5. **Resultado Obtido:**
+
+<img width="1232" height="613" alt="11" src="https://github.com/user-attachments/assets/98b62033-a75e-4d23-86d8-9da3bad6716a" />
+
+<img width="1734" height="623" alt="10" src="https://github.com/user-attachments/assets/2ee35390-a05c-4853-b1a2-6b5785e1092c" />
+
+<img width="1813" height="607" alt="12" src="https://github.com/user-attachments/assets/aec6a05c-0df9-4a3f-9f39-7232a45acaa9" />
+
+6. **Evidência do Teste:** Teste em conformidade, conforme evidenciado acima no item 5.
+7. **Status:** ✅ Concluído
+
 ---
 
 ## 8. Análise de Riscos
