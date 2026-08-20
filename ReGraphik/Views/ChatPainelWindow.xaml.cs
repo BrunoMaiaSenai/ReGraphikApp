@@ -1,12 +1,7 @@
-﻿using LiteDB;
-using ReGraphik.Models;
-using ReGraphik.Services;
-using ReGraphik.Views;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
+
 namespace ReGraphik.Views
 {
     public partial class ChatPainelWindow : Window

@@ -180,10 +180,10 @@ namespace ReGraphik.ViewModels
         /// <summary>
         /// Assina o nó raiz "mensagens" do Firebase e reage a qualquer
         /// inserção nova. Para cada mensagem nova destinada ao usuário logado:
-        ///   1. Atualiza o badge de não-lidas;
-        ///   2. Se a conversa afetada estiver aberta, adiciona a mensagem na lista;
-        ///   3. Se o painel estiver fechado, dispara o evento NovaMensagemRecebida
-        ///      para o MainViewModel mostrar o toast.
+        ///    1. Atualiza o badge de não-lidas;
+        ///    2. Se a conversa afetada estiver aberta, adiciona a mensagem na lista;
+        ///    3. Se o painel estiver fechado, dispara o evento NovaMensagemRecebida
+        ///       para o MainViewModel mostrar o toast.
         /// </summary>
         private void IniciarEscutaFirebase()
         {
@@ -197,8 +197,8 @@ namespace ReGraphik.ViewModels
                     .AsObservable<Mensagem>()
                     .Subscribe(evento =>
                     {
-                        /// Ignora eventos nulos ou de deleção
-                        if (evento?.Object == null) return;
+                        /// Ignora eventos nulos ou de deleção, ou se a VM foi descartada
+                        if (_disposed || evento?.Object == null) return;
 
                         var msg = evento.Object;
 
@@ -208,35 +208,42 @@ namespace ReGraphik.ViewModels
 
                         _mensagensJaVistas.Add(msg.Id);
 
-                        Application.Current.Dispatcher.Invoke(async () =>
+                        InvocarUI(async () =>
                         {
-                            /// Atualiza o badge de não-lidas
-                            await AtualizarNotificacoesAsync();
-
-                            /// Se a conversa com este remetente estiver aberta, adiciona a mensagem em tempo real na lista de mensagens
-                            if (ConversaSelecionada?.UsuarioId == msg.RemetenteId)
+                            try
                             {
-                                msg.EhMinhaMensagem = false;
-                                Mensagens.Add(msg);
-
-                                /// Marca como lida imediatamente
-                                await _chatService.MarcarComoLidaAsync(
-                                    msg.RemetenteId, _usuarioLogado.Id);
+                                /// Atualiza o badge de não-lidas
                                 await AtualizarNotificacoesAsync();
-                            }
-                            else
-                            {
-                                /// Atualiza (ou cria) a linha da conversa na lista lateral
-                                await AtualizarConversaNaListaAsync(msg);
 
-                                /// Dispara o toast se o painel estiver fechado
-                                if (!ChatAberto)
+                                /// Se a conversa com este remetente estiver aberta, adiciona a mensagem em tempo real na lista de mensagens
+                                if (ConversaSelecionada?.UsuarioId == msg.RemetenteId)
                                 {
-                                    var preview = msg.Texto.Length > 50
-                                        ? msg.Texto[..50] + "..."
-                                        : msg.Texto;
-                                    NovaMensagemRecebida?.Invoke(msg.RemetenteNome, preview);
+                                    msg.EhMinhaMensagem = false;
+                                    Mensagens.Add(msg);
+
+                                    /// Marca como lida imediatamente
+                                    await _chatService.MarcarComoLidaAsync(
+                                        msg.RemetenteId, _usuarioLogado.Id);
+                                    await AtualizarNotificacoesAsync();
                                 }
+                                else
+                                {
+                                    /// Atualiza (ou cria) a linha da conversa na lista lateral
+                                    await AtualizarConversaNaListaAsync(msg);
+
+                                    /// Dispara o toast se o painel estiver fechado
+                                    if (!ChatAberto)
+                                    {
+                                        var preview = msg.Texto.Length > 50
+                                            ? msg.Texto[..50] + "..."
+                                            : msg.Texto;
+                                        NovaMensagemRecebida?.Invoke(msg.RemetenteNome, preview);
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                System.Diagnostics.Debug.WriteLine($"Erro no callback do Firebase: {ex.Message}");
                             }
                         });
                     });
@@ -249,10 +256,7 @@ namespace ReGraphik.ViewModels
                 System.Diagnostics.Debug.WriteLine($"Erro ao iniciar escuta do Firebase: {ex.Message}");
 
                 /// Mostra uma mensagem de erro ao usuário, garantindo que seja executada na thread da UI
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    MensagemWindow.Exibir("Erro de Conexão", $"Erro ao iniciar escuta do Firebase!", MensagemWindow.TipoMensagem.Erro);
-                });
+                NotificarErro("Erro de Conexão", "Erro ao iniciar escuta do Firebase!");
             }
         }
 
@@ -303,10 +307,7 @@ namespace ReGraphik.ViewModels
                 System.Diagnostics.Debug.WriteLine($"Erro ao atualizar conversa na lista: {ex.Message}");
 
                 /// Mostra uma mensagem de erro ao usuário, garantindo que seja executada na thread da UI
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    MensagemWindow.Exibir("Erro de Conexão", $"Erro ao atualizar conversa na lista!", MensagemWindow.TipoMensagem.Erro);
-                });
+                NotificarErro("Erro de Conexão", "Erro ao atualizar conversa na lista!");
             }
         }
 
@@ -340,28 +341,33 @@ namespace ReGraphik.ViewModels
             {
                 /// Obtém todos os usuários do sistema, exceto o usuário logado
                 var usuarios = await _chatService.ListarUsuariosAsync();
-                var conversas = new List<Conversa>();
 
-                foreach (var u in usuarios.Where(u =>
+                var usuariosFiltrados = usuarios.Where(u =>
                     !string.IsNullOrEmpty(u.Id) &&
                     u.Id != _usuarioLogado.Id &&
-                    u.Login != _usuarioLogado.Login))
+                    u.Login != _usuarioLogado.Login);
+
+                /// Executa as requisições em paralelo para otimizar desempenho
+                var tasks = usuariosFiltrados.Select(async u =>
                 {
                     var msgs = await _chatService.ObterMensagensAsync(_usuarioLogado.Id, u.Id);
-                    if (!msgs.Any()) continue;
+                    if (!msgs.Any()) return null;
 
                     var ultima = msgs.OrderByDescending(m => m.DataHora).First();
                     var naoLidas = await _chatService.ContarNaoLidasAsync(_usuarioLogado.Id, u.Id);
 
-                    conversas.Add(new Conversa
+                    return new Conversa
                     {
                         UsuarioId = u.Id,
                         UsuarioNome = u.Nome ?? u.Login ?? "Usuário",
                         UltimaMensagem = ultima.Texto.Length > 40 ? ultima.Texto[..40] + "..." : ultima.Texto,
                         UltimaDataHora = ultima.DataHora,
                         MensagensNaoLidas = naoLidas
-                    });
-                }
+                    };
+                });
+
+                var resultados = await Task.WhenAll(tasks);
+                var conversas = resultados.Where(c => c != null).Cast<Conversa>().ToList();
 
                 InvocarUI(() =>
                 {
@@ -374,10 +380,7 @@ namespace ReGraphik.ViewModels
                 /// Loga o erro no console de depuração para análise posterior
                 System.Diagnostics.Debug.WriteLine($"Erro ao carregar conversas: {ex.Message}");
                 /// Mostra uma mensagem de erro ao usuário, garantindo que seja executada na thread da UI
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    MensagemWindow.Exibir("Erro de Conexão", $"Erro ao carregar conversas!", MensagemWindow.TipoMensagem.Erro);
-                });
+                NotificarErro("Erro de Conexão", "Erro ao carregar conversas!");
             }
             finally
             {
@@ -419,7 +422,7 @@ namespace ReGraphik.ViewModels
                 if (conv != null)
                 {
                     conv.MensagensNaoLidas = 0;
-                    /// Força atualização do binding (Conversa não implementa INotifyPropertyChanged)
+                    /// Força atualização do binding
                     var idx = Conversas.IndexOf(conv);
                     Conversas.RemoveAt(idx);
                     Conversas.Insert(idx, conv);
@@ -431,10 +434,7 @@ namespace ReGraphik.ViewModels
                 System.Diagnostics.Debug.WriteLine($"Erro ao carregar mensagens: {ex.Message}");
 
                 /// Mostra uma mensagem de erro ao usuário, garantindo que seja executada na thread da UI
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    MensagemWindow.Exibir("Erro de Conexão", $"Erro ao carregar mensagens!", MensagemWindow.TipoMensagem.Erro);
-                });
+                NotificarErro("Erro de Conexão", "Erro ao carregar mensagens!");
             }
             finally
             {
@@ -467,7 +467,7 @@ namespace ReGraphik.ViewModels
                 TextoMensagem = string.Empty;
 
                 /// Adiciona localmente para resposta imediata (UX)
-                Application.Current.Dispatcher.Invoke(() => Mensagens.Add(mensagem));
+                InvocarUI(() => Mensagens.Add(mensagem));
 
                 await _chatService.EnviarMensagemAsync(mensagem);
 
@@ -480,10 +480,7 @@ namespace ReGraphik.ViewModels
                 System.Diagnostics.Debug.WriteLine($"Erro ao enviar mensagem: {ex.Message}");
 
                 /// Mostra uma mensagem de erro ao usuário, garantindo que seja executada na thread da UI
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    MensagemWindow.Exibir("Erro de Conexão", $"Erro ao enviar mensagem!", MensagemWindow.TipoMensagem.Erro);
-                });
+                NotificarErro("Erro de Conexão", "Erro ao enviar mensagem!");
             }
         }
 
@@ -493,16 +490,24 @@ namespace ReGraphik.ViewModels
         /// <returns></returns>
         private async Task AbrirNovaConversaAsync()
         {
-            var usuarios = await _chatService.ListarUsuariosAsync();
-            Application.Current.Dispatcher.Invoke(() =>
+            try
             {
-                UsuariosDisponiveis = new ObservableCollection<Usuario>(
-                    usuarios.Where(u =>
-                        !string.IsNullOrEmpty(u.Id) &&
-                        u.Id != _usuarioLogado.Id &&
-                        u.Login != _usuarioLogado.Login));
-            });
-            MostrarNovaConversa = true;
+                var usuarios = await _chatService.ListarUsuariosAsync();
+                InvocarUI(() =>
+                {
+                    UsuariosDisponiveis = new ObservableCollection<Usuario>(
+                        usuarios.Where(u =>
+                            !string.IsNullOrEmpty(u.Id) &&
+                            u.Id != _usuarioLogado.Id &&
+                            u.Login != _usuarioLogado.Login));
+                });
+                MostrarNovaConversa = true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro ao abrir nova conversa: {ex.Message}");
+                NotificarErro("Erro de Conexão", "Erro ao listar usuários para nova conversa!");
+            }
         }
 
         /// <summary>
@@ -541,10 +546,10 @@ namespace ReGraphik.ViewModels
                 MensagensNaoLidas = 0
             };
 
-            Application.Current.Dispatcher.Invoke(() =>
-                Conversas.Insert(0, novaConversa));
+            InvocarUI(() => Conversas.Insert(0, novaConversa));
 
             ConversaSelecionada = novaConversa;
+            await Task.CompletedTask;
         }
 
         /// <summary>
@@ -556,26 +561,25 @@ namespace ReGraphik.ViewModels
             try
             {
                 var usuarios = await _chatService.ListarUsuariosAsync();
-                int total = 0;
 
-                foreach (var u in usuarios.Where(u =>
+                var usuariosFiltrados = usuarios.Where(u =>
                     !string.IsNullOrEmpty(u.Id) &&
-                    u.Id != _usuarioLogado.Id))
-                {
-                    total += await _chatService.ContarNaoLidasAsync(_usuarioLogado.Id, u.Id);
-                }
+                    u.Id != _usuarioLogado.Id);
 
-                Application.Current.Dispatcher.Invoke(() => TotalNaoLidas = total);
+                /// Busca as contagens em paralelo
+                var tasks = usuariosFiltrados.Select(u => _chatService.ContarNaoLidasAsync(_usuarioLogado.Id, u.Id));
+                var resultados = await Task.WhenAll(tasks);
+
+                int total = resultados.Sum();
+
+                InvocarUI(() => TotalNaoLidas = total);
             }
             catch (Exception ex)
             {
                 /// Loga o erro no console de depuração para análise posterior
                 System.Diagnostics.Debug.WriteLine($"Erro ao atualizar notificações: {ex.Message}");
                 /// Mostra uma mensagem de erro ao usuário, garantindo que seja executada na thread da UI
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    MensagemWindow.Exibir("Erro de Conexão", $"Erro ao atualizar notificações!", MensagemWindow.TipoMensagem.Erro);
-                });
+                NotificarErro("Erro de Conexão", "Erro ao atualizar notificações!");
             }
         }
 
@@ -586,7 +590,8 @@ namespace ReGraphik.ViewModels
 
         private void InvocarUI(Action acao) => _dispatcherInvoker?.Invoke(acao);
 
-        private void NotificarErro(string titulo, string mensagem) => _errorHandler?.Invoke(titulo, mensagem);
+        private void NotificarErro(string titulo, string mensagem)
+            => InvocarUI(() => _errorHandler?.Invoke(titulo, mensagem));
 
         private static void ExecutarNaUIThread(Action acao)
         {
