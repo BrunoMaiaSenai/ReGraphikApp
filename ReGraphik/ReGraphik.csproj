@@ -66,4 +66,8 @@
 		</None>
 	</ItemGroup>
 
+	<PropertyGroup>
+		<SatelliteResourceLanguages>pt-BR;en-US</SatelliteResourceLanguages>
+	</PropertyGroup>
+
 </Project>
