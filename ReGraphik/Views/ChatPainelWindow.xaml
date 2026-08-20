@@ -87,10 +87,24 @@
                                     </Style>
                                 </TextBlock.Style>
                             </TextBlock>
-                            <TextBlock Text="Online"
-                                       Foreground="#10B981"
-                                       FontSize="11"
-                                       Visibility="{Binding TemConversaSelecionada, Converter={StaticResource BoolVis}}"/>
+                            <TextBlock FontSize="11" Visibility="{Binding TemConversaSelecionada, Converter={StaticResource BoolVis}}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <!-- Valor Padrão: Offline -->
+                                        <Setter Property="Text" Value="Offline"/>
+                                        <Setter Property="Foreground" Value="#D3D3D3"/>
+                                        <!-- Cinza -->
+                                        <Style.Triggers>
+                                            <!-- Trigger quando a propriedade UsuarioEstaOnline for True -->
+                                            <DataTrigger Binding="{Binding UsuarioEstaOnline}" Value="True">
+                                                <Setter Property="Text" Value="Online"/>
+                                                <Setter Property="Foreground" Value="#10B981"/>
+                                                <!-- Verde -->
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </StackPanel>
 
                         <Button Grid.Column="2"

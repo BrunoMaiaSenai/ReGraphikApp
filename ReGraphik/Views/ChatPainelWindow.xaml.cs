@@ -1,6 +1,6 @@
-﻿using System.Collections.Specialized;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
+using ReGraphik.ViewModels;
 
 namespace ReGraphik.Views
 {
@@ -14,37 +14,35 @@ namespace ReGraphik.Views
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (e.NewValue is ViewModels.ChatViewModel vm)
+            if (e.OldValue is ChatViewModel vmAntiga)
             {
-                vm.Mensagens.CollectionChanged += Mensagens_CollectionChanged;
+                vmAntiga.SolicitarScrollParaFim -= RolandoParaOFim;
+                vmAntiga.SolicitarArrastarJanela -= Arrastar;
+                vmAntiga.SolicitarOcultarJanela -= Ocultar;
+            }
+
+            if (e.NewValue is ChatViewModel vmNova)
+            {
+                vmNova.SolicitarScrollParaFim += RolandoParaOFim;
+                vmNova.SolicitarArrastarJanela += Arrastar;
+                vmNova.SolicitarOcultarJanela += Ocultar;
             }
         }
 
-        private void Mensagens_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        private void RolandoParaOFim()
         {
-            if (e.Action == NotifyCollectionChangedAction.Add)
+            Dispatcher.BeginInvoke(() =>
             {
-                Dispatcher.BeginInvoke(() =>
-                {
-                    ScrollMensagens.ScrollToBottom();
-                }, System.Windows.Threading.DispatcherPriority.Loaded);
-            }
+                ScrollMensagens.ScrollToBottom();
+            }, System.Windows.Threading.DispatcherPriority.Loaded);
         }
 
-        // Permite arrastar a janela pelo cabeçalho (WindowStyle=None)
-        private void Cabecalho_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void Arrastar()
         {
-            if (e.ButtonState == MouseButtonState.Pressed)
+            if (Mouse.LeftButton == MouseButtonState.Pressed)
                 DragMove();
         }
 
-
-
-
-        private void BtnFechar_Click(object sender, RoutedEventArgs e)
-        {
-            Hide(); // Oculta sem destruir — reutilizável
-
-        }
+        private void Ocultar() => Hide();
     }
-};
+}

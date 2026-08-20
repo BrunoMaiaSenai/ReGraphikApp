@@ -29,15 +29,12 @@ namespace ReGraphik.ViewModels
         /// </summary>
         private ChatPainelWindow? _chatWindow;
 
-
         public Usuario UsuarioLogado { get; }
-
 
         /// <summary>
         /// ViewModel do chat
         /// </summary>
         public ChatViewModel ChatViewModel { get; }
-
 
         public object CurrentView
         {
@@ -49,7 +46,6 @@ namespace ReGraphik.ViewModels
             }
         }
 
-
         public string NomeUsuario
         {
             get => _nomeUsuario;
@@ -59,7 +55,6 @@ namespace ReGraphik.ViewModels
                 OnPropertyChanged();
             }
         }
-
 
         public string BtnAtivo
         {
@@ -84,8 +79,6 @@ namespace ReGraphik.ViewModels
         /// </summary>
         private readonly GerenciarUsuariosControl? _gerenciarUsuariosView;
 
-
-
         #region Commands
 
         public ICommand NavegarDashboardCommand { get; }
@@ -95,15 +88,10 @@ namespace ReGraphik.ViewModels
         public ICommand NavegarRelatoriosCommand { get; }
         public ICommand NavegarContaCommand { get; }
         public ICommand NavegarEsgCommand { get; }
-
         public ICommand NavegarGerenciarUsuariosCommand { get; }
-
         public ICommand SairCommand { get; }
-
         public ICommand ChatCommand { get; }
-
         public ICommand irParaRelatorios { get; }
-
 
         #endregion
 
@@ -112,17 +100,13 @@ namespace ReGraphik.ViewModels
         /// </summary>
         /// <param name="usuario"></param>
         /// <param name="window"></param>
-
         public MainViewModel(Usuario usuario, Window window)
         {
-
             UsuarioLogado = usuario;
-
             _currentWindow = window;
 
             /// Assina o evento de sessão expirada para realizar logout automático por inatividade
             UsuarioSessaoService.Instancia.SessaoExpirada += OnSessaoExpirada;
-
 
             NomeUsuario = usuario.Nome ?? "Usuário";
 
@@ -131,95 +115,40 @@ namespace ReGraphik.ViewModels
                                    string.Equals(usuario.Perfil, "Admin", StringComparison.OrdinalIgnoreCase);
 
             /// CHAT
-
             ChatViewModel = new ChatViewModel(usuario);
-
             ChatViewModel.NovaMensagemRecebida += OnNovaMensagemRecebida;
-
             ChatCommand = new RelayCommand(ChatConversar);
 
-
             /// FOTO USUÁRIO
-
             var fotoSalva = ConfiguracaoLocalService.CarregarFoto();
-
             if (fotoSalva != null)
                 UsuarioSessaoService.Instancia.FotoCaminho = fotoSalva;
 
             /// NAVEGAÇÃO 
-
-            NavegarDashboardCommand =
-                new RelayCommand(p => NavegarParaDashboard());
-
-
-            NavegarResiduosCommand =
-                new RelayCommand(p => NavegarParaResiduos());
-
-
-            NavegarEstoqueCommand =
-                new RelayCommand(p => NavegarParaEstoque());
-
-
-            NavegarMapaCommand =
-                new RelayCommand(p => NavegarParaMapa());
-
-
-            NavegarRelatoriosCommand =
-                new RelayCommand(p => NavegarParaRelatorios());
-
-
-            NavegarEsgCommand =
-                new RelayCommand(p => NavegarParaEsg());
-
-
-            NavegarContaCommand =
-                new RelayCommand(p => NavegarParaConta());
-
-
+            NavegarDashboardCommand = new RelayCommand(p => NavegarParaDashboard());
+            NavegarResiduosCommand = new RelayCommand(p => NavegarParaResiduos());
+            NavegarEstoqueCommand = new RelayCommand(p => NavegarParaEstoque());
+            NavegarMapaCommand = new RelayCommand(p => NavegarParaMapa());
+            NavegarRelatoriosCommand = new RelayCommand(p => NavegarParaRelatorios());
+            NavegarEsgCommand = new RelayCommand(p => NavegarParaEsg());
+            NavegarContaCommand = new RelayCommand(p => NavegarParaConta());
 
             /// GERENCIAMENTO DE USUÁRIOS - Disponível apenas para Administrador 
+            NavegarGerenciarUsuariosCommand = new RelayCommand(
+                p => NavegarParaGerenciarUsuarios(),
+                p => usuario.Perfil == "Administrador"
+            );
 
-            NavegarGerenciarUsuariosCommand =
-                new RelayCommand(
-                    p => NavegarParaGerenciarUsuarios(),
-                    p => usuario.Perfil == "Administrador"
-                );
-
-
-
-            SairCommand =
-                new RelayCommand(p => ExecutarSair());
+            SairCommand = new RelayCommand(p => ExecutarSair());
 
             /// Views
-
-            _dashboardView =
-                new DashboardControl(usuario);
-
-
-            _residuosView =
-                new ResiduosControl();
-
-
-            _estoqueView =
-                new EstoqueReversoControl();
-
-
-            _mapaView =
-                new MapaControl();
-
-
-            _relatoriosView =
-                new RelatoriosControl();
-
-
-            _contaView =
-                new ContaControl(UsuarioLogado);
-
-
-            _esgView =
-                new EsgControl(usuario, NavegarRelatoriosCommand);
-
-
+            _dashboardView = new DashboardControl(usuario);
+            _residuosView = new ResiduosControl();
+            _estoqueView = new EstoqueReversoControl();
+            _mapaView = new MapaControl();
+            _relatoriosView = new RelatoriosControl();
+            _contaView = new ContaControl(UsuarioLogado);
+            _esgView = new EsgControl(usuario, NavegarRelatoriosCommand);
 
             /// Cria gerenciamento somente se administrador 
             if (usuario.Perfil == "Administrador")
@@ -233,169 +162,84 @@ namespace ReGraphik.ViewModels
             }
 
             CurrentView = _dashboardView;
-
         }
 
         #region Navegação
 
-
         private void NavegarParaDashboard() =>
-            ExecutarNavegacao(
-                "Dashboard",
-                _dashboardView);
-
-
+            ExecutarNavegacao("Dashboard", _dashboardView);
 
         private void NavegarParaResiduos() =>
-            ExecutarNavegacao(
-                "Residuos",
-                _residuosView);
-
-
+            ExecutarNavegacao("Residuos", _residuosView);
 
         private void NavegarParaEstoque() =>
-            ExecutarNavegacao(
-                "Estoque",
-                _estoqueView);
-
-
+            ExecutarNavegacao("Estoque", _estoqueView);
 
         private void NavegarParaMapa() =>
-            ExecutarNavegacao(
-                "Mapa",
-                _mapaView);
-
-
+            ExecutarNavegacao("Mapa", _mapaView);
 
         private void NavegarParaRelatorios() =>
-            ExecutarNavegacao(
-                "Relatorios",
-                _relatoriosView);
-
-
+            ExecutarNavegacao("Relatorios", _relatoriosView);
 
         private void NavegarParaEsg() =>
-            ExecutarNavegacao(
-                "Esg",
-                _esgView);
-
-
+            ExecutarNavegacao("Esg", _esgView);
 
         private void NavegarParaConta() =>
-            ExecutarNavegacao(
-                "Conta",
-                _contaView);
-
-
+            ExecutarNavegacao("Conta", _contaView);
 
         private void NavegarParaGerenciarUsuarios()
         {
             if (_gerenciarUsuariosView != null)
             {
-                ExecutarNavegacao(
-                    "GerenciarUsuarios",
-                    _gerenciarUsuariosView);
+                ExecutarNavegacao("GerenciarUsuarios", _gerenciarUsuariosView);
             }
         }
 
-        private void ExecutarNavegacao(
-            string nomeBotao,
-            object view)
+        private void ExecutarNavegacao(string nomeBotao, object view)
         {
-
             BtnAtivo = nomeBotao;
-
             CurrentView = view;
 
             // Reinicia o timer de inatividade a cada troca de tela
             UsuarioSessaoService.Instancia.ResetarTimer();
-
         }
 
         #endregion
 
         #region Chat
 
-
         private void ChatConversar()
         {
-
-            if (_chatWindow != null &&
-                _chatWindow.IsLoaded)
+            if (_chatWindow != null && _chatWindow.IsLoaded)
             {
                 _chatWindow.Activate();
                 return;
             }
 
-
-
-            _chatWindow =
-                new ChatPainelWindow();
-
-
-            _chatWindow.DataContext =
-                ChatViewModel;
-
-
-
-            _chatWindow.ShowInTaskbar =
-                false;
-
-
-
-            _chatWindow.Owner =
-                Application.Current.MainWindow;
-
-
+            _chatWindow = new ChatPainelWindow();
+            _chatWindow.DataContext = ChatViewModel;
+            _chatWindow.ShowInTaskbar = false;
+            _chatWindow.Owner = Application.Current.MainWindow;
 
             _ = ChatViewModel.CarregarConversasPublicAsync();
 
-
-
             _chatWindow.Show();
-
         }
 
-
-
-
-
-        private void OnNovaMensagemRecebida(
-            string remetenteNome,
-            string textoPreview)
+        private void OnNovaMensagemRecebida(string remetenteNome, string textoPreview)
         {
-
-
             Application.Current.Dispatcher.Invoke(() =>
             {
-
-                if (_chatWindow == null ||
-                    !_chatWindow.IsVisible)
+                if (_chatWindow == null || !_chatWindow.IsVisible)
                 {
+                    /// Instancia o Toast repassando a ChatViewModel necessária
+                    var toast = new ChatToastWindow(remetenteNome, textoPreview, ChatViewModel);
 
-
-                    var toast =
-                        new ChatToastWindow(
-                            remetenteNome,
-                            textoPreview);
-
-
-
-                    toast.Clicado += () =>
-                        ChatConversar();
-
-
-
+                    toast.Clicado += () => ChatConversar();
                     toast.Show();
-
                 }
-
             });
-
         }
-
-
-
         #endregion
 
         #region Logout
@@ -453,14 +297,12 @@ namespace ReGraphik.ViewModels
 
                 if (resultado == true)
                 {
-                    confirmWindow.Owner = null; 
+                    confirmWindow.Owner = null;
                     RealizarLogout();
                 }
             });
         }
 
-
         #endregion
-
     }
 }

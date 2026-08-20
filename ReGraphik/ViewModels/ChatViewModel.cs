@@ -42,12 +42,28 @@ namespace ReGraphik.ViewModels
         private int _totalNaoLidas;
         private bool _carregando;
         private bool _disposed;
+        private bool _usuarioEstaOnline;
 
         /// <summary>
         /// Disparado quando uma mensagem nova chega enquanto o chat está fechado.
         /// Parâmetros: nome do remetente, prévia do texto.
         /// </summary>
         public event Action<string, string>? NovaMensagemRecebida;
+
+        /// <summary>
+        /// Disparado para que a View execute o ScrollToBottom na lista de mensagens.
+        /// </summary>
+        public event Action? SolicitarScrollParaFim;
+
+        /// <summary>
+        /// Disparado para permitir arrastar a janela sem code-behind direto.
+        /// </summary>
+        public event Action? SolicitarArrastarJanela;
+
+        /// <summary>
+        /// Disparado para ocultar a janela sem code-behind direto.
+        /// </summary>
+        public event Action? SolicitarOcultarJanela;
 
         /// <summary>
         /// Lista de conversas do usuário logado, exibida na lateral do painel de chat.
@@ -68,6 +84,19 @@ namespace ReGraphik.ViewModels
         {
             get => _usuariosDisponiveis;
             set { _usuariosDisponiveis = value; OnPropertyChanged(); }
+        }
+
+        /// <summary>
+        /// Indica se o usuário selecionado ou o contexto atual está online.
+        /// </summary>
+        public bool UsuarioEstaOnline
+        {
+            get => _usuarioEstaOnline;
+            set
+            {
+                _usuarioEstaOnline = value;
+                OnPropertyChanged(nameof(UsuarioEstaOnline)); // Notifica a interface WPF
+            }
         }
 
         /// <summary>
@@ -132,6 +161,8 @@ namespace ReGraphik.ViewModels
         public ICommand IniciarConversaCommand { get; }
         public ICommand SelecionarConversaCommand { get; }
         public ICommand VoltarListaCommand { get; }
+        public ICommand ArrastarJanelaCommand { get; }
+        public ICommand OcultarJanelaCommand { get; }
 
         /// <summary>
         /// Inicializa uma nova instância do ViewModel de chat, configurando o serviço de chat, comandos e listeners do Firebase.
@@ -157,6 +188,10 @@ namespace ReGraphik.ViewModels
             SelecionarConversaCommand = new RelayCommand<Conversa>(c => ConversaSelecionada = c);
             VoltarListaCommand = new RelayCommand(() => ConversaSelecionada = null);
 
+            /// Comandos delegados para controle da janela sem code-behind
+            ArrastarJanelaCommand = new RelayCommand(() => SolicitarArrastarJanela?.Invoke());
+            OcultarJanelaCommand = new RelayCommand(() => SolicitarOcultarJanela?.Invoke());
+
             /// Carrega as conversas e atualiza notificações ao iniciar
             _ = CarregarConversasPublicAsync();
             _ = AtualizarNotificacoesAsync();
@@ -164,7 +199,6 @@ namespace ReGraphik.ViewModels
             /// Inicia a escuta em tempo real do Firebase para mensagens novas
             IniciarEscutaFirebase();
         }
-
 
         /// <summary>
         /// Assina o nó raiz "mensagens" do Firebase e reage a qualquer
@@ -208,6 +242,9 @@ namespace ReGraphik.ViewModels
                                 msg.EhMinhaMensagem = false;
                                 Mensagens.Add(msg);
 
+                                /// Dispara a rolagem automática para a última mensagem
+                                SolicitarScrollParaFim?.Invoke();
+
                                 /// Marca como lida imediatamente
                                 await _chatService.MarcarComoLidaAsync(
                                     msg.RemetenteId, _usuarioLogado.Id);
@@ -232,7 +269,7 @@ namespace ReGraphik.ViewModels
 
                 _listeners.Add(listener);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 /// Loga o erro no console de depuração para análise posterior
                 System.Diagnostics.Debug.WriteLine($"Erro ao iniciar escuta do Firebase: {ex.Message}");
@@ -300,7 +337,7 @@ namespace ReGraphik.ViewModels
         }
 
         /// <summary>
-        /// 
+        /// Método público para recarregar todas as conversas externamente.
         /// </summary>
         /// <returns></returns>
         public async Task CarregarConversasPublicAsync()
@@ -398,6 +435,8 @@ namespace ReGraphik.ViewModels
                 InvocarUI(() =>
                 {
                     Mensagens = new ObservableCollection<Mensagem>(msgs.OrderBy(m => m.DataHora));
+                    /// Dispara a rolagem automática para o final após carregar histórico
+                    SolicitarScrollParaFim?.Invoke();
                 });
 
                 await _chatService.MarcarComoLidaAsync(outroUsuarioId, _usuarioLogado.Id);
@@ -455,8 +494,12 @@ namespace ReGraphik.ViewModels
 
                 TextoMensagem = string.Empty;
 
-                /// Adiciona localmente para resposta imediata (UX)
-                Application.Current.Dispatcher.Invoke(() => Mensagens.Add(mensagem));
+                /// Adiciona localmente para resposta imediata (UX) e faz a rolagem automática
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Mensagens.Add(mensagem);
+                    SolicitarScrollParaFim?.Invoke();
+                });
 
                 await _chatService.EnviarMensagemAsync(mensagem);
 
