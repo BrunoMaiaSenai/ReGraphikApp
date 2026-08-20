@@ -1,13 +1,12 @@
 ﻿using System.Windows;
-using System.Windows.Input;
 using System.Windows.Threading;
-using ReGraphik.ViewModels;
 
 namespace ReGraphik.Views
 {
     /// <summary>
     /// Toast de notificação de nova mensagem.
-    /// Aparece no canto inferior direito da tela e fecha após 5 segundos.
+    /// Aparece no canto inferior direito da tela, some automaticamente
+    /// após 5 segundos, e dispara o evento Clicado se o usuário clicar.
     /// </summary>
     public partial class ChatToastWindow : Window
     {
@@ -18,7 +17,7 @@ namespace ReGraphik.Views
         /// </summary>
         public event Action? Clicado;
 
-        public ChatToastWindow(string remetenteNome, string textoPreview, ChatViewModel? viewModel = null)
+        public ChatToastWindow(string remetenteNome, string textoPreview)
         {
             InitializeComponent();
 
@@ -39,19 +38,16 @@ namespace ReGraphik.Views
             _timerFechamento.Start();
         }
 
-        private void Toast_Click(object sender, MouseButtonEventArgs e)
+        private void Toast_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             _timerFechamento.Stop();
-
-            // Dispara o evento esperado pelo MainViewModel
             Clicado?.Invoke();
-
             Close();
         }
 
         private void BtnFechar_Click(object sender, RoutedEventArgs e)
         {
-            e.Handled = true; // Impede a propagação do clique para o Toast_Click
+            e.Handled = true; // impede que o clique propague para Toast_Click
             FecharToast();
         }
 

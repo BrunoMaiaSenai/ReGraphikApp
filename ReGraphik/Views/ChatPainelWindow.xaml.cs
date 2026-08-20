@@ -1,7 +1,12 @@
-﻿using System.Windows;
+﻿using LiteDB;
+using ReGraphik.Models;
+using ReGraphik.Services;
+using ReGraphik.Views;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Windows;
 using System.Windows.Input;
-using ReGraphik.ViewModels;
-
+using System.Windows.Threading;
 namespace ReGraphik.Views
 {
     public partial class ChatPainelWindow : Window
@@ -14,35 +19,37 @@ namespace ReGraphik.Views
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (e.OldValue is ChatViewModel vmAntiga)
+            if (e.NewValue is ViewModels.ChatViewModel vm)
             {
-                vmAntiga.SolicitarScrollParaFim -= RolandoParaOFim;
-                vmAntiga.SolicitarArrastarJanela -= Arrastar;
-                vmAntiga.SolicitarOcultarJanela -= Ocultar;
-            }
-
-            if (e.NewValue is ChatViewModel vmNova)
-            {
-                vmNova.SolicitarScrollParaFim += RolandoParaOFim;
-                vmNova.SolicitarArrastarJanela += Arrastar;
-                vmNova.SolicitarOcultarJanela += Ocultar;
+                vm.Mensagens.CollectionChanged += Mensagens_CollectionChanged;
             }
         }
 
-        private void RolandoParaOFim()
+        private void Mensagens_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            Dispatcher.BeginInvoke(() =>
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                ScrollMensagens.ScrollToBottom();
-            }, System.Windows.Threading.DispatcherPriority.Loaded);
+                Dispatcher.BeginInvoke(() =>
+                {
+                    ScrollMensagens.ScrollToBottom();
+                }, System.Windows.Threading.DispatcherPriority.Loaded);
+            }
         }
 
-        private void Arrastar()
+        // Permite arrastar a janela pelo cabeçalho (WindowStyle=None)
+        private void Cabecalho_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (Mouse.LeftButton == MouseButtonState.Pressed)
+            if (e.ButtonState == MouseButtonState.Pressed)
                 DragMove();
         }
 
-        private void Ocultar() => Hide();
+
+
+
+        private void BtnFechar_Click(object sender, RoutedEventArgs e)
+        {
+            Hide(); // Oculta sem destruir — reutilizável
+
+        }
     }
 }
