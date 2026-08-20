@@ -47,15 +47,9 @@ namespace ReGraphik.ViewModels
         /// </summary>
         private bool _isCarregando;
 
-        /// <summary>
-        /// Evento disparado para solicitar ao Code-Behind que invoque uma função JavaScript focando um marcador específico.
-        /// </summary>
-        public event Action<int>? SolicitouFocoNoMapa;
-
-        /// <summary>
-        /// Evento disparado para transferir a string contendo o código HTML estrutural do mapa diretamente à View.
-        /// </summary>
-        public event Action<string>? SolicitouHtmlMapa;
+        private string _htmlMapa = string.Empty;
+        private int? _indiceFoco;
+        private PontosColeta? _pontoSelecionado;
 
         /// <summary>
         /// Obtém ou define o nome da cidade usada na pesquisa síncrona/filtragem.
@@ -75,6 +69,52 @@ namespace ReGraphik.ViewModels
         {
             get => _pontosAtuais;
             set { _pontosAtuais = value; OnPropertyChanged(); OnPropertyChanged(nameof(MostrarEstadoVazio)); }
+        }
+
+        /// <summary>
+        /// Conteúdo HTML utilizado para renderização do mapa.
+        /// A View observa esta propriedade através de Binding.
+        /// </summary>
+        public string HtmlMapa
+        {
+            get => _htmlMapa;
+            private set
+            {
+                _htmlMapa = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Índice do marcador que deverá receber foco no mapa.
+        /// </summary>
+        public int? IndiceFoco
+        {
+            get => _indiceFoco;
+            private set
+            {
+                _indiceFoco = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Ponto atualmente selecionado na lista.
+        /// A seleção é realizada diretamente através de Binding no XAML.
+        /// </summary>
+        public PontosColeta? PontoSelecionado
+        {
+            get => _pontoSelecionado;
+            set
+            {
+                _pontoSelecionado = value;
+                OnPropertyChanged();
+
+                if (value != null)
+                {
+                    FocarNoPonto(value);
+                }
+            }
         }
 
         /// <summary>
@@ -121,6 +161,8 @@ namespace ReGraphik.ViewModels
                     }
                 });
             });
+
+            InicializarMapaLivre();
         }
 
         /// <summary>
@@ -251,7 +293,8 @@ namespace ReGraphik.ViewModels
                 var idx = PontosAtuais.IndexOf(ponto);
                 if (idx >= 0)
                 {
-                    SolicitouFocoNoMapa?.Invoke(idx);
+                    IndiceFoco = null;
+                    IndiceFoco = idx;
                 }
             }
         }
@@ -298,7 +341,7 @@ namespace ReGraphik.ViewModels
         {
             var html = GerarHtml(pontos);
             _mapaCarregado = false;
-            SolicitouHtmlMapa?.Invoke(html);
+            HtmlMapa = html;
         }
 
         /// <summary>
