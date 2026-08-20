@@ -4,7 +4,6 @@
     <Platform Name="x86" />
   </Configurations>
   <Project Path="ApiRestReGraphik/ApiRestReGraphik.csproj" Id="74813167-fdfe-4ad1-8085-52c838fde0d1" />
-  <Project Path="ReGraphik.Tests/ReGraphik.Tests.csproj" Id="99d8c803-73a6-4543-adc0-9eef90e607b0" />
   <Project Path="ReGraphik/ReGraphik.csproj" />
   <Project Path="ReGraphikSetup/ReGraphikSetup.wixproj" Id="e01c995a-90f4-4e25-8a3a-b5767f6dbf6f">
     <Platform Project="x86" />
