@@ -15,11 +15,12 @@ namespace ReGraphik.ViewModels
     /// Controla lista de conversas, carregamento de mensagens, envio
     /// e escuta em tempo real de novas mensagens via Firebase.
     /// </summary>
-    public class ChatViewModel : BaseViewModel
+    public class ChatViewModel : BaseViewModel, IDisposable
     {
         private readonly ChatService _chatService;
         private readonly Usuario _usuarioLogado;
-        private readonly DispatcherTimer _timerAtualizacao;
+        private readonly Action<Action>? _dispatcherInvoker;
+        private readonly Action<string, string>? _errorHandler;
 
         /// <summary>
         /// Mantém as assinaturas dos listeners do Firebase para cancelamento
@@ -40,6 +41,7 @@ namespace ReGraphik.ViewModels
         private bool _mostrarNovaConversa;
         private int _totalNaoLidas;
         private bool _carregando;
+        private bool _disposed;
 
         /// <summary>
         /// Disparado quando uma mensagem nova chega enquanto o chat está fechado.
@@ -135,10 +137,16 @@ namespace ReGraphik.ViewModels
         /// Inicializa uma nova instância do ViewModel de chat, configurando o serviço de chat, comandos e listeners do Firebase.
         /// </summary>
         /// <param name="usuarioLogado"></param>
-        public ChatViewModel(Usuario usuarioLogado)
+        public ChatViewModel(
+            Usuario usuarioLogado,
+            ChatService? chatService = null,
+            Action<Action>? dispatcherInvoker = null,
+            Action<string, string>? errorHandler = null)
         {
-            _usuarioLogado = usuarioLogado;
-            _chatService = new ChatService();
+            _usuarioLogado = usuarioLogado ?? throw new ArgumentNullException(nameof(usuarioLogado));
+            _chatService = chatService ?? new ChatService();
+            _dispatcherInvoker = dispatcherInvoker ?? ExecutarNaUIThread;
+            _errorHandler = errorHandler ?? ExibirErroPadrao;
 
             AbrirChatCommand = new RelayCommand(async () => await AbrirChatAsync());
             FecharChatCommand = new RelayCommand(() => ChatAberto = false);
@@ -155,14 +163,6 @@ namespace ReGraphik.ViewModels
 
             /// Inicia a escuta em tempo real do Firebase para mensagens novas
             IniciarEscutaFirebase();
-
-            /// Timer de segurança: garante sync caso algum evento Firebase seja perdido
-            _timerAtualizacao = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(15)
-            };
-            _timerAtualizacao.Tick += async (_, _) => await AtualizarNotificacoesAsync();
-            _timerAtualizacao.Start();
         }
 
 
@@ -346,15 +346,13 @@ namespace ReGraphik.ViewModels
                     {
                         UsuarioId = u.Id,
                         UsuarioNome = u.Nome ?? u.Login ?? "Usuário",
-                        UltimaMensagem = ultima.Texto.Length > 40
-                            ? ultima.Texto[..40] + "..."
-                            : ultima.Texto,
+                        UltimaMensagem = ultima.Texto.Length > 40 ? ultima.Texto[..40] + "..." : ultima.Texto,
                         UltimaDataHora = ultima.DataHora,
                         MensagensNaoLidas = naoLidas
                     });
                 }
 
-                Application.Current.Dispatcher.Invoke(() =>
+                InvocarUI(() =>
                 {
                     Conversas = new ObservableCollection<Conversa>(
                         conversas.OrderByDescending(c => c.UltimaDataHora));
@@ -397,10 +395,9 @@ namespace ReGraphik.ViewModels
                     _mensagensJaVistas.Add(m.Id);
                 }
 
-                Application.Current.Dispatcher.Invoke(() =>
+                InvocarUI(() =>
                 {
-                    Mensagens = new ObservableCollection<Mensagem>(
-                        msgs.OrderBy(m => m.DataHora));
+                    Mensagens = new ObservableCollection<Mensagem>(msgs.OrderBy(m => m.DataHora));
                 });
 
                 await _chatService.MarcarComoLidaAsync(outroUsuarioId, _usuarioLogado.Id);
@@ -574,14 +571,50 @@ namespace ReGraphik.ViewModels
         /// <summary>
         /// Libera recursos, interrompe o timer de atualização e cancela todos os listeners do Firebase para evitar vazamentos de memória.
         /// </summary>
+        #region Helpers de Isolamento da UI e Disposing
+
+        private void InvocarUI(Action acao) => _dispatcherInvoker?.Invoke(acao);
+
+        private void NotificarErro(string titulo, string mensagem) => _errorHandler?.Invoke(titulo, mensagem);
+
+        private static void ExecutarNaUIThread(Action acao)
+        {
+            if (System.Windows.Application.Current?.Dispatcher != null)
+                System.Windows.Application.Current.Dispatcher.Invoke(acao);
+            else
+                acao();
+        }
+
+        private static void ExibirErroPadrao(string titulo, string mensagem)
+        {
+            if (System.Windows.Application.Current?.Dispatcher != null)
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                    Views.MensagemWindow.Exibir(titulo, mensagem, Views.MensagemWindow.TipoMensagem.Erro));
+            }
+        }
+
         public void Dispose()
         {
-            _timerAtualizacao.Stop();
-
-            /// Cancela todos os listeners do Firebase
-            foreach (var l in _listeners)
-                l.Dispose();
-            _listeners.Clear();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if (disposing)
+            {
+                foreach (var listener in _listeners)
+                    listener?.Dispose();
+
+                _listeners.Clear();
+            }
+
+            _disposed = true;
+        }
+
+        #endregion
     }
 }
