@@ -7,11 +7,11 @@ using System.Windows.Input;
 
 namespace ReGraphik.ViewModels
 {
-    /// <summary>
-    /// ViewModel principal da aplicação, responsável por gerenciar a navegação
-    /// entre as páginas e o estado do menu lateral.
-    /// </summary>
-    public class MainViewModel : BaseViewModel
+    /// <summary>
+    /// ViewModel principal da aplicação, responsável por gerenciar a navegação
+    /// entre as páginas e o estado do menu lateral.
+    /// </summary>
+    public class MainViewModel : BaseViewModel
     {
         private readonly Window _currentWindow;
 
@@ -19,24 +19,24 @@ namespace ReGraphik.ViewModels
         private string _nomeUsuario = string.Empty;
         private string _btnAtivo = "Dashboard";
 
-        /// <summary>
-        /// Propriedade para controlar a visibilidade na UI
-        /// </summary>
-        public bool IsAdmin { get; set; }
+        /// <summary>
+        /// Propriedade para controlar a visibilidade na UI
+        /// </summary>
+        public bool IsAdmin { get; set; }
 
-        /// <summary>
-        /// Mantém a instância única do painel de chat para reutilização
-        /// </summary>
-        private ChatPainelWindow? _chatWindow;
+        /// <summary>
+        /// Mantém a instância única do painel de chat para reutilização
+        /// </summary>
+        private ChatPainelWindow? _chatWindow;
 
 
         public Usuario UsuarioLogado { get; }
 
 
-        /// <summary>
-        /// ViewModel do chat
-        /// </summary>
-        public ChatViewModel ChatViewModel { get; }
+        /// <summary>
+        /// ViewModel do chat
+        /// </summary>
+        public ChatViewModel ChatViewModel { get; }
 
 
         public object CurrentView
@@ -79,16 +79,16 @@ namespace ReGraphik.ViewModels
         private readonly EsgControl _esgView;
         private readonly ContaControl _contaView;
 
-        /// <summary>
-        /// View de gerenciamento de usuários (somente administrador)
-        /// </summary>
-        private readonly GerenciarUsuariosControl? _gerenciarUsuariosView;
+        /// <summary>
+        /// View de gerenciamento de usuários (somente administrador)
+        /// </summary>
+        private readonly GerenciarUsuariosControl? _gerenciarUsuariosView;
 
 
 
-        #region Commands
+        #region Commands
 
-        public ICommand NavegarDashboardCommand { get; }
+        public ICommand NavegarDashboardCommand { get; }
         public ICommand NavegarResiduosCommand { get; }
         public ICommand NavegarEstoqueCommand { get; }
         public ICommand NavegarMapaCommand { get; }
@@ -105,124 +105,124 @@ namespace ReGraphik.ViewModels
         public ICommand irParaRelatorios { get; }
 
 
-        #endregion
+        #endregion
 
-        /// <summary>
-        /// Inicializa uma nova instância do MainViewModel, configurando as views, comandos e eventos necessários para a navegação e funcionalidades da aplicação.
-        /// </summary>
-        /// <param name="usuario"></param>
-        /// <param name="window"></param>
+        /// <summary>
+        /// Inicializa uma nova instância do MainViewModel, configurando as views, comandos e eventos necessários para a navegação e funcionalidades da aplicação.
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <param name="window"></param>
 
-        public MainViewModel(Usuario usuario, Window window)
+        public MainViewModel(Usuario usuario, Window window)
         {
 
             UsuarioLogado = usuario;
 
             _currentWindow = window;
 
-            /// Assina o evento de sessão expirada para realizar logout automático por inatividade
-            UsuarioSessaoService.Instancia.SessaoExpirada += OnSessaoExpirada;
+            /// Assina o evento de sessão expirada para realizar logout automático por inatividade
+            UsuarioSessaoService.Instancia.SessaoExpirada += OnSessaoExpirada;
 
 
             NomeUsuario = usuario.Nome ?? "Usuário";
 
-            /// Verifica a forma de perfil logado
-            bool ehAdministrador = string.Equals(usuario.Perfil, "Administrador", StringComparison.OrdinalIgnoreCase) ||
-                 string.Equals(usuario.Perfil, "Admin", StringComparison.OrdinalIgnoreCase);
+            /// Verifica a forma de perfil logado
+            bool ehAdministrador = string.Equals(usuario.Perfil, "Administrador", StringComparison.OrdinalIgnoreCase) ||
+                                   string.Equals(usuario.Perfil, "Admin", StringComparison.OrdinalIgnoreCase);
 
-            /// CHAT
+            /// CHAT
 
-            ChatViewModel = new ChatViewModel(usuario);
+            ChatViewModel = new ChatViewModel(usuario);
 
             ChatViewModel.NovaMensagemRecebida += OnNovaMensagemRecebida;
 
             ChatCommand = new RelayCommand(ChatConversar);
 
 
-            /// FOTO USUÁRIO
+            /// FOTO USUÁRIO
 
-            var fotoSalva = ConfiguracaoLocalService.CarregarFoto();
+            var fotoSalva = ConfiguracaoLocalService.CarregarFoto();
 
             if (fotoSalva != null)
                 UsuarioSessaoService.Instancia.FotoCaminho = fotoSalva;
 
-            /// NAVEGAÇÃO 
+            /// NAVEGAÇÃO 
 
-            NavegarDashboardCommand =
-        new RelayCommand(p => NavegarParaDashboard());
+            NavegarDashboardCommand =
+                new RelayCommand(p => NavegarParaDashboard());
 
 
             NavegarResiduosCommand =
-              new RelayCommand(p => NavegarParaResiduos());
+                new RelayCommand(p => NavegarParaResiduos());
 
 
             NavegarEstoqueCommand =
-              new RelayCommand(p => NavegarParaEstoque());
+                new RelayCommand(p => NavegarParaEstoque());
 
 
             NavegarMapaCommand =
-              new RelayCommand(p => NavegarParaMapa());
+                new RelayCommand(p => NavegarParaMapa());
 
 
             NavegarRelatoriosCommand =
-              new RelayCommand(p => NavegarParaRelatorios());
+                new RelayCommand(p => NavegarParaRelatorios());
 
 
             NavegarEsgCommand =
-              new RelayCommand(p => NavegarParaEsg());
+                new RelayCommand(p => NavegarParaEsg());
 
 
             NavegarContaCommand =
-              new RelayCommand(p => NavegarParaConta());
+                new RelayCommand(p => NavegarParaConta());
 
 
 
-            /// GERENCIAMENTO DE USUÁRIOS - Disponível apenas para Administrador 
+            /// GERENCIAMENTO DE USUÁRIOS - Disponível apenas para Administrador 
 
-            NavegarGerenciarUsuariosCommand =
-        new RelayCommand(
-          p => NavegarParaGerenciarUsuarios(),
-          p => usuario.Perfil == "Administrador"
-        );
+            NavegarGerenciarUsuariosCommand =
+                new RelayCommand(
+                    p => NavegarParaGerenciarUsuarios(),
+                    p => usuario.Perfil == "Administrador"
+                );
 
 
 
             SairCommand =
-              new RelayCommand(p => ExecutarSair());
+                new RelayCommand(p => ExecutarSair());
 
-            /// Views
+            /// Views
 
-            _dashboardView =
-        new DashboardControl(usuario);
+            _dashboardView =
+                new DashboardControl(usuario);
 
 
             _residuosView =
-              new ResiduosControl();
+                new ResiduosControl();
 
 
             _estoqueView =
-              new EstoqueReversoControl();
+                new EstoqueReversoControl();
 
 
             _mapaView =
-              new MapaControl();
+                new MapaControl();
 
 
             _relatoriosView =
-              new RelatoriosControl();
+                new RelatoriosControl();
 
 
             _contaView =
-              new ContaControl(UsuarioLogado);
+                new ContaControl(UsuarioLogado);
 
 
             _esgView =
-              new EsgControl(usuario, NavegarRelatoriosCommand);
+                new EsgControl(usuario, NavegarRelatoriosCommand);
 
 
 
-            /// Cria gerenciamento somente se administrador 
-            if (usuario.Perfil == "Administrador")
+            /// Cria gerenciamento somente se administrador 
+            if (usuario.Perfil == "Administrador")
             {
                 _gerenciarUsuariosView = new GerenciarUsuariosControl();
                 IsAdmin = true;
@@ -236,55 +236,55 @@ namespace ReGraphik.ViewModels
 
         }
 
-        #region Navegação
+        #region Navegação
 
 
-        private void NavegarParaDashboard() =>
-      ExecutarNavegacao(
-        "Dashboard",
-        _dashboardView);
+        private void NavegarParaDashboard() =>
+            ExecutarNavegacao(
+                "Dashboard",
+                _dashboardView);
 
 
 
         private void NavegarParaResiduos() =>
-          ExecutarNavegacao(
-            "Residuos",
-            _residuosView);
+            ExecutarNavegacao(
+                "Residuos",
+                _residuosView);
 
 
 
         private void NavegarParaEstoque() =>
-          ExecutarNavegacao(
-            "Estoque",
-            _estoqueView);
+            ExecutarNavegacao(
+                "Estoque",
+                _estoqueView);
 
 
 
         private void NavegarParaMapa() =>
-          ExecutarNavegacao(
-            "Mapa",
-            _mapaView);
+            ExecutarNavegacao(
+                "Mapa",
+                _mapaView);
 
 
 
         private void NavegarParaRelatorios() =>
-          ExecutarNavegacao(
-            "Relatorios",
-            _relatoriosView);
+            ExecutarNavegacao(
+                "Relatorios",
+                _relatoriosView);
 
 
 
         private void NavegarParaEsg() =>
-          ExecutarNavegacao(
-            "Esg",
-            _esgView);
+            ExecutarNavegacao(
+                "Esg",
+                _esgView);
 
 
 
         private void NavegarParaConta() =>
-          ExecutarNavegacao(
-            "Conta",
-            _contaView);
+            ExecutarNavegacao(
+                "Conta",
+                _contaView);
 
 
 
@@ -293,35 +293,35 @@ namespace ReGraphik.ViewModels
             if (_gerenciarUsuariosView != null)
             {
                 ExecutarNavegacao(
-                  "GerenciarUsuarios",
-                  _gerenciarUsuariosView);
+                    "GerenciarUsuarios",
+                    _gerenciarUsuariosView);
             }
         }
 
         private void ExecutarNavegacao(
-          string nomeBotao,
-          object view)
+            string nomeBotao,
+            object view)
         {
 
             BtnAtivo = nomeBotao;
 
             CurrentView = view;
 
-            // Reinicia o timer de inatividade a cada troca de tela
-            UsuarioSessaoService.Instancia.ResetarTimer();
+            // Reinicia o timer de inatividade a cada troca de tela
+            UsuarioSessaoService.Instancia.ResetarTimer();
 
         }
 
-        #endregion
+        #endregion
 
-        #region Chat
+        #region Chat
 
 
-        private void ChatConversar()
+        private void ChatConversar()
         {
 
             if (_chatWindow != null &&
-              _chatWindow.IsLoaded)
+                _chatWindow.IsLoaded)
             {
                 _chatWindow.Activate();
                 return;
@@ -330,21 +330,21 @@ namespace ReGraphik.ViewModels
 
 
             _chatWindow =
-              new ChatPainelWindow();
+                new ChatPainelWindow();
 
 
             _chatWindow.DataContext =
-              ChatViewModel;
+                ChatViewModel;
 
 
 
             _chatWindow.ShowInTaskbar =
-              false;
+                false;
 
 
 
             _chatWindow.Owner =
-              Application.Current.MainWindow;
+                Application.Current.MainWindow;
 
 
 
@@ -361,8 +361,8 @@ namespace ReGraphik.ViewModels
 
 
         private void OnNovaMensagemRecebida(
-          string remetenteNome,
-          string textoPreview)
+            string remetenteNome,
+            string textoPreview)
         {
 
 
@@ -370,19 +370,19 @@ namespace ReGraphik.ViewModels
             {
 
                 if (_chatWindow == null ||
-                  !_chatWindow.IsVisible)
+                    !_chatWindow.IsVisible)
                 {
 
 
                     var toast =
-                      new ChatToastWindow(
-                        remetenteNome,
-                        textoPreview);
+                        new ChatToastWindow(
+                            remetenteNome,
+                            textoPreview);
 
 
 
                     toast.Clicado += () =>
-                      ChatConversar();
+                        ChatConversar();
 
 
 
@@ -396,43 +396,43 @@ namespace ReGraphik.ViewModels
 
 
 
-        #endregion
+        #endregion
 
-        #region Logout
+        #region Logout
 
-        /// <summary>
-        /// Chamado pelo <see cref="UsuarioSessaoService"/> quando o timer de inatividade expira.
-        /// Exibe um aviso ao usuário e redireciona para a tela de login.
-        /// </summary>
-        private void OnSessaoExpirada()
+        /// <summary>
+        /// Chamado pelo <see cref="UsuarioSessaoService"/> quando o timer de inatividade expira.
+        /// Exibe um aviso ao usuário e redireciona para a tela de login.
+        /// </summary>
+        private void OnSessaoExpirada()
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
                 MessageBox.Show(
-                  "Sua sessão expirou por inatividade. Faça login novamente.",
-                  "Sessão Encerrada",
-                  MessageBoxButton.OK,
-                  MessageBoxImage.Information);
+                    "Sua sessão expirou por inatividade. Faça login novamente.",
+                    "Sessão Encerrada",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
 
                 RealizarLogout();
             });
         }
 
-        /// <summary>
-        /// Encerra a sessão do usuário: libera recursos, cancela eventos e retorna à tela de login.
-        /// </summary>
-        private void RealizarLogout()
+        /// <summary>
+        /// Encerra a sessão do usuário: libera recursos, cancela eventos e retorna à tela de login.
+        /// </summary>
+        private void RealizarLogout()
         {
-            /// Desassinar eventos primeiro (Evita Memory Leaks e NullReference)
-            UsuarioSessaoService.Instancia.SessaoExpirada -= OnSessaoExpirada;
+            /// Desassinar eventos primeiro (Evita Memory Leaks e NullReference)
+            UsuarioSessaoService.Instancia.SessaoExpirada -= OnSessaoExpirada;
             ChatViewModel.NovaMensagemRecebida -= OnNovaMensagemRecebida;
 
-            /// Encerrar os serviços e descartar ViewModels
-            UsuarioSessaoService.Instancia.EncerrarSessao();
+            /// Encerrar os serviços e descartar ViewModels
+            UsuarioSessaoService.Instancia.EncerrarSessao();
             ChatViewModel.Dispose();
 
-            /// Transição de Janelas
-            var loginWindow = new LoginWindow();
+            /// Transição de Janelas
+            var loginWindow = new LoginWindow();
             Application.Current.MainWindow = loginWindow;
             loginWindow.Show();
 
@@ -460,7 +460,7 @@ namespace ReGraphik.ViewModels
         }
 
 
-        #endregion
+        #endregion
 
-    }
+    }
 }

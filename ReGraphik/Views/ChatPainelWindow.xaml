@@ -103,8 +103,7 @@
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
+                                </TextBlock.Style></TextBlock>
                         </StackPanel>
 
                         <Button Grid.Column="2"
