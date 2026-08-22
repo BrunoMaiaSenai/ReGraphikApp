@@ -18,9 +18,11 @@ namespace ReGraphik.Services
         private const string NodeMensagens = "mensagens";
         private const string NodeUsuarios = "usuarios";
 
-        public ChatService()
+        public ChatService() : this(FirebaseConfigService.Client) { }
+
+        public ChatService(FirebaseClient client)
         {
-            _db = FirebaseConfigService.Client;
+            _db = client;
         }
 
         /// <summary>
@@ -68,8 +70,13 @@ namespace ReGraphik.Services
         /// <returns></returns>
         public async Task EnviarMensagemAsync(Mensagem mensagem)
         {
-            var convId = ConversaId(
-                mensagem.RemetenteId, mensagem.DestinatarioId);
+            /// Validação: Não permitir envio de mensagens vazias
+            if (mensagem == null || string.IsNullOrWhiteSpace(mensagem.Texto))
+            {
+                throw new ArgumentException("Não é possível enviar mensagens vazias.");
+            }
+
+            var convId = ConversaId(mensagem.RemetenteId, mensagem.DestinatarioId);
 
             await _db
                 .Child(NodeMensagens)
