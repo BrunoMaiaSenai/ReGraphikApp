@@ -222,10 +222,14 @@ Após a correção, a rotina foi replicada novamente e a mensagem foi exibida co
 ### 7.4. Comunicação Corporativa (Chat em Tempo Real)
 
 | ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Evidência do Teste | Status |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **CT017** | Chat Tempo Real | Envio de mensagem de texto simples entre dois usuários | Texto: *"Resíduo #104 liberado para coleta."* | Mensagem enviada e renderizada instantaneamente via Firebase Realtime na tela do destinatário. | — | — | ⏳ Pendente |
-| **CT018** | Chat Tempo Real | Tentativa de envio de mensagem vazia | Texto: `""` (vazio/espaços) | O botão de envio permanece inativo ou ignora a ação. | — | — | ⏳ Pendente |
-| **CT019** | Notificação de Chat | Recebimento de mensagem com a janela do chat minimizada | Envio de mensagem externa | Indicador visual de alerta de "Nova Mensagem" exibido na barra superior da aplicação. | — | — | ⏳ Pendente |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :---: |
+| **CT017** | **Chat Tempo Real** | Envio de mensagem de texto simples entre dois usuários | Texto: `"Resíduo #104 liberado para coleta."` | Mensagem enviada e renderizada instantaneamente via Firebase Realtime na tela do destinatário. | Objeto `Mensagem` instanciado com remetente, destinatário, texto do resíduo e status `Lida = false` validados com sucesso. |  | ✅ Concluído |
+| **CT018** | **Chat Tempo Real** | Tentativa de envio de mensagem vazia | Texto: `""` (vazio/espaços) | O botão de envio permanece inativo ou ignora a ação. | O método `EnviarMensagemAsync` disparou exceção `ArgumentException` ao receber textos vazios ou espaços em branco. |  | ✅ Concluído |
+| **CT019** | **Notificação de Chat** | Recebimento de mensagem com a janela do chat minimizada | Envio de mensagem externa | Indicador visual de alerta de "Nova Mensagem" exibido na barra superior da aplicação. | A propriedade `MensagensNaoLidas` foi incrementada de 0 para 1 ao receber nova mensagem com a tela desautorizada/minimizada. |  | ✅ Concluído |
+| **CT020** | **Identificador de Sala** | Geração determinística de ID da conversa entre dois usuários | IDs: `"userA"` e `"userB"` | O ID da conversa deve ser sempre idêntico independentemente da ordem em que os usuários iniciam o chat. | A chamada estática ordenou alfabeticamente os IDs gerando `"userA_userB"` tanto para (A, B) quanto para (B, A). | | ✅ Concluído |
+| **CT021** | **Marcação de Leitura** | Atualização do status das mensagens recebidas para lido | Lista de mensagens pendentes | Apenas as mensagens enviadas pelo remetente e com status `Lida = false` devem ser filtradas para atualização. | O filtro Linq isolou com precisão a mensagem pendente ignorando mensagens já lidas e mensagens enviadas pelo destinatário. | | ✅ Concluído |
+| **CT022** | **Leitura de Usuários** | Desserialização de JSON flexível para lista de usuários | JSON com chaves `name` / `foto_perfil` | O modelo `Usuario` deve ser preenchido corretamente mesmo com variações de nomenclatura no nó do Firebase. | Fallback de propriedades mapeou com êxito `name` para `Nome` e `foto_perfil` para `FotoPerfil`, além de capturar a chave do Firebase. |  | ✅ Concluído |
+| **CT023** | **Resiliência de Conexão** | Ocorrência de falha ou perda de conexão no Firebase | Consulta a nó indisponível | O serviço deve tratar a exceção via `try/catch` retornando lista vazia ou valor padrão `0` sem estourar exceção na UI. | Todos os métodos assíncronos de busca (`ObterMensagensAsync`, `ContarNaoLidasAsync`, `ListarUsuariosAsync`) trataram o erro retornando coleções vazias. |  | ✅ Concluído |
 
 ---
 
