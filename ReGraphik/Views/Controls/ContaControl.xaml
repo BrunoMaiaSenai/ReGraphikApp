@@ -440,7 +440,7 @@
                             <iconPacks:PackIconMaterial Grid.Column="0" Kind="History" Width="16" Height="16" Foreground="{DynamicResource CinzaColor}" VerticalAlignment="Center" Margin="0,0,10,0"/>
                             <StackPanel Grid.Column="1">
                                 <TextBlock Text="Último Acesso" FontSize="11" Foreground="{DynamicResource TextoCinzaColor}"/>
-                                <TextBlock Text="{Binding UltimoAcesso, FallbackValue='Hoje às 14:32 (IP: 192.168.1.15)'}" FontSize="12" Foreground="{DynamicResource TextoColor}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding UltimoAcesso}" FontSize="12" Foreground="{DynamicResource TextoColor}" FontWeight="SemiBold" TextWrapping="Wrap"/>
                             </StackPanel>
                         </Grid>
                     </StackPanel>

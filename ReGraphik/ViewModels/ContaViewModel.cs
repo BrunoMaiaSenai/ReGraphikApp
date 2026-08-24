@@ -30,6 +30,8 @@ namespace ReGraphik.ViewModels
         /// </summary>
         private string _caminhoNovaFotoSelecionada = string.Empty;
 
+        public string UltimoAcesso => $"Hoje às {DateTime.Now:HH:mm}";
+
         private string? _fotoPerfilCaminho;
         public string? FotoPerfilCaminho
         {
