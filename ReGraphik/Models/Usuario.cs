@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Text.Json.Serialization;
 
 namespace ReGraphik.Models
@@ -7,11 +8,10 @@ namespace ReGraphik.Models
     {
         [JsonPropertyName("id")]
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
-        private string _nome;
+        private string _nome = string.Empty;
 
-        /// Se no Firebase estiver salvo como "nome" (minúsculo):
         [JsonPropertyName("nome")]
         [JsonProperty("nome")]
         public string Nome
@@ -29,23 +29,35 @@ namespace ReGraphik.Models
 
         [JsonPropertyName("cpf")]
         [JsonProperty("cpf")]
-        public string CPF { get; set; }
+        public string CPF { get; set; } = string.Empty;
 
         [JsonPropertyName("email")]
         [JsonProperty("email")]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [JsonPropertyName("login")]
         [JsonProperty("login")]
-        public string Login { get; set; }
+        public string Login { get; set; } = string.Empty;
 
         [JsonPropertyName("senha")]
         [JsonProperty("senha")]
-        public string Senha { get; set; }
+        public string Senha { get; set; } = string.Empty;
 
         [JsonPropertyName("perfil")]
         [JsonProperty("perfil")]
-        public string Perfil { get; set; }
+        public string Perfil { get; set; } = string.Empty;
+
+        [JsonPropertyName("cargo")]
+        [JsonProperty("cargo")]
+        public string? Cargo { get; set; }
+
+        [JsonPropertyName("departamento")]
+        [JsonProperty("departamento")]
+        public string? Departamento { get; set; }
+
+        [JsonPropertyName("telefone")]
+        [JsonProperty("telefone")]
+        public string? Telefone { get; set; }
 
         [JsonPropertyName("data_cadastro")]
         [JsonProperty("data_cadastro")]
@@ -63,11 +75,12 @@ namespace ReGraphik.Models
         /// Iniciais do nome para exibição no avatar quando não há foto.
         /// Retorna as iniciais das duas primeiras palavras do nome (ex: "Bruno Maia" → "BM").
         /// </summary>
+        [System.Text.Json.Serialization.JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public string Iniciais
         {
             get
             {
-                /// Usa a propriedade Nome (que agora já tem o fallback do Login)
                 string nomeParaUsar = Nome;
 
                 if (string.IsNullOrWhiteSpace(nomeParaUsar)) return "?";

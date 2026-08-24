@@ -459,8 +459,11 @@ namespace ApiRestReGraphik.Controllers
                 CPF = usuario.CPF,
                 Email = usuario.Email,
                 Login = usuario.Login,
-                Senha = usuario.Senha, 
+                Senha = usuario.Senha,
                 Perfil = usuario.Perfil,
+                Cargo = usuario.Cargo,
+                Departamento = usuario.Departamento,
+                Telefone = usuario.Telefone,
                 DataCadastro = usuario.DataCadastro,
                 FotoPerfil = usuario.FotoPerfil,
                 Ativo = usuario.Ativo
