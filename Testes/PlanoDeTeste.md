@@ -246,11 +246,25 @@ Após a correção, a rotina foi replicada novamente e a mensagem foi exibida co
 | **CT030** | **Dashboard / Listagem** | Filtragem dos 5 últimos resíduos com reindexação de ID | Coleção com 10 resíduos cadastrados em datas distintas | Selecionar os 5 mais recentes por data e reindexar seus IDs visualmente de `1` a `5`. | A ordenação decrescente por `DataCadastro` isolou os 5 registros mais recentes e aplicou IDs sequenciais de `1` a `5`. |  | ✅ Concluído |
 | **CT031** | **Dashboard / Gráfico Pizza** | Mapeamento dinâmico de cores por status do resíduo | Status do resíduo: `"Disponível"`, `"Reservado"`, etc. | Atribuir a cor RGB correspondente ao status da fatia do gráfico de pizza. | A instrução `switch` mapeou com exatidão as cores de cada status, aplicando a paleta padrão para valores não cadastrados. |  | ✅ Concluído |
 | **CT032** | **Dashboard / Gráfico Barras** | Agrupamento de peso por tipo de resíduo | Resíduos duplicados por tipo (ex: 2x `"Plástico"`) | Somar a quantidade total agrupando por tipo e ordenar o resultado de forma crescente. | A consulta LINQ agrupou o tipo `"Plástico"`, somando suas massas e ordenando os tipos em ordem crescente no gráfico. |  | ✅ Concluído |
-| **CT033** | **Proposta ESG / Inicialização** | Instanciação da ViewModel ESG com comandos de navegação e exportação | Instância de `Usuario` e comando de navegação para relatórios | A ViewModel deve ser criada com as propriedades `ExportarPdfCommand` e `IrParaRelatoriosCommand` inicializadas. | A classe `EsgViewModel` instanciou com sucesso os dois `ICommand` e manteve a referência do usuário logado. |  | ✅ Concluído |
-| **CT034** | **Proposta ESG / PDF Cancelado** | Cancelamento do salvamento de arquivo na janela SaveFileDialog | Ação de fechar ou clicar em "Cancelar" no diálogo de arquivo | O fluxo de geração do PDF deve ser interrompido sem executar compilação ou lançar exceções. | A verificação `dialog.ShowDialog() != true` retornou `true`, abortando o método com segurança sem erros. |  | ✅ Concluído |
-| **CT035** | **Proposta ESG / Geração PDF** | Exportação do manifesto ESG em formato PDF via QuestPDF | Escolha de caminho válido no `SaveFileDialog` e execução do `ExportarPdfCommand` | Documento PDF formatado gerado no disco com pilares ESG, manifesto, layout A4 e cabeçalho/rodapé institucionais. | O método `GeneratePdf` do QuestPDF criou o arquivo no caminho estipulado, renderizando textos e dados da empresa. |  | ✅ Concluído |
-| **CT036** | **Proposta ESG / Nome do Usuário** | Tratamento de fallback para o nome da empresa/usuário no PDF | Propriedade `_usuario` preenchida (`"Gráfica Alfa"`) vs. `null` | Exibir o nome da empresa quando informado ou o valor fallback `"Parceira Homologada"` no cabeçalho do PDF. | A expressão de coalescência nula `_usuario?.Nome ?? "Parceira Homologada"` atribuiu o valor correto em ambos os cenários. |  | ✅ Concluído |
-| **CT037** | **Proposta ESG / Erro de Exportação** | Tratamento de exceção ao tentar salvar em local sem permissão | Caminho de arquivo bloqueado ou inválido (ex: `SystemException`) | O bloco `catch` deve capturar o erro e exibir um diálogo visual `MensagemPdfWindow` com mensagem explicativa sem fechar a aplicação. | A exceção foi tratada com sucesso e disparou a notificação no Dispatcher indicando o erro na geração do arquivo. |  | ✅ Concluído |
+| **CT033** | **Proposta ESG / Inicialização** | Instanciação da ViewModel com injeção de dependências | Instância de `Usuario`, mocks de `ICommand` e `IDialogService` | As propriedades de comando `ExportarPdfCommand` e `IrParaRelatoriosCommand` não devem ser nulas. | Os comandos foram instanciados corretamente e mantidos disponíveis para a View. |  | ✅ Concluído |
+| **CT034** | **Proposta ESG / PDF Cancelado** | Cancelamento do salvamento de arquivo na caixa de diálogo | Retorno `null` no método `SalvarArquivo` do `IDialogService` | O fluxo deve ser interrompido sem acionar a mensagem de confirmação ou gerar o arquivo. | O serviço confirmou o retorno nulo e `ExibirConfirmacao` nunca foi executado (`Times.Never`). |  | ✅ Concluído |
+| **CT035** | **Proposta ESG / Geração PDF** | Exportação bem-sucedida do documento PDF em caminho válido | Caminho temporário gerado por `Path.GetTempPath()` | Gerar o arquivo PDF físico no disco e acionar a caixa de diálogo de confirmação ao usuário. | O arquivo foi criado no diretório temporário (`File.Exists` = `true`) e a confirmação foi exibida uma vez (`Times.Once`). |  | ✅ Concluído |
+
+---
+
+### 7.6. Perfil do Usuário
+
+| ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Evidência do Teste | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- | :---: | :---: |
+| **CT036** | **Conta / Perfil** | Inicialização do perfil e aplicação de máscaras | Dados cadastrais de `Ana Souza` (CPF, E-mail, Cargo, Dpto, Tel) | Mapear dados para a ViewModel, mascarar CPF/E-mail, calcular iniciais e validar estado sem foto. | A ViewModel carregou todos os dados, exibiu `123.***.***-**`, `an*******@empresa.com`, iniciais `"AS"` e `SemFoto` = `true`. |  | ✅ Concluído |
+| **CT037** | **Conta / Avatar** | Cálculo de iniciais para diferentes formatos de nome | Variações de entrada (`"Carlos Eduardo Silva"`, `"Beatriz"`, `""`, `null`) | Gerar as iniciais baseadas no primeiro e último nome ou retornar `"?"` em caso de valor inválido. | A propriedade `Iniciais` calculou corretamente `"CS"`, `"B"` e o fallback `"?"` para entradas vazias. |  | ✅ Concluído |
+| **CT038** | **Conta / E-mail** | Alternância de máscara no campo de e-mail ao focar/desfocar | Ganho de foco (`GotFocus`) seguido de perda de foco (`LostFocus`) | Exibir o e-mail em texto puro durante a edição e reaplicar a máscara ao perder o foco. | O comando exibiu `"desenvolvedor@teste.com"` no foco e remascarou para `"de***********@teste.com"` ao perder o foco. |  | ✅ Concluído |
+| **CT039** | **Conta / Validação** | Validação de formato de e-mail ao perder o foco | E-mail inválido sem caractere `@` (`"emailsemarrobainvalido.com"`) | Definir a mensagem de erro apropriada na propriedade `MensagemErroEmail`. | A propriedade `MensagemErroEmail` foi preenchida com `"E-mail inválido. Verifique o endereço informado."`. |  | ✅ Concluído |
+| **CT040** | **Conta / Validação** | Salvar perfil com campos obrigatórios em branco | Nome ou Login vazios/nulos | Exibir mensagem de erro geral e impedir a chamada ao serviço de atualização. | A mensagem `"Nome e Login são obrigatórios."` foi exibida e `AtualizarAsync` não foi executado (`Times.Never`). |  | ✅ Concluído |
+| **CT041** | **Conta / Atualização** | Salvar alterações do perfil com dados válidos | Novo Nome (`"Novo Nome"`) e Novo Login (`"novo.login"`) | Atualizar os dados do objeto do usuário e invocar o método de atualização do serviço. | O modelo `Usuario` foi atualizado e `AtualizarAsync` foi chamado exatamente uma vez (`Times.Once`). |  | ✅ Concluído |
+| **CT042** | **Conta / Segurança** | Validação de confirmação de senha com valores divergentes | Array de parâmetros contendo senhas distintas (`"senha123"`, `"senhaDiferente"`) | Exibir erro de incompatibilidade de senhas e cancelar a persistência. | A mensagem `"As senhas digitadas não coincidem."` foi atribuída e o serviço de atualização não foi acionado. |  | ✅ Concluído |
+| **CT043** | **Conta / Segurança** | Alteração de senha quando as entradas são idênticas | Array de parâmetros com senhas iguais (`"NovaSenha123!"`, `"NovaSenha123!"`) | Atualizar a propriedade `Senha` do usuário e persitir as alterações com sucesso. | A propriedade `usuario.Senha` foi atualizada e o serviço `AtualizarAsync` foi invocado com sucesso. |  | ✅ Concluído |
+| **CT044** | **Conta / Profissional** | Atualização dos campos de informações profissionais | Alteração de Cargo, Departamento e Telefone via ViewModel | Refletir as alterações profissionais diretamente na entidade do usuário e persistir via API. | As propriedades `Cargo`, `Departamento` e `Telefone` do modelo foram atualizadas e salvas via `AtualizarAsync`. |  | ✅ Concluído |
 
 ---
 
@@ -258,19 +272,19 @@ Após a correção, a rotina foi replicada novamente e a mensagem foi exibida co
 
 | ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Evidência do Teste | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **CT023** | **Instalador** | Instalação limpa em um computador sem o ReGraphik | Executar `ReGraphik_Setup.exe` | Arquivos copiados para `Program Files`, registro criado e atalhos adicionados à Área de Trabalho. | A instalação ocorreu tranquila e tudo foi instalado com sucesso. | [Evidência CT023](#detalhamento-ct023) | ✅ Concluído |
-| **CT024** | **Instalador (Manutenção)** | Reexecutar instalador com a mesma versão já instalada no sistema | Selecionar nenhuma opção e clicar em *"Avançar"* | **Bloqueio ativado:** Exibe alerta exigindo a seleção de uma das opções de manutenção (Atualizar, Reparar ou Desinstalar). | O bloqueio é efetuado corretamente e o usuário não conseguiu progredir sem escolher uma opção. | [Evidência CT024](#detalhamento-ct024) | ✅ Concluído |
-| **CT025** | **Instalador (Seleção)** | Teste de exclusividade das CheckBoxes de Manutenção | Marcar *"Atualizar"* e depois *"Desinstalar"* | Comportamento de radio-button: A marcação de "Atualizar" é removida automaticamente ao clicar na outra. | O executável não permite a marcação de duas ou mais CheckBoxes, caso uma seja marcada a outra é desmarcada automaticamente. | [Evidência CT025](#detalhamento-ct025) | ✅ Concluído |
-| **CT026** | **Instalador (Atualização)** | Execução do setup em sistema que já possui versão antiga instalada | Selecionar *"Atualizar (Versão mais recente)"* | O instalador sobrepõe os binários mantendo as configurações do usuário e atualiza a versão no Registro. | Como o sistema não possui ainda uma versão atualizada ele apenas alerta o usuário com uma mensagem. | [Evidência CT026](#detalhamento-ct026) | ✅ Concluído |
-| **CT027** | **Instalador (Execução)** | Tentar instalar/atualizar com a aplicação ReGraphik aberta | Clicar em *"Avançar"* com app aberto | Alerta exibido pedindo permissão; ao aceitar, fecha o processo `ReGraphik.exe` via `taskkill` e prossegue. | Uma mensagem avisando que o sistema está aberto aparece na tela para que o usuário possa fechar o aplicativo antes de prosseguir. | [Evidência CT027](#detalhamento-ct027) | ✅ Concluído |
-| **CT028** | **Desinstalação** | Removendo a aplicação via Opção de Manutenção ou Painel do Windows | Selecionar *"Desinstalar"* | Processo `/SILENT` executado, removendo atalhos e pasta da aplicação da máquina. | O aplicativo é desinstalado com sucesso da máquina. | [Evidência CT028](#detalhamento-ct028) | ✅ Concluído |
+| **CT045** | **Instalador** | Instalação limpa em um computador sem o ReGraphik | Executar `ReGraphik_Setup.exe` | Arquivos copiados para `Program Files`, registro criado e atalhos adicionados à Área de Trabalho. | A instalação ocorreu tranquila e tudo foi instalado com sucesso. | [Evidência CT045](#detalhamento-ct045) | ✅ Concluído |
+| **CT046** | **Instalador (Manutenção)** | Reexecutar instalador com a mesma versão já instalada no sistema | Selecionar nenhuma opção e clicar em *"Avançar"* | **Bloqueio ativado:** Exibe alerta exigindo a seleção de uma das opções de manutenção (Atualizar, Reparar ou Desinstalar). | O bloqueio é efetuado corretamente e o usuário não conseguiu progredir sem escolher uma opção. | [Evidência CT046](#detalhamento-ct046) | ✅ Concluído |
+| **CT047** | **Instalador (Seleção)** | Teste de exclusividade das CheckBoxes de Manutenção | Marcar *"Atualizar"* e depois *"Desinstalar"* | Comportamento de radio-button: A marcação de "Atualizar" é removida automaticamente ao clicar na outra. | O executável não permite a marcação de duas ou mais CheckBoxes, caso uma seja marcada a outra é desmarcada automaticamente. | [Evidência CT047](#detalhamento-ct047) | ✅ Concluído |
+| **CT048** | **Instalador (Atualização)** | Execução do setup em sistema que já possui versão antiga instalada | Selecionar *"Atualizar (Versão mais recente)"* | O instalador sobrepõe os binários mantendo as configurações do usuário e atualiza a versão no Registro. | Como o sistema não possui ainda uma versão atualizada ele apenas alerta o usuário com uma mensagem. | [Evidência CT048](#detalhamento-ct048) | ✅ Concluído |
+| **CT049** | **Instalador (Execução)** | Tentar instalar/atualizar com a aplicação ReGraphik aberta | Clicar em *"Avançar"* com app aberto | Alerta exibido pedindo permissão; ao aceitar, fecha o processo `ReGraphik.exe` via `taskkill` e prossegue. | Uma mensagem avisando que o sistema está aberto aparece na tela para que o usuário possa fechar o aplicativo antes de prosseguir. | [Evidência CT049](#detalhamento-ct049) | ✅ Concluído |
+| **CT050** | **Desinstalação** | Removendo a aplicação via Opção de Manutenção ou Painel do Windows | Selecionar *"Desinstalar"* | Processo `/SILENT` executado, removendo atalhos e pasta da aplicação da máquina. | O aplicativo é desinstalado com sucesso da máquina. | [Evidência CT050](#detalhamento-ct050) | ✅ Concluído |
 
 ---
 
 #### Detalhamento de Execução dos Testes (Grupo 7.6 - Inno Setup)
 
-<a id="detalhamento-ct023"></a>
-#### CT023 - Instalação Limpa do Sistema
+<a id="detalhamento-ct045"></a>
+#### CT045 - Instalação Limpa do Sistema
 
 * Primeiro teste de instalação em um notebook que não possuía o Visual Studio e sem o aplicativo da ReGraphik baixado.
 
@@ -302,8 +316,8 @@ Após a correção, a rotina foi replicada novamente e a mensagem foi exibida co
 
 ---
 
-<a id="detalhamento-ct024"></a>
-#### CT024 - Manutenção / Exigência de Seleção
+<a id="detalhamento-ct046"></a>
+#### CT046 - Manutenção / Exigência de Seleção
 
 * Caso uma versão já exista na máquina, o executável fornecerá opção para o aplicativo já baixado.
 
@@ -315,8 +329,8 @@ Após a correção, a rotina foi replicada novamente e a mensagem foi exibida co
 
 ---
 
-<a id="detalhamento-ct025"></a>
-#### CT025 - Exclusividade de Seleção (Checkboxes)
+<a id="detalhamento-ct047"></a>
+#### CT047 - Exclusividade de Seleção (Checkboxes)
 
 * O usuário marca a opção de atualização e logo tenta marcar a opção de desinstalar sem desmarcar a outra antes, o sistema não permite que mais de uma seja marcada então a outra é automaticamente desmarcada.
 
@@ -326,8 +340,8 @@ Após a correção, a rotina foi replicada novamente e a mensagem foi exibida co
 
 ---
 
-<a id="detalhamento-ct026"></a>
-#### CT026 - Atualização de Versão
+<a id="detalhamento-ct048"></a>
+#### CT048 - Atualização de Versão
 
 * O usuário escolhe a opção de atualizar, mas como o sistema não possui uma versão superior, ele apenas alerta o usuário sobre isso.
 
@@ -335,8 +349,8 @@ Após a correção, a rotina foi replicada novamente e a mensagem foi exibida co
 
 ---
 
-<a id="detalhamento-ct027"></a>
-#### CT027 - Validação de Aplicação em Execução
+<a id="detalhamento-ct049"></a>
+#### CT049 - Validação de Aplicação em Execução
 
 * O usuário tenta usar a opção de restaurar o aplicativo quando ele ainda está aberto, e uma mensagem avisando que o sistema está aberto é enviada para que ele aceite fechar o aplicativo aberto antes de restaurar ele.
 
@@ -344,8 +358,8 @@ Após a correção, a rotina foi replicada novamente e a mensagem foi exibida co
 
 ---
 
-<a id="detalhamento-ct028"></a>
-#### CT028 - Desinstalação da Aplicação
+<a id="detalhamento-ct050"></a>
+#### CT050 - Desinstalação da Aplicação
 
 * O usuário escolhe desinstalar o aplicativo e o instalador desinstala ele com sucesso.
 
@@ -359,15 +373,15 @@ Após a correção, a rotina foi replicada novamente e a mensagem foi exibida co
 
 | ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Evidência do Teste | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **CT029** | Tratamento de Rede | Perda de conexão com a Internet durante a navegação no App | Desconectar cabo de rede/Wi-Fi | A interface exibe o status *"Modo Offline / Sem Conexão"* no rodapé e desabilita requisições pendentes sem travar a UI (evita Crash). | — | — | ⏳ Pendente |
-| **CT030** | Usabilidade em diferentes resoluções | Verifica se a interface WPF não quebra layout em HD (1366x768) e Full HD (1920x1080) | Rodar o mesmo fluxo (ex: Cadastrar Resíduo) nas duas resoluções | Checar se botões, campos e o WebView2 do mapa continuam visíveis e clicáveis | Teste em conformidade. | [Evidência CT030](#detalhamento-ct030) | ✅ Concluído |
+| **CT051** | Tratamento de Rede | Perda de conexão com a Internet durante a navegação no App | Desconectar cabo de rede/Wi-Fi | A interface exibe o status *"Modo Offline / Sem Conexão"* no rodapé e desabilita requisições pendentes sem travar a UI (evita Crash). | — | — | ⏳ Pendente |
+| **CT052** | Usabilidade em diferentes resoluções | Verifica se a interface WPF não quebra layout em HD (1366x768) e Full HD (1920x1080) | Rodar o mesmo fluxo (ex: Cadastrar Resíduo) nas duas resoluções | Checar se botões, campos e o WebView2 do mapa continuam visíveis e clicáveis | Teste em conformidade. | [Evidência CT030](#detalhamento-ct030) | ✅ Concluído |
 
 ---
 
 #### Detalhamento de Execução dos Testes (Grupo 7.7)
 
 <a id="detalhamento-ct030"></a>
-#### CT030 - Usabilidade em Diferentes Resoluções
+#### CT052 - Usabilidade em Diferentes Resoluções
 
 1. **Funcionalidade:** Usabilidade em diferentes resoluções
 2. **Cenário / Condição:** Verifica se a interface WPF não quebra layout em HD (1366x768) e Full HD (1920x1080)
