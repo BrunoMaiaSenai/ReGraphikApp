@@ -408,11 +408,7 @@ namespace ReGraphik.ViewModels
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                MessageBox.Show(
-                    "Sua sessão expirou por inatividade. Faça login novamente.",
-                    "Sessão Encerrada",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                MensagemWindow.Exibir("Sessão Encerrada", "Sua sessão expirou por inatividade. Faça login novamente.", MensagemWindow.TipoMensagem.Aviso);
 
                 RealizarLogout();
             });
