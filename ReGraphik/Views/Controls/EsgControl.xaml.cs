@@ -18,20 +18,6 @@ namespace ReGraphik.Views.Controls
             InitializeComponent();
             DataContext = new EsgViewModel(usuario, irParaRelatorios);
         }
-        /// <summary>
-        /// Abre o link do botão no navegador padrão do sistema.
-        /// </summary>
-        private void AbrirLink_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (sender is System.Windows.Controls.Button btn && btn.Tag is string url)
-            {
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName        = url,
-                    UseShellExecute = true
-                });
-            }
-        }
         
     }
     
