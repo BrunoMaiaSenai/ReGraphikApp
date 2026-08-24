@@ -1,55 +1,60 @@
-﻿using Microsoft.Win32;
-using QuestPDF.Fluent;
+﻿using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using ReGraphik.Models;
-using ReGraphik.Views;
+using ReGraphik.Services;
+using ReGraphik.Services.Interface;
 using System;
-using System.Collections.Generic;
-using System.Windows;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace ReGraphik.ViewModels
 {
-    /// <summary>
-    /// ViewModel da tela de Proposta de Valor ESG.
-    /// Exibe os pilares Ambiental, Social e Governança, o guia de certificação
-    /// e permite exportar o relatório institucional em PDF moderno via QuestPDF.
-    /// </summary>
     public class EsgViewModel : BaseViewModel
     {
         private readonly Usuario _usuario;
+        private readonly IDialogService _dialogService;
 
         public ICommand ExportarPdfCommand { get; }
         public ICommand IrParaRelatoriosCommand { get; }
 
+        /// <summary>
+        /// Construtor principal para a aplicação em runtime
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <param name="irParaRelatorios"></param>
         public EsgViewModel(Usuario usuario, ICommand irParaRelatorios)
+            : this(usuario, irParaRelatorios, new WpfDialogService()) { }
+
+        /// <summary>
+        /// Construtor injetável preparado para Testes Unitários
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <param name="irParaRelatorios"></param>
+        /// <param name="dialogService"></param>
+        public EsgViewModel(Usuario usuario, ICommand irParaRelatorios, IDialogService dialogService)
         {
             _usuario = usuario;
+            _dialogService = dialogService;
             ExportarPdfCommand = new RelayCommand(() => ExportarPdf());
             IrParaRelatoriosCommand = irParaRelatorios;
+
+            /// Configuração da licença Comunitária do QuestPDF
+            QuestPDF.Settings.License = LicenseType.Community;
         }
 
         /// <summary>
-        /// Gera o documento institucional de Proposta de Valor ESG formatado em PDF de alta qualidade.
+        /// Método responsável por exportar o relatório ESG em PDF
         /// </summary>
         private void ExportarPdf()
         {
-            var dialog = new SaveFileDialog
-            {
-                Title = "Salvar Proposta de Valor ESG",
-                Filter = "PDF (*.pdf)|*.pdf",
-                FileName = $"Proposta_Valor_ESG_ReGraphik_{DateTime.Now:yyyyMMdd_HHmm}.pdf",
-                DefaultExt = ".pdf"
-            };
+            var nomePadrao = $"Proposta_Valor_ESG_ReGraphik_{DateTime.Now:yyyyMMdd_HHmm}.pdf";
+            var caminho = _dialogService.SalvarArquivo("Salvar Proposta de Valor ESG", "PDF (*.pdf)|*.pdf", nomePadrao);
 
-            if (dialog.ShowDialog() != true) return;
+            if (string.IsNullOrWhiteSpace(caminho)) return;
 
             try
             {
-                var caminho = dialog.FileName;
-
-                /// Definição da Paleta de Cores Oficial do Sistema
                 const string azulEscuro = "#0D2A56";
                 const string azulMedio = "#1649A2";
                 const string verdeEsg = "#137333";
@@ -57,18 +62,17 @@ namespace ReGraphik.ViewModels
                 const string laranjaEsg = "#B45309";
                 const string cinzaTexto = "#1E293B";
                 const string cinzaSubtitulo = "#475569";
-                const string cinzaBorda = "#E2G2F0";
+                const string cinzaBorda = "#E2E8F0"; 
                 const string cinzaLeve = "#94A3B8";
 
                 QuestPDF.Fluent.Document.Create(container =>
                 {
                     container.Page(page =>
                     {
-                        page.Size(PageSizes.A4); /// Formato Retrato para leitura institucional
+                        page.Size(PageSizes.A4);
                         page.Margin(40);
                         page.DefaultTextStyle(x => x.FontFamily("Arial").FontSize(11).FontColor(cinzaTexto));
 
-                        /// Cabeçalho Institucional
                         page.Header().Column(col =>
                         {
                             col.Item().Row(row =>
@@ -88,13 +92,11 @@ namespace ReGraphik.ViewModels
                             col.Item().PaddingTop(6).LineHorizontal(1.5f).LineColor(verdeEsg);
                         });
 
-                        /// Conteúdo do Manifesto ESG
                         page.Content().PaddingTop(20).Column(col =>
                         {
                             col.Item().Text("REGRAPHIK — Relatório de Proposta de Valor ESG").FontSize(16).Bold().FontColor(azulMedio);
                             col.Item().PaddingTop(15);
 
-                            /// Pilar E - Ambiental
                             col.Item().Text("🌿  E — Ambiental (Environmental)").FontSize(13).Bold().FontColor(verdeEsg);
                             col.Item().PaddingTop(4).Text(
                                 "O ReGraphik atua diretamente na redução do impacto ambiental gerado pelo setor gráfico. " +
@@ -103,9 +105,8 @@ namespace ReGraphik.ViewModels
                                 "e diminuindo emissões de CO₂ associadas ao descarte inadequado.").Justify();
                             col.Item().PaddingTop(4).Text("Indicadores monitorados: kg de resíduos cadastrados · pontos de coleta ativados · estimativa de CO₂ evitado por tonelada reciclada.").FontSize(10).Italic().FontColor(cinzaSubtitulo);
 
-                            col.Item().PaddingVertical(10).LineHorizontal(0.5f).LineColor("#E2E8F0");
+                            col.Item().PaddingVertical(10).LineHorizontal(0.5f).LineColor(cinzaBorda);
 
-                            /// Pilar S - Social
                             col.Item().Text("🤝  S — Social").FontSize(13).Bold().FontColor(azulMedio);
                             col.Item().PaddingTop(4).Text(
                                 "A plataforma conecta empresas gráficas a cooperativas e coletores, gerando renda " +
@@ -114,9 +115,8 @@ namespace ReGraphik.ViewModels
                                 "criando valor para toda a cadeia produtiva.").Justify();
                             col.Item().PaddingTop(4).Text("Benefícios: geração de renda para catadores · fomento à economia circular local · redução de custos operacionais de descarte para as empresas parceiras.").FontSize(10).Italic().FontColor(cinzaSubtitulo);
 
-                            col.Item().PaddingVertical(10).LineHorizontal(0.5f).LineColor("#E2E8F0");
+                            col.Item().PaddingVertical(10).LineHorizontal(0.5f).LineColor(cinzaBorda);
 
-                            /// Pilar G - Governança
                             col.Item().Text("📋  G — Governança").FontSize(13).Bold().FontColor(roxoEsg);
                             col.Item().PaddingTop(4).Text(
                                 "O ReGraphik oferece rastreabilidade completa dos resíduos gerados: origem, tipo, " +
@@ -127,12 +127,10 @@ namespace ReGraphik.ViewModels
 
                             col.Item().PaddingVertical(15).LineHorizontal(1f).LineColor(laranjaEsg);
 
-                            /// Guia de Certificação
                             col.Item().Text("🏅  Como obter o Certificado ReGraphik ESG").FontSize(14).Bold().FontColor(laranjaEsg);
                             col.Item().PaddingTop(4).Text("O certificado é emitido para empresas parceiras que atingem critérios mínimos de engajamento com a plataforma e comprovam destinação sustentável dos seus resíduos.").Justify();
                             col.Item().PaddingTop(8);
 
-                            /// Passos da Certificação em formato de lista limpa
                             string[] passos = {
                                 "1. Cadastre sua empresa e realize o login na plataforma ReGraphik.",
                                 "2. Registre todos os resíduos gerados mensalmente em \"Cadastrar Resíduos\", informando tipo, quantidade e condição.",
@@ -148,12 +146,11 @@ namespace ReGraphik.ViewModels
                                 col.Item().PaddingBottom(3).Text(passo).FontSize(10);
                             }
 
-                            col.Item().PaddingVertical(12).LineHorizontal(0.5f).LineColor("#E2E8F0");
+                            col.Item().PaddingVertical(12).LineHorizontal(0.5f).LineColor(cinzaBorda);
 
                             col.Item().Text("O Certificado ReGraphik ESG pode ser utilizado em materiais de comunicação, licitações públicas, relatórios de sustentabilidade (GRI, CDP) e processos de due diligence ambiental.").FontSize(10).Italic().FontColor(cinzaSubtitulo);
                         });
 
-                        /// Rodapé Técnico
                         page.Footer().Column(fcol =>
                         {
                             fcol.Item().LineHorizontal(1).LineColor("#CBD5E1");
@@ -172,28 +169,18 @@ namespace ReGraphik.ViewModels
                     });
                 }).GeneratePdf(caminho);
 
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    bool? abrir = MensagemPdfWindow.Exibir(
-                        "Exportação Concluída",
-                        $"Relatório ESG em PDF gerado com sucesso!\n\nSalvo em: {caminho}\n\nDeseja abrir o arquivo agora?",
-                        MensagemPdfWindow.TipoMensagem.Confirmacao);
+                bool abrir = _dialogService.ExibirConfirmacao(
+                    "Exportação Concluída",
+                    $"Relatório ESG em PDF gerado com sucesso!\n\nSalvo em: {caminho}\n\nDeseja abrir o arquivo agora?");
 
-                    if (abrir == true)
-                    {
-                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(caminho) { UseShellExecute = true });
-                    }
-                });
+                if (abrir)
+                {
+                    Process.Start(new ProcessStartInfo(caminho) { UseShellExecute = true });
+                }
             }
             catch (Exception ex)
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    MensagemPdfWindow.Exibir(
-                        "Erro na Exportação",
-                        $"Erro ao gerar o PDF institucional: {ex.Message}",
-                        MensagemPdfWindow.TipoMensagem.Erro);
-                });
+                _dialogService.ExibirErro("Erro na Exportação", $"Erro ao gerar o PDF institucional: {ex.Message}");
             }
         }
     }

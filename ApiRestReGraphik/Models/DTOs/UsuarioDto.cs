@@ -1,33 +1,44 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Http;
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace ApiRestReGraphik.Models.DTOs
+namespace ApiRestReGraphik.Models
 {
     /// <summary>
-    /// Classe DTO que representa a estrutura de dados para um usuário.
+    /// Classe que representa a estrutura de dados para um usuário na API REST.
     /// </summary>
     public class UsuarioDto
     {
         [JsonPropertyName("id")]
         public string? Id { get; set; }
 
-        [JsonPropertyName("name")]
-        public string Nome { get; set; }
+        [JsonPropertyName("nome")]
+        public string Nome { get; set; } = string.Empty;
 
         [JsonPropertyName("cpf")]
-        public string CPF { get; set; }
+        public string CPF { get; set; } = string.Empty;
 
         [JsonPropertyName("email")]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [JsonPropertyName("login")]
-        public string Login { get; set; }
+        public string Login { get; set; } = string.Empty;
 
         [JsonPropertyName("senha")]
-        public string Senha { get; set; }
+        public string Senha { get; set; } = string.Empty;
 
         [JsonPropertyName("perfil")]
         public string Perfil { get; set; } = "User";
+
+        [JsonPropertyName("cargo")]
+        public string? Cargo { get; set; }
+
+        [JsonPropertyName("departamento")]
+        public string? Departamento { get; set; }
+
+        [JsonPropertyName("telefone")]
+        public string? Telefone { get; set; }
 
         [JsonPropertyName("data_cadastro")]
         public DateTime DataCadastro { get; set; }
@@ -36,13 +47,13 @@ namespace ApiRestReGraphik.Models.DTOs
         public string? FotoPerfil { get; set; }
 
         /// <summary>
-        /// Arquivo enviado pelo formulário.
+        /// Arquivo enviado pelo formulário (FormUpload).
         /// </summary>
         [JsonIgnore]
         [NotMapped]
         public IFormFile? ImagemPerfil { get; set; }
 
         [JsonPropertyName("ativo")]
-        public bool Ativo { get; set; }
+        public bool Ativo { get; set; } = true;
     }
 }

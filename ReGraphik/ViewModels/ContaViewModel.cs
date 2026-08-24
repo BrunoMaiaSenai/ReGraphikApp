@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 
 namespace ReGraphik.ViewModels
 {
@@ -32,9 +31,6 @@ namespace ReGraphik.ViewModels
         private string _caminhoNovaFotoSelecionada = string.Empty;
 
         private string? _fotoPerfilCaminho;
-        /// <summary>
-        /// Obtém ou define o caminho (local ou URL) da foto de perfil para o XAML tratar nativamente.
-        /// </summary>
         public string? FotoPerfilCaminho
         {
             get => _fotoPerfilCaminho;
@@ -46,14 +42,8 @@ namespace ReGraphik.ViewModels
             }
         }
 
-        /// <summary>
-        /// Indica se o usuário não possui foto — exibe a inicial do nome no lugar
-        /// </summary>
         public bool SemFoto => string.IsNullOrWhiteSpace(FotoPerfilCaminho);
 
-        /// <summary>
-        /// Obtém as iniciais do usuário logado (primeira e última letra do nome) para exibir no avatar caso não haja foto.
-        /// </summary>
         public string Iniciais
         {
             get
@@ -65,14 +55,7 @@ namespace ReGraphik.ViewModels
             }
         }
 
-        /// <summary>
-        /// Login formatado com @ para exibição no card do perfil
-        /// </summary>
         public string LoginExibicao => string.IsNullOrWhiteSpace(Login) ? string.Empty : $"@{Login}";
-
-        /// <summary>
-        /// E-mail mascarado para exibição no resumo da conta
-        /// </summary>
         public string EmailResumido => MascararEmail(_emailReal);
 
         private string? _nome;
@@ -115,6 +98,27 @@ namespace ReGraphik.ViewModels
             set { _perfil = value; OnPropertyChanged(); }
         }
 
+        private string? _cargo;
+        public string Cargo
+        {
+            get => _cargo;
+            set { _cargo = value; OnPropertyChanged(); }
+        }
+
+        private string? _departamento;
+        public string Departamento
+        {
+            get => _departamento;
+            set { _departamento = value; OnPropertyChanged(); }
+        }
+
+        private string? _telefone;
+        public string Telefone
+        {
+            get => _telefone;
+            set { _telefone = value; OnPropertyChanged(); }
+        }
+
         private bool _ocupado;
         public bool Ocupado
         {
@@ -122,10 +126,6 @@ namespace ReGraphik.ViewModels
             set { _ocupado = value; OnPropertyChanged(); }
         }
 
-
-        /// <summary>
-        /// Total de resíduos cadastrados pelo usuário logado
-        /// </summary>
         private int _totalResiduos;
         public int TotalResiduos
         {
@@ -133,9 +133,6 @@ namespace ReGraphik.ViewModels
             set { _totalResiduos = value; OnPropertyChanged(); }
         }
 
-        /// <summary>
-        /// Total de resíduos reaproveitados pelo usuário logado
-        /// </summary>
         private int _totalReaproveitados;
         public int TotalReaproveitados
         {
@@ -143,9 +140,6 @@ namespace ReGraphik.ViewModels
             set { _totalReaproveitados = value; OnPropertyChanged(); }
         }
 
-        /// <summary>
-        /// Valor econômico total gerado pelo usuário, formatado em moeda
-        /// </summary>
         private string _valorEconomico = "R$ 0,00";
         public string ValorEconomico
         {
@@ -153,9 +147,6 @@ namespace ReGraphik.ViewModels
             set { _valorEconomico = value; OnPropertyChanged(); }
         }
 
-        /// <summary>
-        /// Todos os resíduos cadastrados pelo usuário, do mais recente ao mais antigo
-        /// </summary>
         private ObservableCollection<Residuo> _ultimosResiduos = new();
         public ObservableCollection<Residuo> UltimosResiduos
         {
@@ -163,9 +154,6 @@ namespace ReGraphik.ViewModels
             set { _ultimosResiduos = value; OnPropertyChanged(); }
         }
 
-        /// <summary>
-        /// Controla a animação de giro do botão atualizar enquanto os dados carregam
-        /// </summary>
         private bool _carregandoEstatisticas;
         public bool CarregandoEstatisticas
         {
@@ -173,9 +161,6 @@ namespace ReGraphik.ViewModels
             set { _carregandoEstatisticas = value; OnPropertyChanged(); }
         }
 
-        /// <summary>
-        /// Mensagem de erro inline para o campo de e-mail, exibida abaixo do campo sem MessageBox
-        /// </summary>
         private string _mensagemErroEmail = string.Empty;
         public string MensagemErroEmail
         {
@@ -183,9 +168,6 @@ namespace ReGraphik.ViewModels
             set { _mensagemErroEmail = value; OnPropertyChanged(); }
         }
 
-        /// <summary>
-        /// Mensagem de sucesso inline exibida abaixo do botão Salvar, sem MessageBox
-        /// </summary>
         private string _mensagemSucesso = string.Empty;
         public string MensagemSucesso
         {
@@ -193,9 +175,6 @@ namespace ReGraphik.ViewModels
             set { _mensagemSucesso = value; OnPropertyChanged(); }
         }
 
-        /// <summary>
-        /// Mensagem de erro geral inline exibida abaixo do botão Salvar
-        /// </summary>
         private string _mensagemErroGeral = string.Empty;
         public string MensagemErroGeral
         {
@@ -203,7 +182,7 @@ namespace ReGraphik.ViewModels
             set { _mensagemErroGeral = value; OnPropertyChanged(); }
         }
 
-        /// Comandos da ViewModel
+        // Comandos
         public ICommand SalvarCommand { get; }
         public ICommand CancelarCommand { get; }
         public ICommand EmailGotFocusCommand { get; }
@@ -219,7 +198,6 @@ namespace ReGraphik.ViewModels
 
             CarregarDadosNaTela();
 
-            /// Inicialização dos comandos
             SalvarCommand = new RelayCommand(async (param) => await SalvarPerfilAsync(param));
             CancelarCommand = new RelayCommand(_ => CarregarDadosNaTela());
             EmailGotFocusCommand = new RelayCommand(EmailGotFocus);
@@ -227,27 +205,29 @@ namespace ReGraphik.ViewModels
             SelecionarFotoCommand = new RelayCommand(_ => MudarFoto());
             AtualizarEstatisticasCommand = new RelayCommand(async _ => await CarregarEstatisticasAsync());
 
-            /// Define o caminho inicial vindo da API ou do serviço de sessão
             string? fotoInicial = !string.IsNullOrEmpty(_usuarioAtual.FotoPerfil)
                 ? _usuarioAtual.FotoPerfil
                 : UsuarioSessaoService.Instancia.FotoCaminho;
 
             FotoPerfilCaminho = fotoInicial;
 
-            /// Carrega as estatísticas do usuário em background ao abrir a tela
             _ = CarregarEstatisticasAsync();
         }
 
+        /// <summary>
+        /// Carrega os dados do usuário atual na tela, preenchendo as propriedades correspondentes.
+        /// </summary>
         private void CarregarDadosNaTela()
         {
             Nome = _usuarioAtual.Nome ?? string.Empty;
             Login = _usuarioAtual.Login ?? string.Empty;
             Perfil = _usuarioAtual.Perfil ?? "Usuário";
+            Cargo = _usuarioAtual.Cargo ?? "Analista Operacional";
+            Departamento = _usuarioAtual.Departamento ?? "Gestão Ambiental";
+            Telefone = _usuarioAtual.Telefone ?? string.Empty;
 
-            /// CPF: mascarado e bloqueado — não pode ser editado pelo usuário
             CPF = MascararCpf(_usuarioAtual.CPF);
 
-            /// Email: mascarado mas editável — revela ao focar e mascara ao sair
             _emailReal = _usuarioAtual.Email ?? string.Empty;
             Email = MascararEmail(_emailReal);
 
@@ -255,25 +235,21 @@ namespace ReGraphik.ViewModels
         }
 
         /// <summary>
-        /// Carrega as estatísticas do usuário logado a partir da API de resíduos.
-        /// Também é chamado pelo botão de atualizar com animação de giro.
+        /// Carrega as estatísticas relacionadas aos resíduos do usuário, incluindo total de resíduos, total reaproveitados e valor econômico estimado.
         /// </summary>
+        /// <returns></returns>
         private async Task CarregarEstatisticasAsync()
         {
             try
             {
                 CarregandoEstatisticas = true;
 
-                ///  Obtém todos os resíduos do usuário logado a partir do serviço de resíduos
                 var todos = await _residuoService.ObterTodosResiduosAsync();
-
                 var meus = todos.ToList();
 
-                /// Calcula o total de resíduos e o total de reaproveitados
                 TotalResiduos = meus.Count;
                 TotalReaproveitados = meus.Count(r => r.Status == "Reaproveitado");
 
-                /// Calcula o valor econômico total considerando que cada unidade de resíduo vale R$ 5,50
                 double somaValores = meus.Sum(r => r.Quantidade * 5.50);
                 ValorEconomico = somaValores.ToString("C2");
 
@@ -282,7 +258,6 @@ namespace ReGraphik.ViewModels
                     .OrderByDescending(r => r.DataCadastro)
                     .ToList();
 
-                /// Atualiza a coleção de resíduos na thread da UI para evitar problemas de threading
                 Application.Current.Dispatcher.Invoke(() =>
                     UltimosResiduos = new ObservableCollection<Residuo>(todos_ordenados));
             }
@@ -292,10 +267,7 @@ namespace ReGraphik.ViewModels
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    MensagemWindow.Exibir(
-                        "Erro",
-                        $"Não foi possível carregar as estatísticas!!!",
-                        MensagemWindow.TipoMensagem.Erro);
+                    MensagemWindow.Exibir("Erro", "Não foi possível carregar as estatísticas!", MensagemWindow.TipoMensagem.Erro);
                 });
 
                 TotalResiduos = 0;
@@ -309,7 +281,7 @@ namespace ReGraphik.ViewModels
         }
 
         /// <summary>
-        /// Email: mostra o valor real ao focar no campo para permitir edição
+        /// Método chamado quando o campo de e-mail recebe foco. Ele limpa a mensagem de erro e exibe o e-mail real do usuário para edição.
         /// </summary>
         public void EmailGotFocus()
         {
@@ -317,12 +289,8 @@ namespace ReGraphik.ViewModels
             Email = _emailReal;
         }
 
-        /// <summary>
-        /// Email: salva o valor digitado e reaplica a máscara ao sair do campo
-        /// </summary>
         public void EmailLostFocus()
         {
-            /// Valida o formato básico do e-mail ao sair do campo
             if (!string.IsNullOrWhiteSpace(Email) && !Email.Contains('@'))
             {
                 MensagemErroEmail = "E-mail inválido. Verifique o endereço informado.";
@@ -339,7 +307,8 @@ namespace ReGraphik.ViewModels
         }
 
         /// <summary>
-        /// Método para abrir o diálogo de seleção de arquivo e permitir que o usuário escolha uma nova foto de perfil.
+        /// Método responsável por abrir um diálogo para o usuário selecionar uma nova foto de perfil. 
+        /// Se uma foto for selecionada, o caminho da foto é armazenado e a propriedade FotoPerfilCaminho é atualizada.
         /// </summary>
         private void MudarFoto()
         {
@@ -360,14 +329,16 @@ namespace ReGraphik.ViewModels
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    MensagemWindow.Exibir("Erro", "Erro ao carregar a foto de perfil!!!", MensagemWindow.TipoMensagem.Erro);
+                    MensagemWindow.Exibir("Erro", "Erro ao carregar a foto de perfil!", MensagemWindow.TipoMensagem.Erro);
                 });
             }
         }
 
         /// <summary>
-        /// Máscaras de dados sensíveis para exibição na tela
+        /// Método responsável por mascarar o CPF do usuário, exibindo apenas os três primeiros dígitos e substituindo os demais por asteriscos.
         /// </summary>
+        /// <param name="cpf"></param>
+        /// <returns></returns>
         private static string MascararCpf(string? cpf)
         {
             if (string.IsNullOrWhiteSpace(cpf)) return string.Empty;
@@ -375,6 +346,11 @@ namespace ReGraphik.ViewModels
             return d.Length >= 3 ? d[..3] + ".***.***-**" : cpf;
         }
 
+        /// <summary>
+        /// Método responsável por mascarar o e-mail do usuário, exibindo apenas os dois primeiros caracteres antes do "@" e substituindo os demais por asteriscos.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         private static string MascararEmail(string? email)
         {
             if (string.IsNullOrWhiteSpace(email)) return string.Empty;
@@ -384,8 +360,9 @@ namespace ReGraphik.ViewModels
         }
 
         /// <summary>
-        /// Salva as alterações do perfil do usuário na API após validação dos campos
+        /// Método assíncrono responsável por salvar as alterações no perfil do usuário.
         /// </summary>
+        /// <param name="parameter"></param>
         private async Task SalvarPerfilAsync(object? parameter)
         {
             try
@@ -406,12 +383,39 @@ namespace ReGraphik.ViewModels
                 }
 
                 string novaSenha = string.Empty;
-                if (parameter is PasswordBox passwordBox)
-                    novaSenha = passwordBox.Password;
+                string confirmacaoSenha = string.Empty;
+                PasswordBox? pbSenha = null;
+                PasswordBox? pbConfirmacao = null;
+
+                if (parameter is object[] passArray && passArray.Length >= 2)
+                {
+                    if (passArray[0] is PasswordBox p1) pbSenha = p1;
+                    if (passArray[1] is PasswordBox p2) pbConfirmacao = p2;
+
+                    novaSenha = pbSenha?.Password ?? passArray[0]?.ToString() ?? string.Empty;
+                    confirmacaoSenha = pbConfirmacao?.Password ?? passArray[1]?.ToString() ?? string.Empty;
+                }
+                else if (parameter is PasswordBox singlePb)
+                {
+                    pbSenha = singlePb;
+                    novaSenha = singlePb.Password;
+                }
+
+                if (!string.IsNullOrEmpty(novaSenha) || !string.IsNullOrEmpty(confirmacaoSenha))
+                {
+                    if (novaSenha != confirmacaoSenha)
+                    {
+                        MensagemErroGeral = "As senhas digitadas não coincidem.";
+                        return;
+                    }
+                }
 
                 _usuarioAtual.Nome = Nome;
                 _usuarioAtual.Login = Login;
                 _usuarioAtual.Email = _emailReal;
+                _usuarioAtual.Telefone = Telefone;
+                _usuarioAtual.Cargo = Cargo;
+                _usuarioAtual.Departamento = Departamento;
 
                 if (!string.IsNullOrWhiteSpace(novaSenha))
                     _usuarioAtual.Senha = novaSenha;
@@ -419,7 +423,6 @@ namespace ReGraphik.ViewModels
                 Ocupado = true;
                 bool sucesso = false;
 
-                /// Executa a chamada correta dependendo de haver ou não alteração na foto de perfil
                 if (!string.IsNullOrEmpty(_caminhoNovaFotoSelecionada) && File.Exists(_caminhoNovaFotoSelecionada))
                 {
                     string? novaUrlFoto = await _autorizarService.AtualizarComFotoAsync(_usuarioAtual.Id, _usuarioAtual, _caminhoNovaFotoSelecionada);
@@ -442,6 +445,10 @@ namespace ReGraphik.ViewModels
                 if (sucesso)
                 {
                     Email = MascararEmail(_emailReal);
+
+                    if (pbSenha != null) pbSenha.Password = string.Empty;
+                    if (pbConfirmacao != null) pbConfirmacao.Password = string.Empty;
+
                     OnPropertyChanged(nameof(EmailResumido));
                     OnPropertyChanged(nameof(LoginExibicao));
 
@@ -458,14 +465,11 @@ namespace ReGraphik.ViewModels
                     });
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    MensagemWindow.Exibir(
-                        "Erro",
-                        $"Erro de conexão!!!",
-                        MensagemWindow.TipoMensagem.Erro);
+                    MensagemWindow.Exibir("Erro", "Erro de conexão!", MensagemWindow.TipoMensagem.Erro);
                 });
             }
             finally
