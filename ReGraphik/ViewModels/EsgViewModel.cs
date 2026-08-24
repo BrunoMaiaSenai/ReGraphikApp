@@ -4,8 +4,10 @@ using QuestPDF.Infrastructure;
 using ReGraphik.Models;
 using ReGraphik.Services;
 using ReGraphik.Services.Interface;
+using ReGraphik.Views;
 using System;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ReGraphik.ViewModels
@@ -17,6 +19,8 @@ namespace ReGraphik.ViewModels
 
         public ICommand ExportarPdfCommand { get; }
         public ICommand IrParaRelatoriosCommand { get; }
+
+        public ICommand AbrirLinkCommand { get; }
 
         /// <summary>
         /// Construtor principal para a aplicação em runtime
@@ -38,11 +42,36 @@ namespace ReGraphik.ViewModels
             _dialogService = dialogService;
             ExportarPdfCommand = new RelayCommand(() => ExportarPdf());
             IrParaRelatoriosCommand = irParaRelatorios;
+            AbrirLinkCommand = new RelayCommand(AbrirLink);
 
             /// Configuração da licença Comunitária do QuestPDF
             QuestPDF.Settings.License = LicenseType.Community;
         }
 
+        /// <summary>
+        /// Abre o link do botão no navegador padrão do sistema.
+        /// </summary>
+        private void AbrirLink(object parameter)
+        {
+            if (parameter is string url && !string.IsNullOrWhiteSpace(url))
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = url,
+                        UseShellExecute = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        MensagemWindow.Exibir("Erro", $"Não foi possível abrir o link: {ex.Message}", MensagemWindow.TipoMensagem.Erro);
+                    });
+                }
+            }
+        }
         /// <summary>
         /// Método responsável por exportar o relatório ESG em PDF
         /// </summary>
