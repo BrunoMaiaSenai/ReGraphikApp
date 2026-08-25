@@ -198,8 +198,8 @@ namespace ReGraphik.ViewModels
                 if (todosResiduos != null && todosResiduos.Any())
                 {
                     int totalResiduos = todosResiduos.Count;
-                    int totalReaproveitar = todosResiduos.Count(r => r.Status == "Reaproveitado");
-                    int totalEstoque = todosResiduos.Count(r => r.Status == "Em Estoque");
+                    int totalReaproveitar = todosResiduos.Count(r => string.Equals(r.Status, "Reaproveitado", StringComparison.OrdinalIgnoreCase));
+                    int totalEstoque = todosResiduos.Count(r => string.Equals(r.Status, "Em Estoque", StringComparison.OrdinalIgnoreCase));
 
                     double valorCalculado = todosResiduos.Sum(r => r.Quantidade * 5.50);
                     string total = valorCalculado.ToString("C2");
