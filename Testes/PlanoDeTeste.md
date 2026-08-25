@@ -1,535 +1,1604 @@
-# Plano de Teste - ReGraphik
+<p align="center">
+  <img src="assets/testes-mapa/image1.png" alt="SENAI" width="230">
+</p>
+
+# Documentação Individual de Testes Unitários
+
+## Módulo Mapa e Pontos de Coleta — Sistema ReGraphik
+
+**Aluno:** Otávio Henrique Barbosa Soares  
+**Curso:** Técnico em Desenvolvimento de Sistemas — Noite  
+**Instituição:** Serviço Nacional de Aprendizagem Industrial — SENAI  
+**Equipe:** ReGraphik  
+**Framework de testes:** xUnit  
+**Ambiente:** C# / .NET 8 / Visual Studio 2022  
+**Local e ano:** Nova Lima — 2026  
+
+> Documentação individual apresentada como parte da atividade de testes unitários aplicada ao Projeto de TCC do curso Técnico em Desenvolvimento de Sistemas — Noite, sob orientação do Instrutor Frederico Martins Aguiar.
+
+## Sumário
+
+- [1 Introdução](#1-introdução)
+- [2 Identificação da atividade](#2-identificação-da-atividade)
+- [3 Organização e metodologia da suíte](#3-organização-e-metodologia-da-suíte)
+- [4 Adaptações necessárias no código original](#4-adaptações-necessárias-no-código-original)
+- [5 Plano de testes unitários — WEB](#5-plano-de-testes-unitários--web)
+- [6 Plano de testes unitários — API](#6-plano-de-testes-unitários--api)
+- [7 Registro dos resultados da suíte](#7-registro-dos-resultados-da-suíte)
+- [8 Considerações finais](#8-considerações-finais)
+- [Referências](#referências)
 
 ---
 
-## 1. Identificação do Projeto
-
-| Item | Detalhes |
-| :--- | :--- |
-| **Nome do Sistema** | **ReGraphik** — Plataforma de Gestão de Estoque Reverso |
-| **Versão** | `1.0.0`|
-| **Equipe Responsável** | Bruno Maia, Otávio Henrique, Lucas Aquino, Luna Beatriz, Kaio Alves |
-| **Unidade SENAI** | SENAI Afonso Greco – Nova Lima |
-| **Instrutor Orientador**| Frederico Martins Aguiar |
-| **Data do Planejamento**| 10/08/2026 |
-| **Ambientes** | **API REST:** `webregraphik.runasp.net` / **Desktop:** WPF .NET 8 / **BD:** Firebase Realtime DB |
-
----
-
-## 2. Objetivos dos Testes
-
-O objetivo deste Plano de Testes é validar a estabilidade, integridade, usabilidade e conformidade técnica do ecossistema **ReGraphik** (Cliente Desktop WPF + API REST ASP.NET Core) antes da implantação final nas indústrias do setor gráfico.
-
-* **O que a equipe pretende verificar?**
-  * Sincronização e persistência em tempo real dos dados de resíduos e conversas no **Firebase Realtime Database**.
-  * Consumo seguro e síncrono da **API REST** (`webregraphik.runasp.net`) pelo cliente **Desktop WPF**.
-  * Precisão dos algoritmos de recomendação da **Economia Circular** e dos cálculos do **Módulo ESG**.
-  * Comportamento e fluidez de integrações externas (**Google Maps Places API**, **Imgur API** para fotos de perfil).
-  * Geração e formatação correta dos relatórios exportados em **PDF via QuestPDF**.
-  * Instalação e execução através dos instaladores gerados (**WiX Toolset `.msi`** e **Inno Setup `.exe`**).
-
-* **Quais riscos pretende reduzir?**
-  * Perda ou corrupção de registros de estoque reverso no banco de dados em nuvem.
-  * Incompatibilidade/Falha de carregamento no componente `WebView2` (Mapa Leaflet.js).
-  * Exceções não tratadas (*crashes*) na interface desktop ao lidar com indisponibilidade de conexão/API.
-  * Lentidão no carregamento dos indicadores da **Dashboard** (gráficos OxyPlot) ou estouro de cota do Firebase.
-
-* **O que será considerado evidência de qualidade?**
-  * Aprovação de 100% dos Casos de Teste críticos e de alta prioridade.
-  * Ausência de bugs de severidade Alta ou Crítica abertos na release.
-  * Logs de execução sem exceções não capturadas (`Unhandled Exceptions`).
-  * Relatórios de auditoria e certidões ESG gerados com dados 100% consistentes.
-
----
-
-## 3. Escopo
-
-### 3.1 O que será testado (In-Scope)
-* **Módulos Funcionais do Cliente WPF:**
-  * **Autenticação em 2 Etapas:** Login, Recuperação de Senha e validação de Token de Convite.
-  * **Dashboard:** Carregamento de métricas financeiras, histórico e gráficos com OxyPlot.
-  * **Cadastrar Resíduos:** Validação de entradas (dimensões, tipo, quantidade, origem) e upload de imagem.
-  * **Estoque Reverso:** Filtragem com `ICollectionView` por tipo, status e período.
-  * **Mapa / Pontos de Coleta:** Integração Google Maps Places API e exibição no Leaflet via WebView2.
-  * **Sugestão de Resíduos:** Algoritmo de cruzamento e associação de reaproveitamento.
-  * **Chat em Tempo Real:** Envio/recebimento de mensagens direto via Firebase Realtime DB.
-  * **Relatórios e ESG:** Geração de estatísticas e exportação em PDF via QuestPDF.
-  * **Minha Conta / Perfil:** Alteração de dados e upload de foto via Imgur API.
-* **API REST (`ApiRestReGraphik`):**
-  * Endpoints de CRUD, validação de requisições JSON e respostas HTTP adequadas (`200`, `201`, `400`, `401`, `404`, `500`).
-* **Instalação e Empacotamento:**
-  * Instalação limpa, criação de atalhos e desinstalação via pacote `.msi` / `.exe`.
-
-### 3.2 O que NÃO será testado (Out-of-Scope)
-* Testes de carga extrema / estresse superiores a 1.000 requisições simultâneas por segundo na API.
-* Compatibilidade com sistemas operacionais antigos (Windows 7/8) ou plataformas não-Windows (macOS/Linux).
-* Validação interna da infraestrutura dos servidores do Firebase ou Google.
-
-### 3.3 Funcionalidades Prioritárias
-1. Autenticação e Controle de Acesso (Token e Perfis).
-2. Cadastro, Alteração e Atualização de Status do Resíduo.
-3. Comunicação síncrona Cliente WPF $\leftrightarrow$ API REST $\leftrightarrow$ Firebase.
-4. Geração do Relatório ESG em PDF.
-5. Funcionamento do Mapa de Pontos de Coleta.
-
----
+## 1 Introdução
+
+Este documento apresenta o planejamento dos testes unitários do módulo de Mapa e Pontos de Coleta do sistema ReGraphik. A organização foi preparada como roteiro de execução e de evidências, sem registrar previamente qualquer teste como concluído. Cada caso de teste contém objetivo, procedimento previsto, resultado esperado e um espaço próprio para inserção do print do código correspondente.
+
+A suíte será implementada com xUnit e seguirá a estrutura Arrange, Act e Assert. Os cenários foram definidos a partir dos comportamentos das classes relacionadas ao mapa, considerando caminhos válidos, entradas inesperadas, exceções, respostas de serviços externos e regras de negócio que podem ser verificadas de forma isolada.
+
+Além do plano de testes, o documento registra as adaptações de testabilidade que foram aplicadas ao código original para permitir o isolamento de Google Places e Firebase. Essas adaptações não têm como objetivo alterar regras de negócio; elas permitem que os testes controlem dependências externas e sejam executados de maneira repetível.
+
+| CT | Camada / Pasta | Caso de Teste | Descrição / Cenário | Situação |
+| :---: | :--- | :--- | :--- | :---: |
+| **CT001** | WEB / ConvertersTeste | Conversão de valor verdadeiro | Entrada válida: o converter recebe o valor booleano true. | ✅ Aprovado |
+| **CT002** | WEB / ConvertersTeste | Conversão de valor falso | Entrada válida: o converter recebe o valor booleano false. | ✅ Aprovado |
+| **CT003** | WEB / ConvertersTeste | Tratamento de valor não booleano | Entrada inválida: o converter recebe uma string em vez de um valor booleano. | ✅ Aprovado |
+| **CT004** | WEB / ConvertersTeste | Tratamento de valor nulo | Entrada nula: o converter recebe null como valor de entrada. | ✅ Aprovado |
+| **CT005** | WEB / ConvertersTeste | Conversão inversa não implementada | Exceção esperada: o método ConvertBack é chamado mesmo não possuindo implementação. | ✅ Aprovado |
+| **CT006** | WEB / ServicesTeste | Resposta válida da API | Fluxo de sucesso: a API simulada retorna um ponto com identificador, nome, endereço e coordenadas válidas. | ✅ Aprovado |
+| **CT007** | WEB / ServicesTeste | Pesquisa sem resultados | Resposta vazia: a API simulada retorna results sem nenhum local. | ✅ Aprovado |
+| **CT008** | WEB / ServicesTeste | Falha na comunicação com a API | Falha externa: a requisição HTTP simulada lança HttpRequestException. | ✅ Aprovado |
+| **CT009** | WEB / ServicesTeste | Resultado sem place_id | Resposta incompleta: o local retornado não possui place_id. | ✅ Aprovado |
+| **CT010** | WEB / ServicesTeste | Resultado sem nome | Resposta incompleta: o local possui identificador e coordenadas, mas não possui name. | ✅ Aprovado |
+| **CT011** | WEB / ServicesTeste | Resultado sem coordenadas | Resposta incompleta: o local retornado não possui geometry/location. | ✅ Aprovado |
+| **CT012** | WEB / ServicesTeste | JSON inválido | Resposta malformada: o conteúdo retornado não está em formato JSON válido. | ✅ Aprovado |
+| **CT013** | WEB / ViewModelsTeste | Inicialização do mapa | Estado inicial: uma nova instância do MapaViewModel é criada sem consultas externas. | ✅ Aprovado |
+| **CT014** | WEB / ViewModelsTeste | Estado vazio sem pontos | Coleção vazia e sem carregamento: não existem pontos e IsCarregando está false. | ✅ Aprovado |
+| **CT015** | WEB / ViewModelsTeste | Estado vazio com ponto | Coleção com resultado: existe pelo menos um ponto e o carregamento está inativo. | ✅ Aprovado |
+| **CT016** | WEB / ViewModelsTeste | Estado durante carregamento | Coleção vazia durante busca: IsCarregando está true. | ✅ Aprovado |
+| **CT017** | WEB / ViewModelsTeste | Notificação da propriedade Cidade | Alteração de binding: a propriedade Cidade recebe um novo valor. | ✅ Aprovado |
+| **CT018** | WEB / ViewModelsTeste | Notificação da coleção PontosAtuais | Alteração de binding: a coleção PontosAtuais é substituída por uma nova ObservableCollection. | ✅ Aprovado |
+| **CT019** | WEB / ViewModelsTeste | Lista nula de marcadores | Entrada nula: GerarJsonMarcadores recebe uma lista null. | ✅ Aprovado |
+| **CT020** | WEB / ViewModelsTeste | Lista vazia de marcadores | Entrada vazia: GerarJsonMarcadores recebe uma lista sem pontos. | ✅ Aprovado |
+| **CT021** | WEB / ViewModelsTeste | Geração de marcador válido | Fluxo de sucesso: a lista contém um ponto completo com dados e coordenadas válidas. | ✅ Aprovado |
+| **CT022** | WEB / ViewModelsTeste | Índices de vários marcadores | Múltiplos registros: a lista contém três pontos em ordem definida. | ✅ Aprovado |
+| **CT023** | WEB / ViewModelsTeste | Coordenadas iguais a zero | Dados sem localização válida: o ponto possui Lat = 0 e Lng = 0. | ✅ Aprovado |
+| **CT024** | WEB / ViewModelsTeste | Formatação decimal das coordenadas | Formatação regional: o ponto possui coordenadas com várias casas decimais. | ✅ Aprovado |
+| **CT025** | WEB / ViewModelsTeste | Tratamento de caracteres especiais | Texto especial: nome, cidade e resíduos contêm aspas, quebra de linha e barra invertida. | ✅ Aprovado |
+| **CT026** | WEB / ViewModelsTeste | Foco em ponto do mapa | Mapa carregado: existem dois pontos e o foco é solicitado para o segundo item. | ✅ Aprovado |
+| **CT027** | API / ControllerTeste | Listagem de pontos com sucesso | Fluxo de sucesso: o serviço fornece pontos cadastrados para o endpoint GET. | ✅ Aprovado |
+| **CT028** | API / ControllerTeste | Falha de comunicação na listagem | Falha externa: o serviço lança HttpRequestException durante a listagem. | ✅ Aprovado |
+| **CT029** | API / ControllerTeste | Sincronização sem cidade | Entrada inválida: a sincronização é solicitada com cidade vazia. | ✅ Aprovado |
+| **CT030** | API / ControllerTeste | Sincronização sem chave da API | Falha de configuração: GoogleMaps:ApiKey não está configurada. | ✅ Aprovado |
+| **CT031** | API / ControllerTeste | Sincronização concluída com sucesso | Fluxo de sucesso: uma cidade válida é sincronizada e o serviço retorna quantidades de salvos e ignorados. | ✅ Aprovado |
+| **CT032** | API / ControllerTeste | Busca por ID existente | Registro existente: o serviço encontra o ponto correspondente ao ID informado. | ✅ Aprovado |
+| **CT033** | API / ControllerTeste | Busca por ID inexistente | Registro inexistente: o serviço não encontra ponto para o ID informado. | ✅ Aprovado |
+| **CT034** | API / ControllerTeste | Cadastro sem dados | Entrada inválida: o endpoint de cadastro recebe um DTO nulo. | ✅ Aprovado |
+| **CT035** | API / ControllerTeste | Cadastro válido | Fluxo de sucesso: o endpoint recebe um DTO preenchido com dados válidos. | ✅ Aprovado |
+| **CT036** | API / ControllerTeste | Atualização de ID inexistente | Registro inexistente: é solicitada atualização para um ID não cadastrado. | ✅ Aprovado |
+| **CT037** | API / ControllerTeste | Atualização válida | Fluxo de sucesso: um ponto existente recebe novos dados válidos. | ✅ Aprovado |
+| **CT038** | API / ControllerTeste | Exclusão de ID inexistente | Registro inexistente: é solicitada exclusão para um ID não cadastrado. | ✅ Aprovado |
+| **CT039** | API / ControllerTeste | Exclusão válida | Fluxo de sucesso: o ID informado corresponde a um ponto existente. | ✅ Aprovado |
+| **CT040** | API / ServicesApiTeste | Configuração do Firebase ausente | Falha de configuração: a URL do Realtime Database não está definida. | ✅ Aprovado |
+| **CT041** | API / ServicesApiTeste | Arquivo de credenciais ausente | Falha de configuração: a URL existe, mas o arquivo de credenciais informado não é encontrado. | ✅ Aprovado |
+| **CT042** | API / ServicesApiTeste | Status de erro retornado pelo Google | Resposta externa de erro: o Google simulado retorna status REQUEST_DENIED. | ✅ Aprovado |
+| **CT043** | API / ServicesApiTeste | Resposta sem resultados | Resposta incompleta: o JSON possui status OK, mas não contém a propriedade results. | ✅ Aprovado |
+| **CT044** | API / ServicesApiTeste | Ponto duplicado por coordenadas | Duplicidade: o Google retorna um ponto com latitude e longitude já existentes na base simulada. | ✅ Aprovado |
+| **CT045** | API / ServicesApiTeste | Novo ponto contabilizado como salvo | Fluxo de sucesso: o Google retorna um ponto com coordenadas ainda não cadastradas. | ✅ Aprovado |
+| **CT046** | API / ServicesApiTeste | JSON inválido na sincronização | Resposta malformada: a sincronização recebe um conteúdo que não é JSON válido. | ✅ Aprovado |
+
+**Resumo da suíte unitária:** 46 testes executados, 46 aprovados, 0 falhas e 0 ignorados.
+
+## 2 Identificação da atividade
+
+| **Aluno**               | Otávio Henrique Barbosa Soares                 |
+|-------------------------|------------------------------------------------|
+| **Turma**               | Técnico em Desenvolvimento de Sistemas – Noite |
+| **Equipe**              | ReGraphik                                      |
+| **Data da entrega**     | 25/08/2026                                     |
+| **Componente**          | Mapa e Pontos de Coleta                        |
+| **Projeto de testes**   | TesteReGraphik                                 |
+| **Framework de testes** | xUnit                                          |
+| **Ambiente**            | C# / .NET 8 / Visual Studio 2022               |
+
+### 2.1 Escopo individual
+
+O escopo desta documentação será limitado às classes relacionadas ao mapa e aos pontos de coleta. Os testes serão organizados nas pastas WEB/ConvertersTeste, WEB/ServicesTeste, WEB/ViewModelsTeste, APITeste/ControllerTeste e APITeste/ServicesApiTeste. Alterações em componentes de outras funcionalidades da equipe não fazem parte deste trabalho.
+
+## 3 Organização e metodologia da suíte
+
+A suíte será composta por 46 casos de teste, identificados de CT001 a CT046. Cada caso deverá ser implementado em sua classe correspondente e documentado individualmente. Após a execução de cada pasta, será inserido também um print geral do Gerenciador de Testes mostrando o conjunto daquela pasta.
+
+### 3.1 Estrutura planejada
+
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>TesteReGraphik<br />
+├── WEB<br />
+│ ├── ConvertersTeste<br />
+│ │ └── BoolToVisibilityConverterTeste.cs<br />
+│ ├── ServicesTeste<br />
+│ │ └── GooglePlacesServiceTeste.cs<br />
+│ └── ViewModelsTeste<br />
+│ └── MapaViewModelTeste.cs<br />
+└── APITeste<br />
+├── ControllerTeste<br />
+│ └── PontosDeColetaControllerTeste.cs<br />
+└── ServicesApiTeste<br />
+└── PontosColetaServiceTeste.cs</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
 
-## 4. Base de Teste
+### 3.2 Padrão Arrange, Act e Assert
 
-Artefatos e especificações técnicas utilizados para desenhar e executar os cenários de teste:
-* **Especificação da API REST / Swagger (OpenAPI):** Disponível em `https://webregraphik.runasp.net.`.
-* **Documentação Mintlify do Projeto:** Publicada em `https://brunomaia.mintlify.app/`.
-* **Modelagem de Dados:** Diagramas Conceitual, Lógico e Físico do sistema (Firebase / API / WPF).
-* **Diagramas da UML:** Casos de Uso, Diagramas de Fluxo, Diagramas de Sequência e Mapa de Bounded Contexts.
-* **Regras de Negócio do Setor Gráfico:** Tolerâncias de dimensões (cm/m), status do resíduo (`Disponível`, `Reservado`, `Descartado`) e equivalências de descarte ecológico.
+Cada método de teste será organizado em três etapas. Arrange preparará os objetos e dados necessários; Act executará o comportamento que está sendo avaliado; Assert comparará o resultado obtido com o comportamento esperado. Os nomes dos métodos permanecerão em português sempre que possível, preservando apenas termos técnicos do framework ou da própria aplicação.
 
----
+### 3.3 Padrão de evidências
 
-## 5. Abordagem de Testes
+Para cada CT haverá um espaço reservado para o print do método de teste. O print deverá mostrar, sempre que possível, o atributo \[Fact\], o nome do método e as etapas Arrange, Act e Assert. Ao final de cada pasta haverá um espaço adicional para o print geral do Gerenciador de Testes. O campo “Resultado após execução” deverá ser preenchido somente depois que o teste for realmente executado.
 
-* **Testes Funcionais:** Validação ponta a ponta se as regras do negócio gráfico estão sendo atendidas.
-* **Testes de Integração:** 
-  * Integração WPF $\leftrightarrow$ API REST (via HTTP/JSON).
-  * Integração WPF $\leftrightarrow$ Firebase Realtime Database (Chat em tempo real).
-  * Integração API REST $\leftrightarrow$ Google Maps Places API.
-  * Integração WPF $\leftrightarrow$ Imgur API (Upload de imagens).
-* **Testes de Sistema:** Verificação de fluxos completos (ex: Cadastrar resíduo $\rightarrow$ Consultar no Estoque Reverso $\rightarrow$ Aplicar Sugestão $\rightarrow$ Alterar Status $\rightarrow$ Gerar Relatório ESG).
-* **Testes Não-Funcionais:** 
-  * Desempenho e resposta da interface gráfica em WPF durante o carregamento de dados.
-  * Usabilidade em diferentes resoluções de tela desktop (HD e Full HD).
-* **Testes Exploratórios:** Sessões livres focadas em cenários de uso não previstos ou ações inesperadas do usuário.
-* **Reteste e Regressão:** Reexecução de cenários após correções de código para garantir estabilidade contínua.
+## 4 Adaptações necessárias no código original
 
----
+Antes da execução completa da suíte, duas classes do código original precisaram receber adaptações de testabilidade. As alterações abaixo deverão ser replicadas na solução oficial que será versionada.
 
-## 6. Técnicas de Projeto de Testes
+### 4.1 GooglePlacesService
 
-| Técnica | Aplicação no ReGraphik |
-| :--- | :--- |
-| **Particionamento de Equivalência** | Validação de formatos em campos como E-mail, CPF, CEP e URLs de imagem. |
-| **Análise de Valor Limite (AVL)** | Aplicada em dimensões em cm/m ($0$, valores negativos, casas decimais), quantidades de resíduo ($0$, $1$, $999999$) e limites de caracteres de texto no Chat. |
-| **Tabela de Decisão** | Regras de alteração de Status do Resíduo (`Disponível` $\rightarrow$ `Reservado` $\rightarrow$ `Descartado`) baseadas no perfil do usuário (Administrador vs. Operador). |
-| **Testes Baseados em Cenários** | Simulação do fluxo de trabalho diário de um operador de gráfica registrando aparas de papel e buscando reciclagem. |
-| **Testes de Aceitação:** | Aplicável nas entregas para o instrutor orientador e stakeholders do SENAI, validando se o sistema atende aos critérios definidos nos Casos de Uso e histórias de usuário do TCC (ex: operador consegue cadastrar, buscar e reciclar um resíduo do início ao fim). |
-| **Testes Baseados em Cenários:** | Simulação de fluxos reais de uso do dia a dia de uma gráfica (ex: operador cadastra apara de papel → sistema sugere reaproveitamento → chat combina retirada → status muda para Reservado → relatório ESG reflete a movimentação).|
-| **Testes Exploratórios** | Sessões livres guiadas por checklist mínimo, focadas em interações inesperadas na tela de Cadastro de Resíduos e no comportamento do WebView2 sob perda de conexão. |
+> **Observação de segurança:** qualquer chave real de API foi ocultada das evidências destinadas à publicação no GitHub. Chaves e credenciais não devem ser versionadas no repositório.
 
----
 
-## 7. Casos de Teste
+**Situação original:** O GooglePlacesService possuía uma instância de HttpClient criada diretamente na declaração do campo e a chave da API também era definida diretamente na classe. Não havia um construtor que permitisse fornecer essas dependências externamente.
 
-### 7.1. Autenticação, Cadastro de Usuários e Segurança
+**Adaptação realizada:** A inicialização direta dos campos foi transferida para o construtor padrão e foi acrescentado um segundo construtor que recebe HttpClient e apiKey. Dessa forma, a aplicação continua utilizando o mesmo comportamento padrão, enquanto os testes podem fornecer um cliente HTTP controlado.
 
-| ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Evidência do Teste | Status |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **CT001** | Login | Autenticação com credenciais válidas | Login: `[E-mail Válido]`<br>Senha: `[Senha Válida]` | Acesso liberado, Token de sessão salvo no Firebase Auth e redirecionamento para a Dashboard. | Login foi realizado para adentrar no sistema ReGraphik e tela principal de DashBoard carregada. | [Evidência CT001](#detalhamento-ct001) | ✅ Concluído |
-| **CT002** | Login | Tentativa de login com senha incorreta | Login: `[E-mail Válido]`<br>Senha: `[Senha Incorreta]` | Mensagem de erro *"Usuário ou senha inválidos"* e acesso bloqueado. | — | — | ⏳ Pendente |
-| **CT003** | Cadastro / Convite | Registro de novo usuário com Token de Convite Válido | E-mail: `[E-mail Válido]`<br>Token: `[Token Válido]` | Conta ativada com sucesso no Firebase e permissão concedida. | — | — | ⏳ Pendente |
-| **CT004** | Cadastro / Convite | Registro de novo usuário com Token Inválido/Expirado | E-mail: `[E-mail Válido]`<br>Token: `[Token Inválido]` | Mensagem de erro *"Token de convite inválido ou já utilizado"* e bloqueio do cadastro. | Ao inserir um token inválido, o sistema não retornou a mensagem de erro. Após a correção da causa raiz, a mensagem passou a ser exibida corretamente. | [Evidência CT004](#detalhamento-ct004) | ✅ Concluído |
-| **CT005** | Perfil do Usuário | Upload e alteração de foto de perfil via Imgur API | Selecionar imagem `avatar.png` (PNG < 2MB) | Upload concluído, URL gerada no Imgur v5 e atualizada na interface WPF. | — | — | ⏳ Pendente |
+**Motivo:** Permitir que respostas da API do Google Places sejam simuladas nos testes unitários, evitando chamadas reais à internet e tornando os cenários reproduzíveis.
 
----
+**Impacto:** Nenhuma regra de negócio do método BuscarPostosNoBrasilAsync foi alterada. A busca, o processamento do JSON, o tratamento das coordenadas, endereço formatado e exceções permanecem com a mesma implementação.
 
-#### Detalhamento de Execução dos Testes (Grupo 7.1)
+**Testes relacionados:** CT006 a CT012.
 
-<a id="detalhamento-ct001"></a>
-#### CT001 - Login com Credenciais Válidas
+#### 4.1.1 Estrutura de referência antes da adaptação
 
-1. **Funcionalidade:** CT001 - Login
-2. **Cenário / Condição:** Autenticação com credenciais válidas.
-3. **Entrada:** Login: `[E-mail Válido]`, Senha: `[Senha Válida]`
-4. **Resultado Esperado:** Acesso liberado, Token JWT/Firebase gerado e redirecionamento para a Dashboard.
-5. **Resultado Obtido:** Login foi realizado para adentrar no sistema ReGraphik e tela principal de DashBoard carregada.
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>private readonly HttpClient _httpClient = new HttpClient();<br />
+private readonly string _apiKey = "&lt;CHAVE_EXISTENTE&gt;";<br />
+<br />
+// A classe utiliza diretamente essas dependências na consulta.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
 
-<img width="484" height="283" alt="01" src="https://github.com/user-attachments/assets/e6b30079-1a42-4994-b180-55bfbf934a3d" />
+Figura 1 – Código original do GooglePlacesService antes da adaptação
 
-<img width="489" height="282" alt="02" src="https://github.com/user-attachments/assets/d8656c46-c9ee-43cf-b909-5e13fdbeaf95" />
 
-6. **Evidência do Teste:** Foi avaliado e homologado conforme evidenciado no resultado obtido, o cliente realiza o login, adicionando login e senha válidos, e é direcionado para a tela da Dashboard.
-7. **Status:** ✅ Concluído
+|---------------------------------------------------------------------------------------------------------------|
 
----
+Fonte: Elaborado pelo autor (2026).
 
-<a id="detalhamento-ct004"></a>
-#### CT004 - Registro de Novo Usuário com Token Inválido/Expirado
+#### 4.1.2 Estrutura a ser adicionada
 
-1. **Funcionalidade:** CT004 - Cadastro / Convite
-2. **Cenário / Condição:** Registro de novo usuário com Token Inválido ou Expirado
-3. **Entrada:** E-mail: `[E-mail Válido]`, Token: `[Token Inválido]`
-4. **Resultado Esperado:** Mensagem de erro *"Token de convite inválido ou já utilizado"* e bloqueio do cadastro.
-5. **Resultado Obtido:** Cadastro do usuário realizado e token válido enviado com sucesso!
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>public GooglePlacesService()<br />
+{<br />
+}<br />
+<br />
+public GooglePlacesService(HttpClient httpClient, string apiKey)<br />
+{<br />
+_httpClient = httpClient;<br />
+_apiKey = apiKey;<br />
+}</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
 
-<img width="479" height="277" alt="03" src="https://github.com/user-attachments/assets/422bcec1-8787-469a-9301-7319986f5b1a" />
+Figura 2 – GooglePlacesService após inclusão dos construtores para testabilidade
 
-Ao inserir um token inválido no credenciamento do usuário, o sistema não retornou uma mensagem de “Token de convite inválido ou já utilizado”.
 
-6. **Evidência do Teste:** Foi identificada a causa raiz do problema, que era a falta de uma mensagem de erro do token, para identificar que o token está inválido.
+|---------------------------------------------------------------------------------------------------------------|
 
-<img width="491" height="230" alt="05" src="https://github.com/user-attachments/assets/ff2f524a-7fe1-4e25-bd40-2ba2a9f84d67" />
+Fonte: Elaborado pelo autor (2026).
 
-<img width="491" height="184" alt="04" src="https://github.com/user-attachments/assets/68ef529e-29d6-4c6c-851d-9b7c23779182" />
+Testes relacionados: CT006 a CT012. A finalidade dessa adaptação será permitir que o arquivo GooglePlacesServiceTeste.cs utilize um HttpClient controlado, sem realizar chamadas reais à internet.
 
-Após a correção, a rotina foi replicada novamente e a mensagem foi exibida corretamente.
+### 4.2 PontosColetaService
 
-<img width="491" height="241" alt="07" src="https://github.com/user-attachments/assets/1c050662-581b-465b-bf11-3cc1741b48a8" />
+**Situação original:** A classe possuía apenas o construtor público responsável pela inicialização normal do Firebase.
 
-<img width="493" height="157" alt="06" src="https://github.com/user-attachments/assets/18b0669c-d87c-4bf1-8ced-3fc8a7974883" />
+**Adaptação realizada:** O construtor público original foi preservado. Foi acrescentado um segundo construtor, com modificador protected, que recebe uma instância de FirebaseClient fornecida externamente.
 
-7. **Status:** ✅ Concluído
+**Motivo:** Permitir que uma classe derivada utilizada nos testes seja criada com um cliente Firebase controlado, sem executar o processo real de leitura de credenciais e autenticação.
 
----
+**Impacto:** O funcionamento do construtor utilizado em produção não foi alterado.
 
-### 7.2. Gestão do Estoque Reverso e Resíduos
+#### 4.2.1 Construtor protegido a ser acrescentado
 
-| ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Evidência do Teste | Status |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **CT006** | Cadastro de Resíduo | Inclusão de aparas de papel com dados válidos | Tipo: `Papel A4`<br>Qtd: `50`<br>Dimensões: `21x29.7cm` | Resíduo salvo no Firebase com status `Disponível` e atualização imediata do estoque. | — | — | ⏳ Pendente |
-| **CT007** | Cadastro de Resíduo | Tentativa de cadastro com quantidade zerada ou negativa | Tipo: `Vinil`<br>Qtd: `-5` | Validação de formulário impedindo envio: *"A quantidade deve ser maior que zero"*. | — | — | ⏳ Pendente |
-| **CT008** | Cadastro de Resíduo | Omissão de campos obrigatórios no cadastro | Tipo: `Em Branco`<br>Qtd: `10` | Indicação em vermelho nos campos nulos com mensagem *"Preencha os campos obrigatórios"*. | — | — | ⏳ Pendente |
-| **CT009** | Consulta de Estoque | Filtragem dinâmica por tipo de resíduo | Filtro em memória: `Vinil` | A listagem atualiza via `ICollectionView` exibindo apenas os resíduos do tipo Vinil sem travamentos. | — | — | ⏳ Pendente |
-| **CT010** | Alteração de Status | Transição do estado do resíduo de "Disponível" para "Reservado" | Clicar em *"Reservar Resíduo"* ID `#104` | Status no Firebase alterado para `Reservado`, mudando a cor do indicador no card do app. | — | — | ⏳ Pendente |
-| **CT011** | Alteração de Status | Finalização do ciclo de vida para "Descartado/Reaproveitado" | Clicar em *"Dar Baixa / Concluir"* | Resíduo movido para a lista de concluídos e contabilizado na métrica da Dashboard ESG. | — | — | ⏳ Pendente |
-| **CT012** | Exclusão de Resíduo | Remoção de item do estoque por perfil Usuário vs Administrador | Perfil: `Usuário` clicando em Excluir | Opção desabilitada ou com mensagem *"Ação restrita a Administradores"*. | — | — | ⏳ Pendente |
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>protected PontosColetaService(<br />
+ILogger&lt;PontosColetaService&gt; logger,<br />
+IConfiguration configuration,<br />
+FirebaseClient firebaseClient)<br />
+{<br />
+_logger = logger;<br />
+_configuration = configuration;<br />
+_firebaseClient = firebaseClient;<br />
+}</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
 
----
+Figura 3 – Estrutura original do PontosColetaService antes da inclusão do construtor para testes
 
-### 7.3. Módulo de Geolocalização e Pontos de Coleta
 
-| ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Evidência do Teste | Status |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **CT013** | Pontos de Coleta | Busca de pontos de reciclagem por cidade válida | Cidade: `Nova Lima` | Consulta enviada à Google Places API e marcadores (pins) desenhados no Leaflet/WebView2. | — | — | ⏳ Pendente |
-| **CT014** | Pontos de Coleta | Pesquisa por cidade sem retorno ou inexistente | Cidade: `Igarapé` | Retorno limpo e exibição da mensagem *"Nenhum ponto de coleta localizado nesta região"*. | Inicialmente não retornou aviso. Após validação adicionada ao `MapaViewModel`, a mensagem passou a ser exibida corretamente. | [Evidência CT014](#detalhamento-ct014) | ✅ Concluído |
-| **CT015** | Interatividade do Mapa | Clique no Pin do Ponto de Coleta | Clicar no marcador no mapa | Janela (popup) é aberta contendo endereço, telefone de contato e tipos de materiais aceitos. | Popup interativo renderizado no WebView2 com sucesso. | Homologado | ✅ Concluído |
-| **CT016** | Fallback do Mapa | Execução sem conexão com a internet ou API fora do ar | Desconectar internet / Buscar mapa | Tratamento de exceção exibindo *"Serviço de mapa indisponível. Verifique sua conexão"*. | — | — | ⏳ Pendente |
+|---------------------------------------------------------------------------------------------------------------|
 
----
+Fonte: Elaborado pelo autor (2026).
 
-#### Detalhamento de Execução dos Testes (Grupo 7.3)
+Figura 4 – Construtor protegido acrescentado ao PontosColetaService
 
-<a id="detalhamento-ct014"></a>
-#### CT014 - Pesquisa por Cidade sem Retorno ou Inexistente
 
-1. **Funcionalidade:** CT015 - Pontos de Coleta / Pesquisa por cidade sem retorno ou inexistente.
-2. **Cenário / Condição:** Pesquisar o nome de uma cidade que não possui nenhum ponto de coleta.
-3. **Entrada:** Login: `[Usuário Válido]`, Senha: `[Senha Válida]`
-4. **Resultado Esperado:** Retorno limpo e exibição da mensagem *"Nenhum ponto de coleta localizado nesta região"*.
-5. **Resultado Obtido:** Pesquisei pela cidade de Igarapé e o sistema não retornou nenhum ponto de coleta e nenhuma mensagem de aviso. Pesquisei pontos de coleta na cidade de Igarapé após a correção, e o sistema retornou a mensagem *"Nenhum ponto de coleta localizado nesta região"*.
-6. **Evidência do Teste:** Foi adicionada uma validação no `MapaViewModel` para verificar se a busca pela cidade retornou algum ponto de coleta. Quando nenhum resultado é encontrado, o sistema exibe a mensagem *"Nenhum ponto de coleta localizado nesta região"*, sem alterar o funcionamento das demais funcionalidades do mapa.
-7. **Status:** ✅ Concluído
+|---------------------------------------------------------------------------------------------------------------|
 
----
+Fonte: Elaborado pelo autor (2026).
 
-### 7.4. Comunicação Corporativa (Chat em Tempo Real)
+#### 4.2.2 Métodos que deverão receber o modificador virtual
 
-| ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Evidência do Teste | Status |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :---: |
-| **CT017** | **Chat Tempo Real** | Envio de mensagem de texto simples entre dois usuários | Texto: `"Resíduo #104 liberado para coleta."` | Mensagem enviada e renderizada instantaneamente via Firebase Realtime na tela do destinatário. | Objeto `Mensagem` instanciado com remetente, destinatário, texto do resíduo e status `Lida = false` validados com sucesso. |  | ✅ Concluído |
-| **CT018** | **Chat Tempo Real** | Tentativa de envio de mensagem vazia | Texto: `""` (vazio/espaços) | O botão de envio permanece inativo ou ignora a ação. | O método `EnviarMensagemAsync` disparou exceção `ArgumentException` ao receber textos vazios ou espaços em branco. |  | ✅ Concluído |
-| **CT019** | **Notificação de Chat** | Recebimento de mensagem com a janela do chat minimizada | Envio de mensagem externa | Indicador visual de alerta de "Nova Mensagem" exibido na barra superior da aplicação. | A propriedade `MensagensNaoLidas` foi incrementada de 0 para 1 ao receber nova mensagem com a tela desautorizada/minimizada. |  | ✅ Concluído |
-| **CT020** | **Identificador de Sala** | Geração determinística de ID da conversa entre dois usuários | IDs: `"userA"` e `"userB"` | O ID da conversa deve ser sempre idêntico independentemente da ordem em que os usuários iniciam o chat. | A chamada estática ordenou alfabeticamente os IDs gerando `"userA_userB"` tanto para (A, B) quanto para (B, A). | | ✅ Concluído |
-| **CT021** | **Marcação de Leitura** | Atualização do status das mensagens recebidas para lido | Lista de mensagens pendentes | Apenas as mensagens enviadas pelo remetente e com status `Lida = false` devem ser filtradas para atualização. | O filtro Linq isolou com precisão a mensagem pendente ignorando mensagens já lidas e mensagens enviadas pelo destinatário. | | ✅ Concluído |
-| **CT022** | **Leitura de Usuários** | Desserialização de JSON flexível para lista de usuários | JSON com chaves `name` / `foto_perfil` | O modelo `Usuario` deve ser preenchido corretamente mesmo com variações de nomenclatura no nó do Firebase. | Fallback de propriedades mapeou com êxito `name` para `Nome` e `foto_perfil` para `FotoPerfil`, além de capturar a chave do Firebase. |  | ✅ Concluído |
-| **CT023** | **Resiliência de Conexão** | Ocorrência de falha ou perda de conexão no Firebase | Consulta a nó indisponível | O serviço deve tratar a exceção via `try/catch` retornando lista vazia ou valor padrão `0` sem estourar exceção na UI. | Todos os métodos assíncronos de busca (`ObterMensagensAsync`, `ContarNaoLidasAsync`, `ListarUsuariosAsync`) trataram o erro retornando coleções vazias. |  | ✅ Concluído |
-| **CT024** | **Resiliência de Conexão** | Contagem de mensagens não lidas com erro de rede ou Firebase | Parâmetros: `"destinatario"`, `"remetente"` | O serviço deve tratar a exceção e retornar o valor padrão `0` sem interromper a execução do app. | O método `ContarNaoLidasAsync` capturou a falha no bloco `catch` e retornou `0` como valor de fallback seguro. |  | ✅ Concluído |
+A lógica interna dos métodos deverá permanecer inalterada. A única mudança será acrescentar virtual às assinaturas abaixo, permitindo override em classes falsas criadas exclusivamente no projeto de testes.
 
----
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>public virtual async Task&lt;List&lt;PontosColeta&gt;&gt; Listar()<br />
+public virtual async Task&lt;PontosColeta&gt; ObterPorId(string id)<br />
+public virtual async Task Criar(PontosColeta pontosColeta)<br />
+public virtual async Task&lt;(int salvos, int ignorados)&gt; SincronizarComGoogleMapsAsync(<br />
+string cidade, string apiKey, HttpClient httpClient)<br />
+public virtual async Task Atualizar(string id, PontosColeta pontosColeta)<br />
+public virtual async Task Excluir(string id)</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
 
-### 7.5. Indicadores, Dashboard e Relatórios ESG
+Figura 5 – Assinaturas do PontosColetaService após aplicação de virtual
 
-| ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Evidência do Teste | Status |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :---: |
-| **CT025** | **Dashboard / Perfil** | Formatação de perfil e geração de iniciais do usuário | Nome: `"Carlos Eduardo"`, Perfil: `"Admin"` | Exibir nome completo, iniciais `"CE"` e o perfil expandido como `"Administrador"`. | A View Model atribuiu corretamente o nome, calculou as iniciais `"CE"` e converteu `"Admin"` para `"Administrador"`. |  | ✅ Concluído |
-| **CT026** | **Dashboard / Usuário** | Cálculo do fallback de iniciais para variações de nome | Nomes variados (`"João Silva"`, `"Maria"`, `""`, `null`) | Gerar iniciais com base nas palavras do nome ou retornar `"?"` em caso de valor inválido. | O cálculo retornou `"JS"`, `"M"` e fallback `"?"` em todos os casos de teste estipulados. |  | ✅ Concluído |
-| **CT027** | **Dashboard / Avatar** | Validação do caminho do arquivo local da foto de perfil | Caminho: `@"C:\caminho_inexistente_foto.png"` | Retornar `null` caso a foto de perfil não seja uma URL e o arquivo local não exista no disco. | A propriedade `FotoPerfil` validou a inexistência do arquivo no disco via `File.Exists` e retornou `null` com segurança. |  | ✅ Concluído |
-| **CT028** | **Dashboard / Gráficos** | Formatação de valores do eixo Y no gráfico de barras | Entrada numérico: `150.5` | Formatar o peso exibindo duas casas decimais seguidas do sufixo `"kg"`. | A função `FormatterTipos` formatou o valor numérico para o padrão textual `"150,50 kg"`. |  | ✅ Concluído |
-| **CT029** | **Dashboard / Indicadores** | Agregação de contadores e valor total estimado de resíduos | Lista de resíduos com quantidades e status variados | Calcular o total de resíduos, contagens por status (`"Reaproveitado"`, `"Em Estoque"`) e multiplicar a quantidade por R$ 5,50. | Os contadores totais foram consolidados e a expressão LINQ `Sum` calculou com precisão o valor monetário acumulado. |  | ✅ Concluído |
-| **CT030** | **Dashboard / Listagem** | Filtragem dos 5 últimos resíduos com reindexação de ID | Coleção com 10 resíduos cadastrados em datas distintas | Selecionar os 5 mais recentes por data e reindexar seus IDs visualmente de `1` a `5`. | A ordenação decrescente por `DataCadastro` isolou os 5 registros mais recentes e aplicou IDs sequenciais de `1` a `5`. |  | ✅ Concluído |
-| **CT031** | **Dashboard / Gráfico Pizza** | Mapeamento dinâmico de cores por status do resíduo | Status do resíduo: `"Disponível"`, `"Reservado"`, etc. | Atribuir a cor RGB correspondente ao status da fatia do gráfico de pizza. | A instrução `switch` mapeou com exatidão as cores de cada status, aplicando a paleta padrão para valores não cadastrados. |  | ✅ Concluído |
-| **CT032** | **Dashboard / Gráfico Barras** | Agrupamento de peso por tipo de resíduo | Resíduos duplicados por tipo (ex: 2x `"Plástico"`) | Somar a quantidade total agrupando por tipo e ordenar o resultado de forma crescente. | A consulta LINQ agrupou o tipo `"Plástico"`, somando suas massas e ordenando os tipos em ordem crescente no gráfico. |  | ✅ Concluído |
-| **CT033** | **Proposta ESG / Inicialização** | Instanciação da ViewModel com injeção de dependências | Instância de `Usuario`, mocks de `ICommand` e `IDialogService` | As propriedades de comando `ExportarPdfCommand` e `IrParaRelatoriosCommand` não devem ser nulas. | Os comandos foram instanciados corretamente e mantidos disponíveis para a View. |  | ✅ Concluído |
-| **CT034** | **Proposta ESG / PDF Cancelado** | Cancelamento do salvamento de arquivo na caixa de diálogo | Retorno `null` no método `SalvarArquivo` do `IDialogService` | O fluxo deve ser interrompido sem acionar a mensagem de confirmação ou gerar o arquivo. | O serviço confirmou o retorno nulo e `ExibirConfirmacao` nunca foi executado (`Times.Never`). |  | ✅ Concluído |
-| **CT035** | **Proposta ESG / Geração PDF** | Exportação bem-sucedida do documento PDF em caminho válido | Caminho temporário gerado por `Path.GetTempPath()` | Gerar o arquivo PDF físico no disco e acionar a caixa de diálogo de confirmação ao usuário. | O arquivo foi criado no diretório temporário (`File.Exists` = `true`) e a confirmação foi exibida uma vez (`Times.Once`). |  | ✅ Concluído |
 
----
+|---------------------------------------------------------------------------------------------------------------|
 
-### 7.6. Perfil do Usuário
+Fonte: Elaborado pelo autor (2026).
 
-| ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Evidência do Teste | Status |
-| :--- | :--- | :--- | :--- | :--- | :--- | :---: | :---: |
-| **CT036** | **Conta / Perfil** | Inicialização do perfil e aplicação de máscaras | Dados cadastrais de `Ana Souza` (CPF, E-mail, Cargo, Dpto, Tel) | Mapear dados para a ViewModel, mascarar CPF/E-mail, calcular iniciais e validar estado sem foto. | A ViewModel carregou todos os dados, exibiu `123.***.***-**`, `an*******@empresa.com`, iniciais `"AS"` e `SemFoto` = `true`. |  | ✅ Concluído |
-| **CT037** | **Conta / Avatar** | Cálculo de iniciais para diferentes formatos de nome | Variações de entrada (`"Carlos Eduardo Silva"`, `"Beatriz"`, `""`, `null`) | Gerar as iniciais baseadas no primeiro e último nome ou retornar `"?"` em caso de valor inválido. | A propriedade `Iniciais` calculou corretamente `"CS"`, `"B"` e o fallback `"?"` para entradas vazias. |  | ✅ Concluído |
-| **CT038** | **Conta / E-mail** | Alternância de máscara no campo de e-mail ao focar/desfocar | Ganho de foco (`GotFocus`) seguido de perda de foco (`LostFocus`) | Exibir o e-mail em texto puro durante a edição e reaplicar a máscara ao perder o foco. | O comando exibiu `"desenvolvedor@teste.com"` no foco e remascarou para `"de***********@teste.com"` ao perder o foco. |  | ✅ Concluído |
-| **CT039** | **Conta / Validação** | Validação de formato de e-mail ao perder o foco | E-mail inválido sem caractere `@` (`"emailsemarrobainvalido.com"`) | Definir a mensagem de erro apropriada na propriedade `MensagemErroEmail`. | A propriedade `MensagemErroEmail` foi preenchida com `"E-mail inválido. Verifique o endereço informado."`. |  | ✅ Concluído |
-| **CT040** | **Conta / Validação** | Salvar perfil com campos obrigatórios em branco | Nome ou Login vazios/nulos | Exibir mensagem de erro geral e impedir a chamada ao serviço de atualização. | A mensagem `"Nome e Login são obrigatórios."` foi exibida e `AtualizarAsync` não foi executado (`Times.Never`). |  | ✅ Concluído |
-| **CT041** | **Conta / Atualização** | Salvar alterações do perfil com dados válidos | Novo Nome (`"Novo Nome"`) e Novo Login (`"novo.login"`) | Atualizar os dados do objeto do usuário e invocar o método de atualização do serviço. | O modelo `Usuario` foi atualizado e `AtualizarAsync` foi chamado exatamente uma vez (`Times.Once`). |  | ✅ Concluído |
-| **CT042** | **Conta / Segurança** | Validação de confirmação de senha com valores divergentes | Array de parâmetros contendo senhas distintas (`"senha123"`, `"senhaDiferente"`) | Exibir erro de incompatibilidade de senhas e cancelar a persistência. | A mensagem `"As senhas digitadas não coincidem."` foi atribuída e o serviço de atualização não foi acionado. |  | ✅ Concluído |
-| **CT043** | **Conta / Segurança** | Alteração de senha quando as entradas são idênticas | Array de parâmetros com senhas iguais (`"NovaSenha123!"`, `"NovaSenha123!"`) | Atualizar a propriedade `Senha` do usuário e persitir as alterações com sucesso. | A propriedade `usuario.Senha` foi atualizada e o serviço `AtualizarAsync` foi invocado com sucesso. |  | ✅ Concluído |
-| **CT044** | **Conta / Profissional** | Atualização dos campos de informações profissionais | Alteração de Cargo, Departamento e Telefone via ViewModel | Refletir as alterações profissionais diretamente na entidade do usuário e persistir via API. | As propriedades `Cargo`, `Departamento` e `Telefone` do modelo foram atualizadas e salvas via `AtualizarAsync`. |  | ✅ Concluído |
+Testes relacionados: CT027 a CT046. O construtor público original continuará responsável pelo funcionamento normal da aplicação, enquanto o construtor protegido e os métodos virtuais permitirão substituições apenas no contexto dos testes.
 
----
+### 4.3 Componentes que não deverão ser alterados
 
-### 7.6. Instalação, Manutenção e Atualização (Inno Setup)
+Para os cenários planejados, BoolToVisibilityConverter.cs, MapaViewModel.cs e PontosColetaController.cs não precisarão receber alterações para tornar os testes executáveis. Os testes deverão observar o comportamento já existente nessas classes.
 
-| ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Evidência do Teste | Status |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **CT045** | **Instalador** | Instalação limpa em um computador sem o ReGraphik | Executar `ReGraphik_Setup.exe` | Arquivos copiados para `Program Files`, registro criado e atalhos adicionados à Área de Trabalho. | A instalação ocorreu tranquila e tudo foi instalado com sucesso. | [Evidência CT045](#detalhamento-ct045) | ✅ Concluído |
-| **CT046** | **Instalador (Manutenção)** | Reexecutar instalador com a mesma versão já instalada no sistema | Selecionar nenhuma opção e clicar em *"Avançar"* | **Bloqueio ativado:** Exibe alerta exigindo a seleção de uma das opções de manutenção (Atualizar, Reparar ou Desinstalar). | O bloqueio é efetuado corretamente e o usuário não conseguiu progredir sem escolher uma opção. | [Evidência CT046](#detalhamento-ct046) | ✅ Concluído |
-| **CT047** | **Instalador (Seleção)** | Teste de exclusividade das CheckBoxes de Manutenção | Marcar *"Atualizar"* e depois *"Desinstalar"* | Comportamento de radio-button: A marcação de "Atualizar" é removida automaticamente ao clicar na outra. | O executável não permite a marcação de duas ou mais CheckBoxes, caso uma seja marcada a outra é desmarcada automaticamente. | [Evidência CT047](#detalhamento-ct047) | ✅ Concluído |
-| **CT048** | **Instalador (Atualização)** | Execução do setup em sistema que já possui versão antiga instalada | Selecionar *"Atualizar (Versão mais recente)"* | O instalador sobrepõe os binários mantendo as configurações do usuário e atualiza a versão no Registro. | Como o sistema não possui ainda uma versão atualizada ele apenas alerta o usuário com uma mensagem. | [Evidência CT048](#detalhamento-ct048) | ✅ Concluído |
-| **CT049** | **Instalador (Execução)** | Tentar instalar/atualizar com a aplicação ReGraphik aberta | Clicar em *"Avançar"* com app aberto | Alerta exibido pedindo permissão; ao aceitar, fecha o processo `ReGraphik.exe` via `taskkill` e prossegue. | Uma mensagem avisando que o sistema está aberto aparece na tela para que o usuário possa fechar o aplicativo antes de prosseguir. | [Evidência CT049](#detalhamento-ct049) | ✅ Concluído |
-| **CT050** | **Desinstalação** | Removendo a aplicação via Opção de Manutenção ou Painel do Windows | Selecionar *"Desinstalar"* | Processo `/SILENT` executado, removendo atalhos e pasta da aplicação da máquina. | O aplicativo é desinstalado com sucesso da máquina. | [Evidência CT050](#detalhamento-ct050) | ✅ Concluído |
+### 4.4 Projeto TesteReGraphik
 
----
+O arquivo TesteReGraphik.csproj não deverá ser apresentado como uma alteração realizada nesta documentação, pois ele não foi modificado. A documentação deve refletir somente mudanças efetivamente aplicadas no processo.
 
-#### Detalhamento de Execução dos Testes (Grupo 7.6 - Inno Setup)
+### 4.5 Quadro-resumo das adaptações
 
-<a id="detalhamento-ct045"></a>
-#### CT045 - Instalação Limpa do Sistema
+| **Arquivo**                  | **Adaptação planejada**                                | **Finalidade**                                            | **CT relacionados** |
+|------------------------------|--------------------------------------------------------|-----------------------------------------------------------|---------------------|
+| GooglePlacesService.cs       | Construtor padrão + construtor com HttpClient e apiKey | Simular respostas do Google Places                        | CT006–CT012         |
+| PontosColetaService.cs       | Construtor protected + seis métodos virtual            | Isolar Firebase e permitir classes controladas nos testes | CT027–CT046         |
+| BoolToVisibilityConverter.cs | Nenhuma                                                | Testar implementação existente                            | CT001–CT005         |
+| MapaViewModel.cs             | Nenhuma                                                | Testar implementação existente                            | CT013–CT026         |
+| PontosColetaController.cs    | Nenhuma                                                | Testar decisões HTTP da implementação existente           | CT027–CT039         |
+| TesteReGraphik.csproj        | Nenhuma alteração registrada                           | Refletir o processo realmente realizado                   | —                   |
 
-* Primeiro teste de instalação em um notebook que não possuía o Visual Studio e sem o aplicativo da ReGraphik baixado.
+## 5 Plano de testes unitários – WEB
 
-<img width="1455" height="740" alt="InnoSetup_Imagem14" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem14.jpeg" />
+Esta seção apresentará os casos planejados para a camada WPF. Cada CT terá um espaço próprio para evidência do método de teste. O resultado deverá ser preenchido apenas após a execução.
 
-* Foi instalado o executável na pasta do sistema.
+### 5.1 WEB / ConvertersTeste
 
-<img width="965" height="76" alt="InnoSetup_Imagem15" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem15.jpeg" />
+Os casos CT001 a CT005 avaliarão a conversão de valores para estados de visibilidade do WPF.
 
-* A linguagem foi escolhida e os termos de uso foram lidos e aceitos.
+#### CT001 – Conversão de valor verdadeiro
 
-<img width="532" height="278" alt="InnoSetup_Imagem16" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem16.jpeg" />
+| **Camada / pasta**  | WEB / ConvertersTeste                         |
+|---------------------|-----------------------------------------------|
+| **Classe de teste** | BoolToVisibilityConverterTeste                |
+| **Nome do método**  | Converter_ValorVerdadeiro_DeveRetornarVisible |
+| **Situação**        | Aprovado                                      |
 
-<img width="842" height="652" alt="InnoSetup_Imagem17" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem17.jpeg" />
+**Objetivo:** Verificar se o converter retorna Visibility.Visible quando recebe o valor booleano true.
 
-* Assim como o esperado os arquivos foram copiados e enviados para a pasta `Program Files` e foi criado um atalho na tela do usuário.
+**Procedimento previsto:** Será criada uma instância do converter e enviado o valor true ao método Convert. O retorno será comparado com Visibility.Visible.
 
-<img width="851" height="660" alt="InnoSetup_Imagem18" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem18.jpeg" />
+**Resultado esperado:** O teste deverá confirmar que o resultado é Visibility.Visible.
 
-<img width="832" height="652" alt="InnpSetup_Imagem1" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem1.jpeg" />
+Figura 6 – Evidência do código do CT001 – BoolToVisibilityConverterTeste
 
-<img width="827" height="647" alt="InnoSetup_Imagem3" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem3.jpeg" />
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>![Evidência do documento](assets/testes-mapa/image7.png)<strong><br />
+</strong></th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
 
-<img width="840" height="653" alt="InnoSetup_Imagem4" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem4.jpeg" />
+Fonte: Elaborado pelo autor (2026).
 
-<img width="851" height="656" alt="InnoSetup_Imagem19" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem19.jpeg" />
+**Resultado após execução:**
 
-<img width="1366" height="988" alt="InnoSetup_Imagem20" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem20.jpeg" />
 
----
 
-<a id="detalhamento-ct046"></a>
-#### CT046 - Manutenção / Exigência de Seleção
+#### CT002 – Conversão de valor falso
 
-* Caso uma versão já exista na máquina, o executável fornecerá opção para o aplicativo já baixado.
+| **Camada / pasta**  | WEB / ConvertersTeste                      |
+|---------------------|--------------------------------------------|
+| **Classe de teste** | BoolToVisibilityConverterTeste             |
+| **Nome do método**  | Converter_ValorFalso_DeveRetornarCollapsed |
+| **Situação**        | Aprovado                                   |
 
-<img width="1391" height="978" alt="InnoSetup_Imagem21" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem21.jpeg" />
+**Objetivo:** Verificar se o converter retorna Visibility.Collapsed quando recebe o valor booleano false.
 
-* Se o usuário tenta avançar sem escolher uma opção, uma mensagem de alerta aparece e ele não consegue prosseguir se uma opção não for escolhida.
+**Procedimento previsto:** Será enviado false ao método Convert, mantendo os demais parâmetros apenas como apoio à chamada do conversor.
 
-<img width="822" height="647" alt="InnoSetup_Imagem5" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem5.jpeg" />
+**Resultado esperado:** O teste deverá confirmar que o resultado é Visibility.Collapsed.
 
----
+Figura 7 – Evidência do código do CT002 – BoolToVisibilityConverterTeste
 
-<a id="detalhamento-ct047"></a>
-#### CT047 - Exclusividade de Seleção (Checkboxes)
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>![Evidência do documento](assets/testes-mapa/image9.png)<strong><br />
+</strong></th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
 
-* O usuário marca a opção de atualização e logo tenta marcar a opção de desinstalar sem desmarcar a outra antes, o sistema não permite que mais de uma seja marcada então a outra é automaticamente desmarcada.
+Fonte: Elaborado pelo autor (2026).
 
-<img width="831" height="646" alt="InnoSetup_Imagem6" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem6.jpeg" />
+**Resultado após execução:**
 
-<img width="842" height="647" alt="InnoSetup_Imagem7" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem7.jpeg" />
 
----
 
-<a id="detalhamento-ct048"></a>
-#### CT048 - Atualização de Versão
+#### CT003 – Tratamento de valor não booleano
 
-* O usuário escolhe a opção de atualizar, mas como o sistema não possui uma versão superior, ele apenas alerta o usuário sobre isso.
+| **Camada / pasta**  | WEB / ConvertersTeste                            |
+|---------------------|--------------------------------------------------|
+| **Classe de teste** | BoolToVisibilityConverterTeste                   |
+| **Nome do método**  | Converter_ValorNaoBooleano_DeveRetornarCollapsed |
+| **Situação**        | Aprovado                                         |
 
-<img width="840" height="651" alt="InnoSetup_Imagem8" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem8.jpeg" />
+**Objetivo:** Verificar o comportamento do converter quando a entrada não é do tipo booleano.
 
----
+**Procedimento previsto:** Será utilizada uma string como entrada para representar um valor inesperado.
 
-<a id="detalhamento-ct049"></a>
-#### CT049 - Validação de Aplicação em Execução
+**Resultado esperado:** O teste deverá confirmar que a entrada é tratada sem exceção e retorna Visibility.Collapsed.
 
-* O usuário tenta usar a opção de restaurar o aplicativo quando ele ainda está aberto, e uma mensagem avisando que o sistema está aberto é enviada para que ele aceite fechar o aplicativo aberto antes de restaurar ele.
+Figura 8 – Evidência do código do CT003 – BoolToVisibilityConverterTeste
 
-<img width="1600" height="844" alt="InnoSetup_Imagem10" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem10.jpeg" />
 
----
+|----------------------------------------------------------------------------------------------------------------|
 
-<a id="detalhamento-ct050"></a>
-#### CT050 - Desinstalação da Aplicação
+Fonte: Elaborado pelo autor (2026).
 
-* O usuário escolhe desinstalar o aplicativo e o instalador desinstala ele com sucesso.
+**Resultado após execução:**
 
-<img width="842" height="647" alt="InnoSetup_Imagem7" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem7.jpeg" />
 
-<img width="1390" height="983" alt="InnoSetup_Imagem11" src="./Imgs/Teste_Instalador_InnoSetup/InnoSetup_Imagem11.jpeg" />
 
----
+#### CT004 – Tratamento de valor nulo
 
-### 7.7. Resiliência e Conectividade
+| **Camada / pasta**  | WEB / ConvertersTeste                     |
+|---------------------|-------------------------------------------|
+| **Classe de teste** | BoolToVisibilityConverterTeste            |
+| **Nome do método**  | Converter_ValorNulo_DeveRetornarCollapsed |
+| **Situação**        | Aprovado                                  |
 
-| ID | Funcionalidade | Cenário / Condição | Entrada | Resultado Esperado | Resultado Obtido | Evidência do Teste | Status |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **CT051** | Tratamento de Rede | Perda de conexão com a Internet durante a navegação no App | Desconectar cabo de rede/Wi-Fi | A interface exibe o status *"Modo Offline / Sem Conexão"* no rodapé e desabilita requisições pendentes sem travar a UI (evita Crash). | — | — | ⏳ Pendente |
-| **CT052** | Usabilidade em diferentes resoluções | Verifica se a interface WPF não quebra layout em HD (1366x768) e Full HD (1920x1080) | Rodar o mesmo fluxo (ex: Cadastrar Resíduo) nas duas resoluções | Checar se botões, campos e o WebView2 do mapa continuam visíveis e clicáveis | Teste em conformidade. | [Evidência CT030](#detalhamento-ct030) | ✅ Concluído |
+**Objetivo:** Verificar como o converter trata uma entrada nula.
 
----
+**Procedimento previsto:** Será enviado um valor nulo ao método Convert.
 
-#### Detalhamento de Execução dos Testes (Grupo 7.7)
+**Resultado esperado:** O teste deverá confirmar que o método retorna Visibility.Collapsed.
 
-<a id="detalhamento-ct030"></a>
-#### CT052 - Usabilidade em Diferentes Resoluções
+Figura 9 – Evidência do código do CT004 – BoolToVisibilityConverterTeste
 
-1. **Funcionalidade:** Usabilidade em diferentes resoluções
-2. **Cenário / Condição:** Verifica se a interface WPF não quebra layout em HD (1366x768) e Full HD (1920x1080)
-3. **Entrada:** Rodar o mesmo fluxo (ex: Cadastrar Resíduo) nas duas resoluções
-4. **Resultado Esperado:** Checar se botões, campos e o WebView2 do mapa continuam visíveis e clicáveis
-5. **Resultado Obtido:**
 
-<img width="1232" height="613" alt="11" src="https://github.com/user-attachments/assets/98b62033-a75e-4d23-86d8-9da3bad6716a" />
+|---------------------------------------------------------------------------------------------------------------|
 
-<img width="1734" height="623" alt="10" src="https://github.com/user-attachments/assets/2ee35390-a05c-4853-b1a2-6b5785e1092c" />
+Fonte: Elaborado pelo autor (2026).
 
-<img width="1813" height="607" alt="12" src="https://github.com/user-attachments/assets/aec6a05c-0df9-4a3f-9f39-7232a45acaa9" />
+**Resultado após execução:**
 
-6. **Evidência do Teste:** Teste em conformidade, conforme evidenciado acima no item 5.
-7. **Status:** ✅ Concluído
 
----
 
-## 8. Análise de Riscos
+#### CT005 – Conversão inversa não implementada
 
-| Risco Identificado | Impacto | Probabilidade | Ação de Mitigação / Prevenção |
-| :--- | :---: | :---: | :--- |
-| **Inatividade/Warm-up da API (Runasp.net no plano gratuito)** | Médio | Alta | Implementar indicador de carregamento (*Spinner/Loading*) no app WPF e *retry policy* nas chamadas HTTP. |
-| **Perda de conexão com o Firebase durante o Chat** | Médio | Média | Tratamento de exceção com notificação na tela (*Toast*) e reconexão automática ao reestabelecer rede. |
-| **Falha de renderização do WebView2 (Leaflet.js)** | Alto | Baixa | Adicionar verificação de presença do Runtime do WebView2 no instalador `.msi`/`.exe`. |
-| **Estouro de cota de chamadas da Google Places API** | Médio | Baixa | Armazenar em cache no Firebase os resultados de pontos de coleta já pesquisados por cidade. |
-| **Entradas de dimensões malformadas no cadastro** | Médio | Alta | Aplicar mascaramento de entrada nos inputs e validação estrita via regex e Análise de Valor Limite. |
+| **Camada / pasta**  | WEB / ConvertersTeste                                              |
+|---------------------|--------------------------------------------------------------------|
+| **Classe de teste** | BoolToVisibilityConverterTeste                                     |
+| **Nome do método**  | ConverterDeVolta_QuandoExecutado_DeveLancarNotImplementedException |
+| **Situação**        | Aprovado                                                           |
 
----
+**Objetivo:** Confirmar o comportamento definido para o método ConvertBack.
 
-## 9. Reteste e Regressão
+**Procedimento previsto:** O método ConvertBack será chamado com um valor de Visibility para verificar a exceção prevista na implementação.
 
-### 9.1 Conceitos e Aplicação no ReGraphik
-* **Erro:** Uma falha humana cometida pelo desenvolvedor (ex: esquecer de passar o token JWT no cabeçalho HTTP).
-* **Defeito (Bug):** A imperfeição presente na base de código (ex: método de consulta retornando `401 Unauthorized` por falta de header).
-* **Falha:** A manifestação visível ao usuário durante o uso (ex: a tela de Estoque Reverso fica em branco e exibe alerta de erro).
+**Resultado esperado:** O teste deverá capturar NotImplementedException.
 
-* **Processo de Reteste:** Após a correção do defeito pelo desenvolvedor, o testador reexecuta **exatamente o caso de teste que falhou** para confirmar que o problema foi sanado.
-* **Processo de Regressão:** Suíte de cenários executados para assegurar que a correção de um módulo (ex: alteração na API) não causou efeitos colaterais indesejados em outros módulos funcionais (ex: Chat ou Relatórios).
+Figura 10 – Evidência do código do CT005 – BoolToVisibilityConverterTeste
 
-### 9.2 Suíte Obrigatória de Testes de Regressão (Top 5 Cenários)
-Sempre que houver um novo deploy na API ou nova versão do cliente WPF, as 5 funcionalidades abaixo deverão ser **obrigatoriamente retestadas**:
 
-1. **`CT001` - Autenticação e Renovação de Sessão:** Garantir que o fluxo de login e validação do token permanecem operacionais.
-2. **`CT003` - Fluxo de Entrada e Persistência no Estoque Reverso:** Confirmar que o cadastro de resíduos continua gravando corretamente no Firebase.
-3. **`CT006` - Integração com Mapa e Geolocalização:** Assegurar que a busca de pontos de coleta via Google Places API / WebView2 continua ativa.
-4. **`CT007` - Sincronização do Chat em Tempo Real:** Validar que as mensagens continuam trafegando com baixa latência.
-5. **`CT008` - Compilação de Relatórios em PDF:** Garantir que o QuestPDF continua gerando o documento sem erros de layout ou dados zerados.
+|----------------------------------------------------------------------------------------------------------------|
 
-### 9.3 Critérios de Classificação de Severidade e Prioridade
+Fonte: Elaborado pelo autor (2026).
 
-Para padronizar a triagem de defeitos, a equipe adotará os seguintes critérios objetivos:
+**Resultado após execução:**
 
-**Severidade (impacto técnico no sistema)**
 
-| Nível | Critério no ReGraphik |
-| :--- | :--- |
-| **Crítica** | Sistema trava, dados são perdidos/corrompidos no Firebase, ou login/API ficam totalmente inacessíveis. |
-| **Alta** | Funcionalidade principal (Cadastro, Estoque, ESG) não funciona, mas o sistema não trava. |
-| **Média** | Funcionalidade secundária falha (ex: Chat com atraso, Mapa não carrega um pin) mas existe alternativa. |
-| **Baixa** | Problemas visuais, de layout ou usabilidade que não impedem o uso (ex: ícone desalinhado). |
 
-**Prioridade (urgência de correção para o negócio)**
+### EVIDÊNCIA GERAL DA PASTA – WEB / ConvertersTeste
 
-| Nível | Critério no ReGraphik |
-| :--- | :--- |
-| **Alta** | Bloqueia o fluxo principal do operador ou compromete a apresentação/entrega do TCC. |
-| **Média** | Afeta a experiência, mas há contorno possível até a próxima versão. |
-| **Baixa** | Pode ser corrigido em ciclos futuros sem impacto imediato. |
+Figura 11 – Resultado geral dos testes – WEB / ConvertersTeste no Gerenciador de Testes
 
-> Importante: Severidade e Prioridade são avaliadas separadamente. Um defeito de baixa severidade técnica (ex: erro visual na tela de login) pode receber prioridade alta se ocorrer durante a apresentação da banca.
 
----
+|----------------------------------------------------------------------------------------------------------------|
 
-## 10. Critérios de Entrada e Saída
+Fonte: Elaborado pelo autor (2026).
 
-### 10.1 Critérios de Entrada (Para iniciar os testes)
-* [x] API REST implantada e acessível em `https://webregraphik.runasp.net`.
-* [x] Instância do Firebase Realtime Database configurada e online.
-* [x] Build da aplicação Desktop WPF e/ou pacote instalador (`.msi` / `.exe`) gerados sem erros.
-* [x] Chaves de API (Google Places, Imgur) válidas e configuradas nas variáveis do sistema.
+Resumo após execução da pasta: Total: \[ 5 \] Aprovados: \[ 5 \] Falhas: \[ 0 \] Ignorados: \[ 0 \].
 
-### 10.2 Critérios de Saída (Para aprovar a entrega)
-* [x] Execução de no mínimo **95%** dos casos de teste planejados neste documento.
-* [x] **100% de aprovação nos Casos de Teste do Escopo Crítico** (Login, Cadastro de Resíduos, API e ESG).
-* [x] **Zero defeitos com severidade Alta ou Crítica pendentes de correção**.
-* [x] Registro e arquivamento de todas as evidências (prints, logs e PDFs) no repositório.
+### 5.2 WEB / ServicesTeste
 
----
+Os casos CT006 a CT012 avaliarão o processamento das respostas do Google Places com comunicação HTTP controlada pela suíte.
 
-## 11. Evidências e Documentação
+#### CT006 – Resposta válida da API
 
-### 11.1 Armazenamento de Evidências
-Todas as evidências geradas durante os testes deverão ser salvas na pasta do repositório:
-`docs/evidencias-testes/`
+| **Camada / pasta**  | WEB / ServicesTeste                                           |
+|---------------------|---------------------------------------------------------------|
+| **Classe de teste** | GooglePlacesServiceTeste                                      |
+| **Nome do método**  | BuscarPostos_RespostaValida_DeveRetornarPontoComDadosCorretos |
+| **Situação**        | Aprovado                                                      |
 
-Formatação esperada das evidências:
-* **Capturas de Tela (Prints):** NomeDoTeste_Status.png (Ex: `CT003_CadastroResiduo_SUCESSO.png`).
-* **Relatórios Impressos:** Exemplo de PDF exportado com dados de teste.
-* **Logs da API/HTTP:** Arquivos `.txt` contendo os retornos do Swagger/Postman.
+**Objetivo:** Verificar se uma resposta válida do Google Places é transformada corretamente em um ponto de coleta.
 
-### 11.2 Padrão de Reporte de Defeito (Bug Report)
-Ao encontrar qualquer falha, o testador deverá abrir uma **Issue no GitHub** utilizando o padrão abaixo:
+**Procedimento previsto:** Será fornecido um JSON controlado contendo place_id, nome, endereço e coordenadas. A chamada HTTP será simulada, sem acesso real à internet.
 
-```text
-[BUG] - Título claro e objetivo do problema
+**Resultado esperado:** O teste deverá encontrar um único ponto e validar ID, nome, endereço, material e coordenadas.
 
-- Descrição: Explicação sucinta sobre o comportamento incorreto observador.
-- Módulo Afetado: [Ex: Cadastrar Resíduos / Chat / API REST / Mapa]
-- Passos para Reproduzir:
-  1. Abrir o ReGraphik Desktop.
-  2. Fazer login com perfil Operador.
-  3. Navegar até a aba 'Cadastrar Resíduos'.
-  4. Preencher o campo 'Quantidade' com -10 e clicar em 'Salvar'.
-- Resultado Esperado: O sistema deve exibir um alerta de validação impedindo o envio.
-- Resultado Obtido: O sistema trava (Crash) e lança uma exceção 'FormatException'.
-- Severidade: Alta (Trava a aplicação)
-- Prioridade: Alta (Bloqueia o fluxo principal do operador)
-- Ambiente: Windows 11 64-bits / ReGraphik v1.0.0 / .NET 8.0 Runtime
-- Evidência: print_erro_crash.png (em anexo)
+Figura 12 – Evidência do código do CT006 – GooglePlacesServiceTeste
 
-````
 
----
+|------------------------------------------------------------------------------------------------------------|
 
-## 12. Recursos Necessários
+Fonte: Elaborado pelo autor (2026).
 
-| Tipo | Recurso |
-| :--- | :--- |
-| **Equipe** | 5 integrantes atuando em revezamento entre desenvolvimento e testes |
-| **Ambiente** | 1 máquina Windows 10/11 64-bits para testes de instalação e execução do WPF |
-| **Ferramentas** | Postman/Swagger (API), GitHub Issues (defeitos), WebView2 Runtime |
-| **Dados de Teste** | Massa de dados fictícia de resíduos, usuários e conversas no Firebase (ambiente de homologação) |
-| **Acessos** | Chaves de API válidas (Google Places, Imgur) configuradas em ambiente de teste |
+**Resultado após execução:**
 
----
 
-## 13. Cronograma
 
-| Atividade | Período Previsto |
-| :--- | :--- |
-| Preparação do ambiente e dados de teste | Semana 1 |
-| Execução dos Casos de Teste funcionais | Semana 2 |
-| Testes de integração (API, Firebase, Google Maps, Imgur) | Semana 2–3 |
-| Testes não funcionais e exploratórios | Semana 3 |
-| Correção de defeitos, reteste e regressão | Semana 4 |
-| Fechamento e relatório final | Semana 5 |
+#### CT007 – Pesquisa sem resultados
 
-> Este cronograma deverá ser atualizado a cada ciclo de desenvolvimento (sprint) do TCC.
+| **Camada / pasta**  | WEB / ServicesTeste                               |
+|---------------------|---------------------------------------------------|
+| **Classe de teste** | GooglePlacesServiceTeste                          |
+| **Nome do método**  | BuscarPostos_SemResultados_DeveRetornarListaVazia |
+| **Situação**        | Aprovado                                          |
 
+**Objetivo:** Verificar o retorno quando a API informa uma lista vazia de resultados.
 
+**Procedimento previsto:** Será simulado um JSON com a propriedade results contendo um vetor vazio.
+
+**Resultado esperado:** O teste deverá confirmar que a lista retornada está vazia.
+
+Figura 13 – Evidência do código do CT007 – GooglePlacesServiceTeste
+
+
+|---------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT008 – Falha na comunicação com a API
+
+| **Camada / pasta**  | WEB / ServicesTeste                                   |
+|---------------------|-------------------------------------------------------|
+| **Classe de teste** | GooglePlacesServiceTeste                              |
+| **Nome do método**  | BuscarPostos_FalhaNaRequisicao_DeveRetornarListaVazia |
+| **Situação**        | Aprovado                                              |
+
+**Objetivo:** Verificar o tratamento de uma falha HTTP durante a consulta externa.
+
+**Procedimento previsto:** O manipulador HTTP de teste lançará HttpRequestException no momento da requisição.
+
+**Resultado esperado:** O teste deverá confirmar que a falha é tratada e que o método retorna uma lista vazia.
+
+Figura 14 – Evidência do código do CT008 – GooglePlacesServiceTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT009 – Resultado sem place_id
+
+| **Camada / pasta**  | WEB / ServicesTeste                           |
+|---------------------|-----------------------------------------------|
+| **Classe de teste** | GooglePlacesServiceTeste                      |
+| **Nome do método**  | BuscarPostos_SemPlaceId_DeveGerarIdSequencial |
+| **Situação**        | Aprovado                                      |
+
+**Objetivo:** Verificar a regra usada quando a resposta não possui place_id.
+
+**Procedimento previsto:** Será fornecido um resultado válido sem o campo place_id.
+
+**Resultado esperado:** O teste deverá confirmar que o serviço gera o identificador alternativo previsto.
+
+Figura 15 – Evidência do código do CT009 – GooglePlacesServiceTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT010 – Resultado sem nome
+
+| **Camada / pasta**  | WEB / ServicesTeste                  |
+|---------------------|--------------------------------------|
+| **Classe de teste** | GooglePlacesServiceTeste             |
+| **Nome do método**  | BuscarPostos_SemNome_DeveUsarSemNome |
+| **Situação**        | Aprovado                             |
+
+**Objetivo:** Verificar o valor adotado quando o Google não informa o nome do local.
+
+**Procedimento previsto:** Será simulado um resultado com identificador e coordenadas, mas sem a propriedade name.
+
+**Resultado esperado:** O teste deverá confirmar que NomePonto recebe o texto padrão "Sem Nome".
+
+Figura 16 – Evidência do código do CT010 – GooglePlacesServiceTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT011 – Resultado sem coordenadas
+
+| **Camada / pasta**  | WEB / ServicesTeste                                          |
+|---------------------|--------------------------------------------------------------|
+| **Classe de teste** | GooglePlacesServiceTeste                                     |
+| **Nome do método**  | BuscarPostos_SemCoordenadas_DeveManterLatitudeELongitudeZero |
+| **Situação**        | Aprovado                                                     |
+
+**Objetivo:** Verificar como o serviço trata um resultado sem geometry/location.
+
+**Procedimento previsto:** Será fornecido um resultado sem latitude e longitude.
+
+**Resultado esperado:** O teste deverá confirmar que Lat e Lng permanecem com valor 0.
+
+Figura 17 – Evidência do código do CT011 – GooglePlacesServiceTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT012 – JSON inválido
+
+| **Camada / pasta**  | WEB / ServicesTeste                              |
+|---------------------|--------------------------------------------------|
+| **Classe de teste** | GooglePlacesServiceTeste                         |
+| **Nome do método**  | BuscarPostos_JsonInvalido_DeveRetornarListaVazia |
+| **Situação**        | Aprovado                                         |
+
+**Objetivo:** Verificar o tratamento de conteúdo fora do formato JSON esperado.
+
+**Procedimento previsto:** A resposta HTTP simulada conterá texto inválido em vez de JSON.
+
+**Resultado esperado:** O teste deverá confirmar que a falha de processamento é tratada e retorna uma lista vazia.
+
+Figura 18 – Evidência do código do CT012 – GooglePlacesServiceTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+### EVIDÊNCIA GERAL DA PASTA – WEB / ServicesTeste
+
+Figura 19 – Resultado geral dos testes – WEB / ServicesTeste no Gerenciador de Testes
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+Resumo após execução da pasta: Total: \[ 7 \] Aprovados: \[ 7 \] Falhas: \[ 0 \] Ignorados: \[ 0 \].
+
+### 5.3 WEB / ViewModelsTeste
+
+Os casos CT013 a CT026 avaliarão estado de tela, notificações de binding, geração de marcadores e foco no mapa.
+
+#### CT013 – Inicialização do mapa
+
+| **Camada / pasta**  | WEB / ViewModelsTeste                                |
+|---------------------|------------------------------------------------------|
+| **Classe de teste** | MapaViewModelTeste                                   |
+| **Nome do método**  | Construtor_AoCriarViewModel_DeveInicializarMapaLivre |
+| **Situação**        | Aprovado                                             |
+
+**Objetivo:** Verificar o estado inicial do MapaViewModel.
+
+**Procedimento previsto:** Uma nova instância do ViewModel será criada sem realizar consultas externas.
+
+**Resultado esperado:** O teste deverá confirmar a existência do comando de busca, do HTML básico do mapa e do estado vazio inicial.
+
+Figura 20 – Evidência do código do CT013 – MapaViewModelTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT014 – Estado vazio sem pontos
+
+| **Camada / pasta**  | WEB / ViewModelsTeste                                             |
+|---------------------|-------------------------------------------------------------------|
+| **Classe de teste** | MapaViewModelTeste                                                |
+| **Nome do método**  | MostrarEstadoVazio_SemPontosENaoCarregando_DeveRetornarVerdadeiro |
+| **Situação**        | Aprovado                                                          |
+
+**Objetivo:** Verificar se o estado vazio é exibido quando não existem pontos e não há carregamento.
+
+**Procedimento previsto:** A coleção PontosAtuais será mantida vazia e IsCarregando será definido como false.
+
+**Resultado esperado:** MostrarEstadoVazio deverá retornar verdadeiro.
+
+Figura 21 – Evidência do código do CT014 – MapaViewModelTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT015 – Estado vazio com ponto
+
+| **Camada / pasta**  | WEB / ViewModelsTeste                         |
+|---------------------|-----------------------------------------------|
+| **Classe de teste** | MapaViewModelTeste                            |
+| **Nome do método**  | MostrarEstadoVazio_ComPonto_DeveRetornarFalso |
+| **Situação**        | Aprovado                                      |
+
+**Objetivo:** Verificar se o estado vazio é ocultado quando existe um ponto de coleta.
+
+**Procedimento previsto:** Será adicionada uma instância de PontosColeta à coleção e o carregamento permanecerá inativo.
+
+**Resultado esperado:** MostrarEstadoVazio deverá retornar falso.
+
+Figura 22 – Evidência do código do CT015 – MapaViewModelTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT016 – Estado durante carregamento
+
+| **Camada / pasta**  | WEB / ViewModelsTeste                                    |
+|---------------------|----------------------------------------------------------|
+| **Classe de teste** | MapaViewModelTeste                                       |
+| **Nome do método**  | MostrarEstadoVazio_DuranteCarregamento_DeveRetornarFalso |
+| **Situação**        | Aprovado                                                 |
+
+**Objetivo:** Verificar o estado da interface durante uma operação de carregamento.
+
+**Procedimento previsto:** A coleção permanecerá vazia, porém IsCarregando será definido como true.
+
+**Resultado esperado:** MostrarEstadoVazio deverá retornar falso enquanto o carregamento estiver ativo.
+
+Figura 23 – Evidência do código do CT016 – MapaViewModelTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT017 – Notificação da propriedade Cidade
+
+| **Camada / pasta**  | WEB / ViewModelsTeste                      |
+|---------------------|--------------------------------------------|
+| **Classe de teste** | MapaViewModelTeste                         |
+| **Nome do método**  | Cidade_AoAlterarValor_DeveNotificarMudanca |
+| **Situação**        | Aprovado                                   |
+
+**Objetivo:** Verificar se a alteração da cidade dispara PropertyChanged.
+
+**Procedimento previsto:** O teste assinará o evento PropertyChanged e, em seguida, alterará a propriedade Cidade.
+
+**Resultado esperado:** O nome da propriedade notificada deverá ser Cidade.
+
+Figura 24 – Evidência do código do CT017 – MapaViewModelTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT018 – Notificação da coleção PontosAtuais
+
+| **Camada / pasta**  | WEB / ViewModelsTeste                               |
+|---------------------|-----------------------------------------------------|
+| **Classe de teste** | MapaViewModelTeste                                  |
+| **Nome do método**  | PontosAtuais_AoAlterarColecao_DeveNotificarMudancas |
+| **Situação**        | Aprovado                                            |
+
+**Objetivo:** Verificar as notificações produzidas quando a coleção de pontos é substituída.
+
+**Procedimento previsto:** O evento PropertyChanged será monitorado durante a atribuição de uma nova ObservableCollection.
+
+**Resultado esperado:** Deverão ser notificadas PontosAtuais e MostrarEstadoVazio.
+
+Figura 25 – Evidência do código do CT018 – MapaViewModelTeste
+
+
+|---------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT019 – Lista nula de marcadores
+
+| **Camada / pasta**  | WEB / ViewModelsTeste                                |
+|---------------------|------------------------------------------------------|
+| **Classe de teste** | MapaViewModelTeste                                   |
+| **Nome do método**  | GerarJsonMarcadores_ListaNula_DeveRetornarArrayVazio |
+| **Situação**        | Aprovado                                             |
+
+**Objetivo:** Verificar se uma referência nula é tratada de forma segura pela geração de marcadores.
+
+**Procedimento previsto:** GerarJsonMarcadores será chamado com lista nula.
+
+**Resultado esperado:** O retorno deverá ser o vetor JSON vazio \[\] sem lançamento de exceção.
+
+Figura 26 – Evidência do código do CT019 – MapaViewModelTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT020 – Lista vazia de marcadores
+
+| **Camada / pasta**  | WEB / ViewModelsTeste                                 |
+|---------------------|-------------------------------------------------------|
+| **Classe de teste** | MapaViewModelTeste                                    |
+| **Nome do método**  | GerarJsonMarcadores_ListaVazia_DeveRetornarArrayVazio |
+| **Situação**        | Aprovado                                              |
+
+**Objetivo:** Verificar o JSON produzido quando não existem pontos de coleta.
+
+**Procedimento previsto:** Será enviada uma lista vazia para GerarJsonMarcadores.
+
+**Resultado esperado:** O retorno deverá ser exatamente \[\].
+
+Figura 27 – Evidência do código do CT020 – MapaViewModelTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT021 – Geração de marcador válido
+
+| **Camada / pasta**  | WEB / ViewModelsTeste                                     |
+|---------------------|-----------------------------------------------------------|
+| **Classe de teste** | MapaViewModelTeste                                        |
+| **Nome do método**  | GerarJsonMarcadores_ComPontoValido_DeveGerarDadosCorretos |
+| **Situação**        | Aprovado                                                  |
+
+**Objetivo:** Verificar a estrutura gerada para um ponto de coleta válido.
+
+**Procedimento previsto:** Será criado um ponto com nome, cidade, resíduos e coordenadas conhecidas e o JSON produzido será inspecionado.
+
+**Resultado esperado:** O JSON deverá conter índice, nome, endereço, tipos de resíduos, latitude e longitude corretos.
+
+Figura 28 – Evidência do código do CT021 – MapaViewModelTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+#### CT022 – Índices de vários marcadores
+
+| **Camada / pasta**  | WEB / ViewModelsTeste                                           |
+|---------------------|-----------------------------------------------------------------|
+| **Classe de teste** | MapaViewModelTeste                                              |
+| **Nome do método**  | GerarJsonMarcadores_ComVariosPontos_DeveGerarIndicesSequenciais |
+| **Situação**        | Aprovado                                                        |
+
+**Objetivo:** Verificar a numeração dos marcadores quando existem vários pontos.
+
+**Procedimento previsto:** Serão fornecidos três pontos em uma lista ordenada.
+
+**Resultado esperado:** O JSON deverá conter índices 0, 1 e 2 na mesma ordem dos pontos informados.
+
+Figura 29 – Evidência do código do CT022 – MapaViewModelTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT023 – Coordenadas iguais a zero
+
+| **Camada / pasta**  | WEB / ViewModelsTeste                                         |
+|---------------------|---------------------------------------------------------------|
+| **Classe de teste** | MapaViewModelTeste                                            |
+| **Nome do método**  | GerarJsonMarcadores_CoordenadasZero_DeveUsarCoordenadasPadrao |
+| **Situação**        | Aprovado                                                      |
+
+**Objetivo:** Verificar a regra de coordenadas padrão quando o ponto possui latitude e longitude zero.
+
+**Procedimento previsto:** Será enviado um ponto com Lat = 0 e Lng = 0.
+
+**Resultado esperado:** O JSON deverá utilizar as coordenadas padrão definidas pelo ViewModel.
+
+Figura 30 – Evidência do código do CT023 – MapaViewModelTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT024 – Formatação decimal das coordenadas
+
+| **Camada / pasta**  | WEB / ViewModelsTeste                                              |
+|---------------------|--------------------------------------------------------------------|
+| **Classe de teste** | MapaViewModelTeste                                                 |
+| **Nome do método**  | GerarJsonMarcadores_CoordenadasDecimais_DeveUsarPontoComoSeparador |
+| **Situação**        | Aprovado                                                           |
+
+**Objetivo:** Verificar se a serialização das coordenadas é independente da cultura regional.
+
+**Procedimento previsto:** Será utilizado um ponto com várias casas decimais.
+
+**Resultado esperado:** O JSON deverá usar ponto como separador decimal e não vírgula.
+
+Figura 31 – Evidência do código do CT024 – MapaViewModelTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT025 – Tratamento de caracteres especiais
+
+| **Camada / pasta**  | WEB / ViewModelsTeste                                               |
+|---------------------|---------------------------------------------------------------------|
+| **Classe de teste** | MapaViewModelTeste                                                  |
+| **Nome do método**  | GerarJsonMarcadores_TextoComCaracteresEspeciais_DeveEscaparConteudo |
+| **Situação**        | Aprovado                                                            |
+
+**Objetivo:** Verificar o tratamento de aspas, barras e quebras de linha nos textos enviados ao mapa.
+
+**Procedimento previsto:** Será criado um ponto contendo caracteres especiais em nome, cidade e resíduos.
+
+**Resultado esperado:** O conteúdo deverá ser escapado ou normalizado de forma a não quebrar o JSON/JavaScript.
+
+Figura 32 – Evidência do código do CT025 – MapaViewModelTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT026 – Foco em ponto do mapa
+
+| **Camada / pasta**  | WEB / ViewModelsTeste                               |
+|---------------------|-----------------------------------------------------|
+| **Classe de teste** | MapaViewModelTeste                                  |
+| **Nome do método**  | FocarNoPonto_MapaCarregado_DeveDefinirIndiceCorreto |
+| **Situação**        | Aprovado                                            |
+
+**Objetivo:** Verificar o índice de foco após o carregamento do mapa.
+
+**Procedimento previsto:** Serão adicionados dois pontos à coleção; o mapa será marcado como carregado e o segundo ponto será solicitado para foco.
+
+**Resultado esperado:** IndiceFoco deverá corresponder à posição do segundo ponto na coleção.
+
+Figura 33 – Evidência do código do CT026 – MapaViewModelTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+### EVIDÊNCIA GERAL DA PASTA – WEB / ViewModelsTeste
+
+Figura 34 – Resultado geral dos testes – WEB / ViewModelsTeste no Gerenciador de Testes
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+Resumo após execução da pasta: Total: \[ 14 \] Aprovados: \[ 14 \] Falhas: \[ 0 \] Ignorados: \[ 0 \].
+
+## 6 Plano de testes unitários – API
+
+Esta seção reunirá os testes das classes da ApiRestReGraphik relacionadas aos pontos de coleta. As dependências de Firebase e Google serão substituídas por respostas controladas quando o objetivo for avaliar apenas a regra da classe sob teste.
+
+### 6.1 APITeste / ControllerTeste
+
+Os casos CT027 a CT039 avaliarão as respostas HTTP da Controller para listagem, sincronização, consulta, cadastro, atualização e exclusão.
+
+#### CT027 – Listagem de pontos com sucesso
+
+| **Camada / pasta**  | API / ControllerTeste          |
+|---------------------|--------------------------------|
+| **Classe de teste** | PontosColetaControllerTeste    |
+| **Nome do método**  | Listar_ComDados_DeveRetornarOk |
+| **Situação**        | Aprovado                       |
+
+**Objetivo:** Verificar a resposta do endpoint GET quando o serviço fornece pontos cadastrados.
+
+**Procedimento previsto:** O serviço controlado retornará uma lista com um ponto, e o método Get será executado sem acesso real ao Firebase.
+
+**Resultado esperado:** O Controller deverá retornar 200 OK e uma coleção de PontosColetaDto com os dados esperados.
+
+Figura 35 – Evidência do código do CT027 – PontosColetaControllerTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT028 – Falha de comunicação na listagem
+
+| **Camada / pasta**  | API / ControllerTeste                          |
+|---------------------|------------------------------------------------|
+| **Classe de teste** | PontosColetaControllerTeste                    |
+| **Nome do método**  | Listar_FalhaComunicacao_DeveRetornarBadGateway |
+| **Situação**        | Aprovado                                       |
+
+**Objetivo:** Verificar a resposta HTTP quando a listagem sofre HttpRequestException.
+
+**Procedimento previsto:** O serviço falso lançará uma falha de comunicação durante Listar.
+
+**Resultado esperado:** O Controller deverá retornar 502 Bad Gateway.
+
+Figura 36 – Evidência do código do CT028 – PontosColetaControllerTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT029 – Sincronização sem cidade
+
+| **Camada / pasta**  | API / ControllerTeste                                |
+|---------------------|------------------------------------------------------|
+| **Classe de teste** | PontosColetaControllerTeste                          |
+| **Nome do método**  | SincronizarCidade_CidadeVazia_DeveRetornarBadRequest |
+| **Situação**        | Aprovado                                             |
+
+**Objetivo:** Verificar a validação do parâmetro cidade na sincronização.
+
+**Procedimento previsto:** SincronizarCidade será chamado com texto vazio.
+
+**Resultado esperado:** O Controller deverá retornar 400 Bad Request sem chamar a sincronização externa.
+
+Figura 37 – Evidência do código do CT029 – PontosColetaControllerTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT030 – Sincronização sem chave da API
+
+| **Camada / pasta**  | API / ControllerTeste                                |
+|---------------------|------------------------------------------------------|
+| **Classe de teste** | PontosColetaControllerTeste                          |
+| **Nome do método**  | SincronizarCidade_SemApiKey_DeveRetornarErroServidor |
+| **Situação**        | Aprovado                                             |
+
+**Objetivo:** Verificar a resposta quando GoogleMaps:ApiKey não está configurada.
+
+**Procedimento previsto:** A Controller será criada com uma IConfiguration sem a chave do Google Maps.
+
+**Resultado esperado:** O retorno deverá ser 500 Internal Server Error.
+
+Figura 38 – Evidência do código do CT030 – PontosColetaControllerTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT031 – Sincronização concluída com sucesso
+
+| **Camada / pasta**  | API / ControllerTeste                   |
+|---------------------|-----------------------------------------|
+| **Classe de teste** | PontosColetaControllerTeste             |
+| **Nome do método**  | SincronizarCidade_Valida_DeveRetornarOk |
+| **Situação**        | Aprovado                                |
+
+**Objetivo:** Verificar a resposta da sincronização para uma cidade válida.
+
+**Procedimento previsto:** O serviço falso informará três pontos salvos e um ignorado.
+
+**Resultado esperado:** O Controller deverá retornar 200 OK com Mensagem, PontosSalvos = 3 e PontosIgnoradosPorDuplicidade = 1.
+
+Figura 39 – Evidência do código do CT031 – PontosColetaControllerTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT032 – Busca por ID existente
+
+| **Camada / pasta**  | API / ControllerTeste                |
+|---------------------|--------------------------------------|
+| **Classe de teste** | PontosColetaControllerTeste          |
+| **Nome do método**  | BuscarPorId_Existente_DeveRetornarOk |
+| **Situação**        | Aprovado                             |
+
+**Objetivo:** Verificar a consulta individual de um ponto existente.
+
+**Procedimento previsto:** O serviço controlado retornará um objeto PontosColeta para o ID informado.
+
+**Resultado esperado:** O Controller deverá retornar 200 OK com o objeto esperado.
+
+Figura 40 – Evidência do código do CT032 – PontosColetaControllerTeste
+
+
+|---------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT033 – Busca por ID inexistente
+
+| **Camada / pasta**  | API / ControllerTeste                        |
+|---------------------|----------------------------------------------|
+| **Classe de teste** | PontosColetaControllerTeste                  |
+| **Nome do método**  | BuscarPorId_Inexistente_DeveRetornarNotFound |
+| **Situação**        | Aprovado                                     |
+
+**Objetivo:** Verificar a resposta para um identificador que não existe.
+
+**Procedimento previsto:** O serviço falso retornará null para ObterPorId.
+
+**Resultado esperado:** O Controller deverá retornar 404 Not Found.
+
+Figura 41 – Evidência do código do CT033 – PontosColetaControllerTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT034 – Cadastro sem dados
+
+| **Camada / pasta**  | API / ControllerTeste                    |
+|---------------------|------------------------------------------|
+| **Classe de teste** | PontosColetaControllerTeste              |
+| **Nome do método**  | Cadastrar_DtoNulo_DeveRetornarBadRequest |
+| **Situação**        | Aprovado                                 |
+
+**Objetivo:** Verificar a validação de entrada no endpoint POST.
+
+**Procedimento previsto:** O método Post será chamado com DTO nulo.
+
+**Resultado esperado:** O Controller deverá retornar 400 Bad Request.
+
+Figura 42 – Evidência do código do CT034 – PontosColetaControllerTeste
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT035 – Cadastro válido
+
+| **Camada / pasta**  | API / ControllerTeste                      |
+|---------------------|--------------------------------------------|
+| **Classe de teste** | PontosColetaControllerTeste                |
+| **Nome do método**  | Cadastrar_DadosValidos_DeveRetornarCreated |
+| **Situação**        | Aprovado                                   |
+
+**Objetivo:** Verificar o fluxo de criação de um ponto de coleta válido.
+
+**Procedimento previsto:** Será fornecido um PontosColetaDto completo e o serviço de criação será controlado pela suíte.
+
+**Resultado esperado:** O Controller deverá retornar CreatedAtAction/201, gerar um GUID e preservar os dados principais do DTO.
+
+Figura 43 – Evidência do código do CT035 – PontosColetaControllerTeste
+
+
+|---------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT036 – Atualização de ID inexistente
+
+| **Camada / pasta**  | API / ControllerTeste                        |
+|---------------------|----------------------------------------------|
+| **Classe de teste** | PontosColetaControllerTeste                  |
+| **Nome do método**  | Atualizar_IdInexistente_DeveRetornarNotFound |
+| **Situação**        | Aprovado                                     |
+
+**Objetivo:** Verificar a tentativa de atualizar um ponto que não existe.
+
+**Procedimento previsto:** ObterPorId retornará null antes da atualização.
+
+**Resultado esperado:** O Controller deverá retornar 404 Not Found e não concluir a atualização.
+
+Figura 44 – Evidência do código do CT036 – PontosColetaControllerTeste
+
+
+|---------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT037 – Atualização válida
+
+| **Camada / pasta**  | API / ControllerTeste                 |
+|---------------------|---------------------------------------|
+| **Classe de teste** | PontosColetaControllerTeste           |
+| **Nome do método**  | Atualizar_DadosValidos_DeveRetornarOk |
+| **Situação**        | Aprovado                              |
+
+**Objetivo:** Verificar a atualização de um ponto existente.
+
+**Procedimento previsto:** O serviço falso devolverá um ponto existente; um DTO com novos dados será enviado ao Put.
+
+**Resultado esperado:** O Controller deverá retornar 200 OK e encaminhar ao serviço o ID e os valores atualizados.
+
+Figura 45 – Evidência do código do CT037 – PontosColetaControllerTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT038 – Exclusão de ID inexistente
+
+| **Camada / pasta**  | API / ControllerTeste                      |
+|---------------------|--------------------------------------------|
+| **Classe de teste** | PontosColetaControllerTeste                |
+| **Nome do método**  | Excluir_IdInexistente_DeveRetornarNotFound |
+| **Situação**        | Aprovado                                   |
+
+**Objetivo:** Verificar a tentativa de excluir um ponto não encontrado.
+
+**Procedimento previsto:** ObterPorId retornará null para o identificador informado.
+
+**Resultado esperado:** O Controller deverá retornar 404 Not Found e não executar a exclusão.
+
+Figura 46 – Evidência do código do CT038 – PontosColetaControllerTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT039 – Exclusão válida
+
+| **Camada / pasta**  | API / ControllerTeste              |
+|---------------------|------------------------------------|
+| **Classe de teste** | PontosColetaControllerTeste        |
+| **Nome do método**  | Excluir_IdExistente_DeveRetornarOk |
+| **Situação**        | Aprovado                           |
+
+**Objetivo:** Verificar o fluxo de exclusão de um ponto existente.
+
+**Procedimento previsto:** O serviço falso retornará o ponto solicitado e registrará o ID recebido no método Excluir.
+
+**Resultado esperado:** O Controller deverá retornar 200 OK e o ID encaminhado à exclusão deverá coincidir com o ponto existente.
+
+Figura 47 – Evidência do código do CT039 – PontosColetaControllerTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+### EVIDÊNCIA GERAL DA PASTA – APITeste / ControllerTeste
+
+Figura 48 – Resultado geral dos testes – APITeste / ControllerTeste no Gerenciador de Testes
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+Resumo após execução da pasta: Total: \[ 13 \] Aprovados: \[ 13 \] Falhas: \[ 0 \] Ignorados: \[ 0 \].
+
+### 6.2 APITeste / ServicesApiTeste
+
+Os casos CT040 a CT046 avaliarão validações de configuração e regras de sincronização do PontosColetaService sem acesso real ao Firebase ou Google.
+
+#### CT040 – Configuração do Firebase ausente
+
+| **Camada / pasta**  | API / ServicesApiTeste                               |
+|---------------------|------------------------------------------------------|
+| **Classe de teste** | PontosColetaServiceTeste                             |
+| **Nome do método**  | ServicoPontosColeta_SemUrlFirebase_DeveLancarExcecao |
+| **Situação**        | Aprovado                                             |
+
+**Objetivo:** Verificar a validação da URL do Firebase no construtor de produção.
+
+**Procedimento previsto:** O serviço será instanciado com uma IConfiguration sem Firebase:RealtimeDatabaseUrl.
+
+**Resultado esperado:** A construção deverá lançar exceção com a mensagem prevista para configuração ausente.
+
+Figura 49 – Evidência do código do CT040 – PontosColetaServiceTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT041 – Arquivo de credenciais ausente
+
+| **Camada / pasta**  | API / ServicesApiTeste                                                   |
+|---------------------|--------------------------------------------------------------------------|
+| **Classe de teste** | PontosColetaServiceTeste                                                 |
+| **Nome do método**  | ServicoPontosColeta_SemArquivoCredencial_DeveLancarFileNotFoundException |
+| **Situação**        | Aprovado                                                                 |
+
+**Objetivo:** Verificar a validação do arquivo de credenciais do Firebase.
+
+**Procedimento previsto:** Será configurada uma URL do Firebase e um nome de arquivo inexistente.
+
+**Resultado esperado:** A construção deverá lançar FileNotFoundException e indicar o arquivo não localizado.
+
+Figura 50 – Evidência do código do CT041 – PontosColetaServiceTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT042 – Status de erro retornado pelo Google
+
+| **Camada / pasta**  | API / ServicesApiTeste                        |
+|---------------------|-----------------------------------------------|
+| **Classe de teste** | PontosColetaServiceTeste                      |
+| **Nome do método**  | Sincronizar_StatusErroGoogle_DeveRetornarZero |
+| **Situação**        | Aprovado                                      |
+
+**Objetivo:** Verificar a reação da sincronização a um status do Google diferente de OK e ZERO_RESULTS.
+
+**Procedimento previsto:** A resposta HTTP simulada utilizará REQUEST_DENIED e uma lista vazia.
+
+**Resultado esperado:** O método deverá retornar zero salvos, zero ignorados e não criar pontos.
+
+Figura 51 – Evidência do código do CT042 – PontosColetaServiceTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT043 – Resposta sem resultados
+
+| **Camada / pasta**  | API / ServicesApiTeste                  |
+|---------------------|-----------------------------------------|
+| **Classe de teste** | PontosColetaServiceTeste                |
+| **Nome do método**  | Sincronizar_SemResults_DeveRetornarZero |
+| **Situação**        | Aprovado                                |
+
+**Objetivo:** Verificar a sincronização quando a resposta não possui a propriedade results.
+
+**Procedimento previsto:** Será simulado um JSON com status OK, mas sem results.
+
+**Resultado esperado:** O método deverá encerrar com contadores zerados e sem criar pontos.
+
+Figura 52 – Evidência do código do CT043 – PontosColetaServiceTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT044 – Ponto duplicado por coordenadas
+
+| **Camada / pasta**  | API / ServicesApiTeste                             |
+|---------------------|----------------------------------------------------|
+| **Classe de teste** | PontosColetaServiceTeste                           |
+| **Nome do método**  | Sincronizar_CoordenadasDuplicadas_DeveIgnorarPonto |
+| **Situação**        | Aprovado                                           |
+
+**Objetivo:** Verificar a regra de prevenção de duplicidade pelas coordenadas.
+
+**Procedimento previsto:** Um ponto existente será carregado em memória e o Google simulado retornará outro ponto com a mesma latitude e longitude.
+
+**Resultado esperado:** O método deverá contabilizar um ignorado, zero salvos e não chamar o cadastro do ponto duplicado.
+
+Figura 53 – Evidência do código do CT044 – PontosColetaServiceTeste
+
+
+|----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT045 – Novo ponto contabilizado como salvo
+
+| **Camada / pasta**  | API / ServicesApiTeste                      |
+|---------------------|---------------------------------------------|
+| **Classe de teste** | PontosColetaServiceTeste                    |
+| **Nome do método**  | Sincronizar_NovoPonto_DeveContabilizarSalvo |
+| **Situação**        | Aprovado                                    |
+
+**Objetivo:** Verificar o processamento de um ponto ainda inexistente na base.
+
+**Procedimento previsto:** O Google simulado retornará um local com coordenadas novas e o método Criar será substituído por armazenamento em memória.
+
+**Resultado esperado:** O método deverá contabilizar um salvo, zero ignorados e preparar o ponto com os valores de configuração definidos para o teste.
+
+Figura 54 – Evidência do código do CT045 – PontosColetaServiceTeste
+
+
+|---------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+#### CT046 – JSON inválido na sincronização
+
+| **Camada / pasta**  | API / ServicesApiTeste                                       |
+|---------------------|--------------------------------------------------------------|
+| **Classe de teste** | PontosColetaServiceTeste                                     |
+| **Nome do método**  | Sincronizar_JsonInvalido_DeveLancarInvalidOperationException |
+| **Situação**        | Aprovado                                                     |
+
+**Objetivo:** Verificar o tratamento de uma resposta externa corrompida.
+
+**Procedimento previsto:** O HttpClient de teste retornará texto que não pode ser interpretado como JSON.
+
+**Resultado esperado:** A sincronização deverá converter a falha de desserialização para InvalidOperationException, conforme o tratamento previsto no serviço.
+
+Figura 55 – Evidência do código do CT046 – PontosColetaServiceTeste
+
+
+|-----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+**Resultado após execução:**
+
+
+
+### EVIDÊNCIA GERAL DA PASTA – APITeste / ServicesApiTeste
+
+Figura 56 – Resultado geral dos testes – APITeste / ServicesApiTeste no Gerenciador de Testes
+
+
+|-----------------------------------------------------------------------------------------------------------------|
+
+Fonte: Elaborado pelo autor (2026).
+
+Resumo após execução da pasta: Total: \[ 7 \] Aprovados: \[ 7 \] Falhas: \[ 0 \] Ignorados: \[ 0 \].
+
+## 7 Registro dos resultados da suíte
+
+| **Total planejado**    | 46                   |
+|------------------------|----------------------|
+| **Total executado**    | 46                   |
+| **Aprovados**          | 46                   |
+| **Falhas encontradas** | 0                    |
+| **Falhas corrigidas**  | 0                    |
+| **Resultado final**    | 46 Testes aprovados. |
+
+## 8 Considerações finais
+
+A realização dos testes unitários no módulo de Mapa e Pontos de Coleta do sistema ReGraphik permitiu verificar de forma organizada os principais comportamentos das camadas WEB e API relacionadas a essa funcionalidade. Foram elaborados e executados 46 casos de teste, contemplando diferentes cenários, como entradas válidas e inválidas, tratamento de valores nulos, respostas inesperadas, falhas de comunicação, validações, geração de marcadores, sincronização com serviços externos, prevenção de duplicidade, operações de cadastro, consulta, atualização e exclusão.
+
+Ao final da execução da suíte, os 46 testes foram aprovados, sem ocorrência de falhas. Esse resultado demonstra que os comportamentos avaliados apresentaram as respostas esperadas dentro dos cenários definidos para a atividade.
+
+Durante a preparação da suíte, também foi necessário realizar pequenas adaptações de testabilidade em classes relacionadas ao módulo, principalmente para permitir o isolamento de dependências externas como Google Places e Firebase. Essas adaptações não alteraram as regras de negócio nem o funcionamento normal da aplicação, servindo apenas para possibilitar a execução de testes de forma controlada, repetível e independente de conexões externas.
+
+A atividade contribuiu para validar o funcionamento do módulo e também para demonstrar a importância dos testes unitários no desenvolvimento de software. A utilização do xUnit, juntamente com a organização dos testes no padrão Arrange, Act e Assert, facilitou a leitura dos cenários, a identificação dos resultados esperados e a manutenção da suíte.
+
+Dessa forma, a suíte desenvolvida cumpriu o objetivo proposto, finalizando a validação do módulo de Mapa e Pontos de Coleta com **46 testes executados, 46 aprovados e nenhuma falha**, fornecendo maior segurança para a continuidade e manutenção do sistema ReGraphik.
+
+## Referências
+
+SENAI. Aula 02 – Criando o primeiro projeto xUnit.net. Material didático do curso Técnico em Desenvolvimento de Sistemas. Nova Lima, 2026.
+
+SENAI. Aula 03 – Escrevendo os primeiros testes com xUnit.net. Material didático do curso Técnico em Desenvolvimento de Sistemas. Nova Lima, 2026.
+
+SENAI. Situação de Aprendizagem – Suíte Individual de Testes Unitários Aplicada ao Projeto de TCC. Nova Lima, 2026.
+
+REGRAPHIK. Código-fonte do módulo Mapa e Pontos de Coleta. Projeto de TCC, 2026.

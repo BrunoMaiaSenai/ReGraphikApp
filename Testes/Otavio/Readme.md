@@ -1,3 +1,5 @@
+
+
 # Documentação Individual de Testes Unitários
 
 ## Módulo Mapa e Pontos de Coleta — Sistema ReGraphik
@@ -33,6 +35,57 @@ Este documento apresenta o planejamento dos testes unitários do módulo de Mapa
 A suíte será implementada com xUnit e seguirá a estrutura Arrange, Act e Assert. Os cenários foram definidos a partir dos comportamentos das classes relacionadas ao mapa, considerando caminhos válidos, entradas inesperadas, exceções, respostas de serviços externos e regras de negócio que podem ser verificadas de forma isolada.
 
 Além do plano de testes, o documento registra as adaptações de testabilidade que foram aplicadas ao código original para permitir o isolamento de Google Places e Firebase. Essas adaptações não têm como objetivo alterar regras de negócio; elas permitem que os testes controlem dependências externas e sejam executados de maneira repetível.
+
+| CT | Camada / Pasta | Caso de Teste | Descrição / Cenário | Situação |
+| :---: | :--- | :--- | :--- | :---: |
+| **CT001** | WEB / ConvertersTeste | Conversão de valor verdadeiro | Entrada válida: o converter recebe o valor booleano true. | ✅ Aprovado |
+| **CT002** | WEB / ConvertersTeste | Conversão de valor falso | Entrada válida: o converter recebe o valor booleano false. | ✅ Aprovado |
+| **CT003** | WEB / ConvertersTeste | Tratamento de valor não booleano | Entrada inválida: o converter recebe uma string em vez de um valor booleano. | ✅ Aprovado |
+| **CT004** | WEB / ConvertersTeste | Tratamento de valor nulo | Entrada nula: o converter recebe null como valor de entrada. | ✅ Aprovado |
+| **CT005** | WEB / ConvertersTeste | Conversão inversa não implementada | Exceção esperada: o método ConvertBack é chamado mesmo não possuindo implementação. | ✅ Aprovado |
+| **CT006** | WEB / ServicesTeste | Resposta válida da API | Fluxo de sucesso: a API simulada retorna um ponto com identificador, nome, endereço e coordenadas válidas. | ✅ Aprovado |
+| **CT007** | WEB / ServicesTeste | Pesquisa sem resultados | Resposta vazia: a API simulada retorna results sem nenhum local. | ✅ Aprovado |
+| **CT008** | WEB / ServicesTeste | Falha na comunicação com a API | Falha externa: a requisição HTTP simulada lança HttpRequestException. | ✅ Aprovado |
+| **CT009** | WEB / ServicesTeste | Resultado sem place_id | Resposta incompleta: o local retornado não possui place_id. | ✅ Aprovado |
+| **CT010** | WEB / ServicesTeste | Resultado sem nome | Resposta incompleta: o local possui identificador e coordenadas, mas não possui name. | ✅ Aprovado |
+| **CT011** | WEB / ServicesTeste | Resultado sem coordenadas | Resposta incompleta: o local retornado não possui geometry/location. | ✅ Aprovado |
+| **CT012** | WEB / ServicesTeste | JSON inválido | Resposta malformada: o conteúdo retornado não está em formato JSON válido. | ✅ Aprovado |
+| **CT013** | WEB / ViewModelsTeste | Inicialização do mapa | Estado inicial: uma nova instância do MapaViewModel é criada sem consultas externas. | ✅ Aprovado |
+| **CT014** | WEB / ViewModelsTeste | Estado vazio sem pontos | Coleção vazia e sem carregamento: não existem pontos e IsCarregando está false. | ✅ Aprovado |
+| **CT015** | WEB / ViewModelsTeste | Estado vazio com ponto | Coleção com resultado: existe pelo menos um ponto e o carregamento está inativo. | ✅ Aprovado |
+| **CT016** | WEB / ViewModelsTeste | Estado durante carregamento | Coleção vazia durante busca: IsCarregando está true. | ✅ Aprovado |
+| **CT017** | WEB / ViewModelsTeste | Notificação da propriedade Cidade | Alteração de binding: a propriedade Cidade recebe um novo valor. | ✅ Aprovado |
+| **CT018** | WEB / ViewModelsTeste | Notificação da coleção PontosAtuais | Alteração de binding: a coleção PontosAtuais é substituída por uma nova ObservableCollection. | ✅ Aprovado |
+| **CT019** | WEB / ViewModelsTeste | Lista nula de marcadores | Entrada nula: GerarJsonMarcadores recebe uma lista null. | ✅ Aprovado |
+| **CT020** | WEB / ViewModelsTeste | Lista vazia de marcadores | Entrada vazia: GerarJsonMarcadores recebe uma lista sem pontos. | ✅ Aprovado |
+| **CT021** | WEB / ViewModelsTeste | Geração de marcador válido | Fluxo de sucesso: a lista contém um ponto completo com dados e coordenadas válidas. | ✅ Aprovado |
+| **CT022** | WEB / ViewModelsTeste | Índices de vários marcadores | Múltiplos registros: a lista contém três pontos em ordem definida. | ✅ Aprovado |
+| **CT023** | WEB / ViewModelsTeste | Coordenadas iguais a zero | Dados sem localização válida: o ponto possui Lat = 0 e Lng = 0. | ✅ Aprovado |
+| **CT024** | WEB / ViewModelsTeste | Formatação decimal das coordenadas | Formatação regional: o ponto possui coordenadas com várias casas decimais. | ✅ Aprovado |
+| **CT025** | WEB / ViewModelsTeste | Tratamento de caracteres especiais | Texto especial: nome, cidade e resíduos contêm aspas, quebra de linha e barra invertida. | ✅ Aprovado |
+| **CT026** | WEB / ViewModelsTeste | Foco em ponto do mapa | Mapa carregado: existem dois pontos e o foco é solicitado para o segundo item. | ✅ Aprovado |
+| **CT027** | API / ControllerTeste | Listagem de pontos com sucesso | Fluxo de sucesso: o serviço fornece pontos cadastrados para o endpoint GET. | ✅ Aprovado |
+| **CT028** | API / ControllerTeste | Falha de comunicação na listagem | Falha externa: o serviço lança HttpRequestException durante a listagem. | ✅ Aprovado |
+| **CT029** | API / ControllerTeste | Sincronização sem cidade | Entrada inválida: a sincronização é solicitada com cidade vazia. | ✅ Aprovado |
+| **CT030** | API / ControllerTeste | Sincronização sem chave da API | Falha de configuração: GoogleMaps:ApiKey não está configurada. | ✅ Aprovado |
+| **CT031** | API / ControllerTeste | Sincronização concluída com sucesso | Fluxo de sucesso: uma cidade válida é sincronizada e o serviço retorna quantidades de salvos e ignorados. | ✅ Aprovado |
+| **CT032** | API / ControllerTeste | Busca por ID existente | Registro existente: o serviço encontra o ponto correspondente ao ID informado. | ✅ Aprovado |
+| **CT033** | API / ControllerTeste | Busca por ID inexistente | Registro inexistente: o serviço não encontra ponto para o ID informado. | ✅ Aprovado |
+| **CT034** | API / ControllerTeste | Cadastro sem dados | Entrada inválida: o endpoint de cadastro recebe um DTO nulo. | ✅ Aprovado |
+| **CT035** | API / ControllerTeste | Cadastro válido | Fluxo de sucesso: o endpoint recebe um DTO preenchido com dados válidos. | ✅ Aprovado |
+| **CT036** | API / ControllerTeste | Atualização de ID inexistente | Registro inexistente: é solicitada atualização para um ID não cadastrado. | ✅ Aprovado |
+| **CT037** | API / ControllerTeste | Atualização válida | Fluxo de sucesso: um ponto existente recebe novos dados válidos. | ✅ Aprovado |
+| **CT038** | API / ControllerTeste | Exclusão de ID inexistente | Registro inexistente: é solicitada exclusão para um ID não cadastrado. | ✅ Aprovado |
+| **CT039** | API / ControllerTeste | Exclusão válida | Fluxo de sucesso: o ID informado corresponde a um ponto existente. | ✅ Aprovado |
+| **CT040** | API / ServicesApiTeste | Configuração do Firebase ausente | Falha de configuração: a URL do Realtime Database não está definida. | ✅ Aprovado |
+| **CT041** | API / ServicesApiTeste | Arquivo de credenciais ausente | Falha de configuração: a URL existe, mas o arquivo de credenciais informado não é encontrado. | ✅ Aprovado |
+| **CT042** | API / ServicesApiTeste | Status de erro retornado pelo Google | Resposta externa de erro: o Google simulado retorna status REQUEST_DENIED. | ✅ Aprovado |
+| **CT043** | API / ServicesApiTeste | Resposta sem resultados | Resposta incompleta: o JSON possui status OK, mas não contém a propriedade results. | ✅ Aprovado |
+| **CT044** | API / ServicesApiTeste | Ponto duplicado por coordenadas | Duplicidade: o Google retorna um ponto com latitude e longitude já existentes na base simulada. | ✅ Aprovado |
+| **CT045** | API / ServicesApiTeste | Novo ponto contabilizado como salvo | Fluxo de sucesso: o Google retorna um ponto com coordenadas ainda não cadastradas. | ✅ Aprovado |
+| **CT046** | API / ServicesApiTeste | JSON inválido na sincronização | Resposta malformada: a sincronização recebe um conteúdo que não é JSON válido. | ✅ Aprovado |
+
+**Resumo da suíte unitária:** 46 testes executados, 46 aprovados, 0 falhas e 0 ignorados.
 
 ## 2 Identificação da atividade
 
@@ -499,6 +552,7 @@ Fonte: Elaborado pelo autor (2026).
 
 Figura 14 – Evidência do código do CT008 – GooglePlacesServiceTeste
 
+
 |----------------------------------------------------------------------------------------------------------------|
 
 Fonte: Elaborado pelo autor (2026).
@@ -548,6 +602,7 @@ Fonte: Elaborado pelo autor (2026).
 
 Figura 16 – Evidência do código do CT010 – GooglePlacesServiceTeste
 
+
 |----------------------------------------------------------------------------------------------------------------|
 
 Fonte: Elaborado pelo autor (2026).
@@ -572,7 +627,7 @@ Fonte: Elaborado pelo autor (2026).
 
 Figura 17 – Evidência do código do CT011 – GooglePlacesServiceTeste
 
-| ![Evidência do documento](assets/testes-mapa/image28.png) |
+
 |----------------------------------------------------------------------------------------------------------------|
 
 Fonte: Elaborado pelo autor (2026).
@@ -762,6 +817,7 @@ Fonte: Elaborado pelo autor (2026).
 
 Figura 25 – Evidência do código do CT018 – MapaViewModelTeste
 
+
 |---------------------------------------------------------------------------------------------------------------|
 
 Fonte: Elaborado pelo autor (2026).
@@ -842,7 +898,6 @@ Figura 28 – Evidência do código do CT021 – MapaViewModelTeste
 Fonte: Elaborado pelo autor (2026).
 
 **Resultado após execução:**
-
 
 
 #### CT022 – Índices de vários marcadores
@@ -1180,7 +1235,6 @@ Fonte: Elaborado pelo autor (2026).
 
 Figura 42 – Evidência do código do CT034 – PontosColetaControllerTeste
 
-
 |----------------------------------------------------------------------------------------------------------------|
 
 Fonte: Elaborado pelo autor (2026).
@@ -1204,6 +1258,7 @@ Fonte: Elaborado pelo autor (2026).
 **Resultado esperado:** O Controller deverá retornar CreatedAtAction/201, gerar um GUID e preservar os dados principais do DTO.
 
 Figura 43 – Evidência do código do CT035 – PontosColetaControllerTeste
+
 
 |---------------------------------------------------------------------------------------------------------------|
 
@@ -1350,6 +1405,7 @@ Figura 49 – Evidência do código do CT040 – PontosColetaServiceTeste
 Fonte: Elaborado pelo autor (2026).
 
 **Resultado após execução:**
+
 
 
 #### CT041 – Arquivo de credenciais ausente
@@ -1500,7 +1556,7 @@ Fonte: Elaborado pelo autor (2026).
 
 **Resultado após execução:**
 
-![Evidência do documento](assets/testes-mapa/image102.png)
+
 
 ### EVIDÊNCIA GERAL DA PASTA – APITeste / ServicesApiTeste
 
