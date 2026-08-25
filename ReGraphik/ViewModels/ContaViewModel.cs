@@ -46,6 +46,9 @@ namespace ReGraphik.ViewModels
 
         public bool SemFoto => string.IsNullOrWhiteSpace(FotoPerfilCaminho);
 
+        /// <summary>
+        /// Calcula as iniciais do nome do usuário para exibição, retornando a primeira letra do primeiro e último nome, ou apenas a primeira letra se houver apenas um nome.
+        /// </summary>
         public string Iniciais
         {
             get
@@ -184,7 +187,9 @@ namespace ReGraphik.ViewModels
             set { _mensagemErroGeral = value; OnPropertyChanged(); }
         }
 
-        // Comandos
+        /// <summary>
+        ///  Comandos para as ações da tela de conta, incluindo salvar alterações, cancelar edições, manipular foco do e-mail, selecionar foto e atualizar estatísticas.
+        /// </summary>
         public ICommand SalvarCommand { get; }
         public ICommand CancelarCommand { get; }
         public ICommand EmailGotFocusCommand { get; }
@@ -192,6 +197,12 @@ namespace ReGraphik.ViewModels
         public ICommand SelecionarFotoCommand { get; }
         public ICommand AtualizarEstatisticasCommand { get; }
 
+        /// <summary>
+        /// Inicializa uma nova instância da classe ContaViewModel com o usuário atual e o serviço de autorização fornecido. 
+        /// Carrega os dados do usuário na tela e configura os comandos para as ações da interface.
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <param name="autorizarService"></param>
         public ContaViewModel(Usuario usuario, IAutorizarService autorizarService)
         {
             _usuarioAtual = usuario;
