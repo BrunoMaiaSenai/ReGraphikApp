@@ -456,4 +456,4 @@ O resultado final de **30 testes aprovados** demonstra que os cenários avaliado
 | Componentes escolhidos                 | 4 componentes do módulo                                                                            | ✅ Concluído |
 | Melhorias identificadas                | Injeção de `HttpClient` e proteção para `Application.Current` nulo                                 | ✅ Concluído |
 
-*Fonte: Elaborado pelo autor (2026).*
+
