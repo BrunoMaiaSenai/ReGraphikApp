@@ -22,6 +22,22 @@ namespace ReGraphik.Services
         private readonly string _apiKey = "AIzaSyCPeDl0hmzFeROHcUxPbnQUvAhOA_N-ros";
 
         /// <summary>
+        /// Construtor padrão usado normalmente pelo sistema.
+        /// </summary>
+        public GooglePlacesService()
+        {
+        }
+
+        /// <summary>
+        /// Construtor utilizado para permitir o controle da requisição HTTP nos testes.
+        /// </summary>
+        public GooglePlacesService(HttpClient httpClient, string apiKey)
+        {
+            _httpClient = httpClient;
+            _apiKey = apiKey;
+        }
+
+        /// <summary>
         /// Busca postos de coleta baseados no tipo de resíduo e na cidade informada.
         /// </summary>
         /// <param name="cidade">Nome da cidade para a busca (Ex: "São Paulo").</param>
